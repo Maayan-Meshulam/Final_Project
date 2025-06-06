@@ -1,6 +1,6 @@
 import { useState, type FunctionComponent } from "react";
 import style from '../../style/previewMission/preivewDiaplayMission.module.css';
-import AddMission from "../manager/AddMission";
+import AddMission from "../user/AddMission";
 
 interface ManageAllMissionsProps {
 
@@ -11,8 +11,9 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
     const [displayAddMission, setDisplayAddMission] = useState<boolean>(false);
 
     return (<>
-        <div className={style.container_page}>
+        <div className="container_page">
 
+        {/* add mission - click will open a popUp form to add mission */}
             <div onClick={()=>setDisplayAddMission(true)}>Add Mission</div>
             {displayAddMission && <AddMission oncloseAddMission={setDisplayAddMission}/>}
 

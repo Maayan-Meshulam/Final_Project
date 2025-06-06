@@ -10,7 +10,7 @@ const ManagerDash: FunctionComponent<ManagerDashProps> = () => {
     //loading the compomemts on hover their links.
     const PreLoadManageEmployee = ()=> import('./ManageEmployee');
     const PreLoadManageProjects = ()=> import('./ManageProjects');
-    const PreLoadAddMission = ()=> import('./AddMission');
+    const PreLoadAddMission = ()=> import('../user/AddMission');
 
     
     return ( <>

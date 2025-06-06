@@ -2,7 +2,7 @@ import type { FunctionComponent } from "react";
 import style from '../../style/addMission/addMission.module.css';
 
 interface AddMissionProps {
-    oncloseAddMission: (closeBool: any) => void
+    oncloseAddMission: (closeBool: boolean) => void
 }
 
 const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission }) => {
@@ -56,7 +56,7 @@ const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission }) =
 
                 <div className={style.btns_add_mission_container} id={style.containerBtnsFormAddMission}>
                     <button className="add_mission_btn" id={style.btnAddMission} type="button">Add</button>
-                    <button className="reset_btn" id={style.btnReset} type="button">reset</button>
+                    <button className="reset_btn" id={style.btnReset} type="reset">reset</button>
                     <button
                         className="close_popUp_btn"
                         id={style.btnclosePopUp}

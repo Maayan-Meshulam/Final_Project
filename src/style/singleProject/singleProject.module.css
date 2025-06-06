@@ -1,0 +1,38 @@
+.Work_distribution_table {
+  width: 100%;
+  max-width: 1400px;
+  direction: rtl;
+  margin: 50px 0;
+}
+
+.Work_distribution_table tr {
+  border-bottom: 1px solid black;
+}
+
+.Work_distribution_table th {
+  background-color: lightgray;
+  padding: 15px 25px;
+  text-align: center;
+}
+
+.Work_distribution_table td {
+  padding: 8px 25px;
+  text-align: center;
+}
+
+.container_general_characterization_project {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#containerStatusProject {
+  display: flex;
+  gap: 10px;
+}
+
+.General_details {
+  width: 100%;
+  max-width: 1400px;
+  text-align: justify;
+}/*# sourceMappingURL=singleProject.module.css.map */

@@ -1,0 +1,40 @@
+.mission_container{
+    width: 100%;
+    display: flex;
+    gap: 100px;
+}
+
+.task_characterization{
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.buttons_container{
+    display: flex;
+    gap:15px
+}
+
+.buttons_container button{
+    border: none;
+    border-radius: 20px;
+    padding: 10px 15px;
+    background-color: #e7e7fb;
+}
+
+.Marginal_information_task{
+    width: 40%;
+}
+
+.comments_container{
+    background-color: #f0f0ff;
+    min-height: 150px;
+    max-width: 500px;
+    width: 100%;
+    padding: 20px;
+}
+
+.comments_container li{
+    padding: 10px;
+}
