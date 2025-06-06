@@ -1,0 +1,56 @@
+.managerDash_conatainer {
+    display: grid;
+    grid-template-areas:
+        'argentTasks argentTasks messageBoard messageBoard quickButtons'
+        'statistics statistics statistics statistics managmentSide'
+        'statistics statistics statistics statistics deficiencies';
+
+    gap: 20px;
+    width: 100%;
+    max-width: 1500px;
+    min-height: 500px;
+}
+
+#argentTasks {
+    grid-area: argentTasks;
+}
+
+#quickButtons {
+    grid-area: quickButtons;
+    display: flex;
+    flex-direction: column;
+    gap: 15px
+}
+
+#statistics {
+    grid-area: statistics;
+}
+
+#messageBoard {
+    grid-area: messageBoard;
+}
+
+#managmentSide {
+    grid-area: managmentSide;
+}
+
+#deficiencies {
+    grid-area: deficiencies;
+}
+
+
+#argentTasks,
+#quickButtons,
+#statistics,
+#messageBoard,
+#managmentSide,
+#deficiencies {
+    padding: 15px;
+    background-color: #f0f0f0;
+}
+
+#argentTasks li,
+#messageBoard li,
+#deficiencies li {
+    padding: 5px;
+}
