@@ -1,0 +1,38 @@
+.warpper_form {
+    width: 100%;
+    overflow-y: auto;
+    background-color: #f8fcff;
+    padding: 20px 50px;
+    
+}
+
+.inline_form_wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+h4 {
+    background-color: lightblue;
+    text-align: center;
+    padding: 10px;
+}
+
+fieldset {
+    width: 100%;
+    padding: 15px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px
+}
+
+legend {
+    background-color: #e4e6f4;
+    grid-column: span 2;
+}
+
+.field_wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
