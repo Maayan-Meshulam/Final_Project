@@ -1,0 +1,25 @@
+.employessTable {
+    width: 100%;
+    max-width: 1400px;
+    direction: rtl;
+    margin: 50px 0;
+}
+
+.employessTable tr {
+    border-bottom: 1px solid black;
+}
+
+.employessTable th {
+    background-color: lightgray;
+    padding: 15px 25px;
+    text-align: center;
+}
+
+.employessTable td {
+    padding: 8px 25px;
+    text-align: center;
+}
+
+caption{
+    caption-side: top;
+}

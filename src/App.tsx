@@ -1,12 +1,12 @@
 import './App.css';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { lazy, Suspense, useState } from 'react';
+import { lazy, Suspense } from 'react';
 import Login from './components/user/Login';
 import ManageAllMissions from './components/employee/ManageAllMisions';
 import SingleProject from './components/user/SingleProject';
 import SingleMission from './components/user/SingleMission';
-import AddNewEmployee from './components/manager/AddNewEmployee';
+import AddProject from './components/user/AddProject';
 
 //componemts - lazy loading
 const Home = lazy(() => import('./components/layot/Home'));
@@ -15,7 +15,6 @@ const ManagerDash = lazy(() => import('./components/manager/ManagerDash'));
 
 
 function App() {
-    const [displayAddNewEmployee, setDisplayAddNewEmployee] = useState<boolean>(true);
 
   return (
     <>
@@ -25,7 +24,7 @@ function App() {
           <Route path='/' element={<><Home /></>} />
           <Route path='/login' element={<><Login /></>} />
           <Route path='/manageAllMissions' element={<><ManageAllMissions /></>} />
-          <Route path='/addNewEmployee' element={<><AddNewEmployee oncloseAddNewEmployee={setDisplayAddNewEmployee} /></>} />
+          <Route path='/addProject' element={<><AddProject/></>} />
           <Route path='/singleProject' element={<><SingleProject /></>} />
           <Route path='/singleMission' element={<><SingleMission /></>} />
           <Route path='/managerDash' element={<><ManagerDash /></>} />
