@@ -17,11 +17,12 @@ const NAME = Joi.object({
     last: GENERAL_VALIDATION
 });
 
-const PHONE = Joi.string() 
+const PHONE = Joi.string()
     .regex(/^(?:972|0)([23489]\d{7}|5\d{8})$/);
 
+// להוסיף שזה שדה ייחודי*******
 const EMAIL = Joi.string()
-    .email();
+    .email()
 
 const PASSWORD = Joi.string()
     .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=<>?{}[\]~`|\\/]).{8,}$/);
@@ -44,8 +45,10 @@ const ADDRESS = Joi.object({
 });
 
 
-const IS_MANAGER = Joi.boolean()
-    .required()
+const MANAGER_LEVEL = Joi.number()
+.required()
+
+const CONNECTEDEMPLOYESS = Joi.array()
 
 
 module.exports = {
@@ -57,5 +60,6 @@ module.exports = {
     PASSWORD,
     IMAGE,
     ADDRESS,
-    IS_MANAGER
+    MANAGER_LEVEL,
+    CONNECTEDEMPLOYESS
 }

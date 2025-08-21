@@ -22,14 +22,18 @@ const NAME = Schema({
 });
 
 const PHONE = {
+    type: String,
     match: RegExp(/^(?:972|0)([23489]\d{7}|5\d{8})$/)
 };
 
 const EMAIL = {
+    type: String,
+    unique: true,
     match: RegExp(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/)
 };
 
 const PASSWORD = {
+    type: String,
     match: RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=<>?{}[\]~`|\\/]).{8,}$/)
 };
 
@@ -59,8 +63,8 @@ const MANAGER_LEVEL = {
     required: true
 };
 
-const ASSOCIATED_EMPLOYEES = {
-    type: [Number] || undefined,
+const CONNECTEDEMPLOYESS = {
+    type: [Number],
     required: true
 };
 
@@ -74,5 +78,5 @@ module.exports = {
     IMAGE,
     ADDRESS,
     MANAGER_LEVEL,
-    ASSOCIATED_EMPLOYEES
+    CONNECTEDEMPLOYESS
 }
