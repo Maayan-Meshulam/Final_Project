@@ -23,7 +23,7 @@ const getUserById = async (userId) => {
     console.log("in get user by id DB");
 
     try {
-        const user = await User.find({ id: userId });
+        const user = await User.findOne({ id: userId });
         return user;
 
     } catch (error) {

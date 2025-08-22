@@ -3,7 +3,7 @@ const { MINI_GENERAL_VALIDATION, NAME,
     PHONE, EMAIL, PASSWORD, IMAGE, ADDRESS, MANAGER_LEVEL, CONNECTEDEMPLOYESS } = require("../../../helpers/joi/generalValidation");
 
 
-const UserValidataion = (user) => {
+const userValid = (user) => {
 
     const schema = Joi.object({
         name: NAME,
@@ -24,4 +24,13 @@ const UserValidataion = (user) => {
     return schema.validate(user, { abortEarly: false })
 };
 
-module.exports = UserValidataion;
+const UserValidLogin = (user) => {
+    const schema = Joi.object({
+        email: EMAIL,
+        password: PASSWORD
+    });
+
+    return schema.validate(user, { abortEarly: false });
+};
+
+module.exports = {userValid, UserValidLogin};

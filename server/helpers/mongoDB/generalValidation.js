@@ -51,7 +51,7 @@ const ADDRESS = Schema({
         min: 1
     },
     zip: {
-        type: String,
+        type: Number,
         required: true,
         min: 1
     }

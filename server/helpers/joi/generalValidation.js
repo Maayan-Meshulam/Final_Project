@@ -36,10 +36,10 @@ const IMAGE = Joi.object({
 const ADDRESS = Joi.object({
     city: GENERAL_VALIDATION,
     street: GENERAL_VALIDATION,
-    houseNumber: Joi.string()
+    houseNumber: Joi.number()
         .required()
         .min(2),
-    zip: Joi.string()
+    zip: Joi.number()
         .required()
         .min(2)
 });

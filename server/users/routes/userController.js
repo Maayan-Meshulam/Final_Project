@@ -1,7 +1,8 @@
 const express = require("express");
 const auth = require("../../auth/authService");
 const { createUser, getAllUsers, getUserById, updateUser, deleteUser } = require("../models/userAccessDBService");
-const userValidation = require("../validation/userValidatorService");
+const { userValidation, userLoginValidation } = require("../validation/userValidatorService");
+const { generateToken } = require("../../auth/providers/jwt");
 const app = express();
 const router = express.Router();
 
@@ -16,12 +17,26 @@ router.post('/', userValidation, async (req, res, next) => {
         res.status(201).send(user);
     } catch (error) {
         console.log(error);
+    }
+});
 
+router.get('/login', userLoginValidation, async (req, res, next) => {
+    console.log("in login user router");
+
+    try {
+        let user = req.body;
+        //יצירת טוקן - המשתמש קיים
+        const token = generateToken(user);
+        console.log(token + " token");
+        res.status(200).send(token);
+
+    } catch (error) {
+        console.log(error);
     }
 });
 
 // get all users
-router.get('/', async (req, res, next) => {
+router.get('/', auth, async (req, res, next) => {
     console.log("in get all users");
 
     try {
@@ -29,7 +44,7 @@ router.get('/', async (req, res, next) => {
         res.status(200).send(allUsers);
 
     } catch (error) {
-        console.log(error);
+        next(error);
     }
 });
 

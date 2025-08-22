@@ -1,5 +1,6 @@
-const userValidator = require("./joi/userValidator");
+const { userValid, UserValidLogin } = require("./joi/userValidator");
 const buildError = require("../../helpers/erorrs/errorsHandeling");
+const User = require("../models/mongoDB/User");
 const VALIDATOR = "joi";
 
 const userValidation = (req, res, next) => {
@@ -7,31 +8,66 @@ const userValidation = (req, res, next) => {
 
     try {
         const user = req.body;
-        
+
 
         if (VALIDATOR == "joi") {
-            
-            const { error } = userValidator(user);
+
+            const { error } = userValid(user);
 
             if (error) {
                 console.log("in user error validation");
                 console.log(error.details);
-                
+
 
                 const errorValidation = error.details.map(detail => detail.message);
-                const newError = buildError("Joi Validation", errorValidation, 400);
-                return next(new Error(newError));
+                return next(buildError("Joi Validation", errorValidation, 400));
             }
 
             return next();
         }
 
-        const newError = buildError("", "validation type not exist", 400);
-        return next(new Error(newError));
+        return next(buildError("", "validation type not exist", 400));
 
     } catch (error) {
         next(error);
     }
 };
 
-module.exports = userValidation;
+
+const userLoginValidation = async (req, res, next) => {
+    try {
+        let user = req.body;
+        ({ email, password } = user);
+
+        console.log(JSON.stringify(user) + "--");
+
+        if (VALIDATOR == "joi") {
+            console.log(77);
+
+            const { error } = UserValidLogin(user);
+            console.log(error);
+
+            if (error) {
+                const errorValidation = error.details.map(detail => detail.message);
+                return next(buildError("Joi Validation", errorValidation, 400))
+            }
+
+            user = await User.find({ email, password });
+            console.log(user + "99");
+
+            if (!user) {
+                return next(buildError("Error", "user is not exist", 400));
+            }
+
+            return next();
+        }
+
+        return next(buildError("", "validation type not exist", 400));
+
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
+module.exports = { userValidation, userLoginValidation };

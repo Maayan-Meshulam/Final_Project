@@ -4,13 +4,14 @@ const SECRET_KEY = "secret"
 //יצירת טוקן
 const generateToken = (user, worker) => {
     const payload = {
-        id: user.id,
+        id: user._id,
         AdminLevel: user.AdminLevel,
         connectedEmployees: user.connectedEmployees,
         workerTaskId: worker
     }
 
     const token = Jwt.sign(payload, SECRET_KEY);
+    return token;
 };
 
 //בדיקת תקינות הטוקן
