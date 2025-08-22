@@ -3,6 +3,7 @@ const { createTask, getAllTasks, getTaskById, updateTask, deleteTask } = require
 const taskValidation = require("../validation/taskValidationService");
 const buildError = require("../../helpers/erorrs/errorsHandeling");
 const auth = require("../../auth/authService");
+const { getUserById } = require("../../users/models/userAccessDBService");
 const router = express.Router();
 
 
@@ -12,13 +13,19 @@ router.post('/', auth, taskValidation, async (req, res, next) => {
 
     try {
         let task = req.body;
-        let user = req.userInfo;
-        console.log(user + "user");
-
+        console.log(JSON.stringify(task) + "task");
+        
+        let user = req.userInfo;    
+        user = await getUserById(user.id);          
+        
+        console.log(JSON.stringify(user));
+        console.log(user.connectedEmployess, task.workerTaskId);
+        
         //בדיקת הרשאות - האם זה המשתמש עצמו / עובד שמושיך למנהל
-        if (!((user.connectedEmployees).includes(user.workerTaskId) || user.workerTaskId == user.id)) {
-            return next(new Error("Authorization", "access blocked, user not allow", 403));
-        }
+        if (!((user.connectedEmployess).includes(task.workerTaskId) || task.workerTaskId == user.id)) {
+            
+            return next(buildError("Authorization", "access blocked, user not allow", 403));
+        }        
 
         //טיפול בשמירת הנתונים
         task = await createTask(task);

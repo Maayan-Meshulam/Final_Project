@@ -17,10 +17,9 @@ const taskValidation = (req, res, next) => {
 
             if (error) {
                 console.log("in task error validation");
-
+                                
                 const validationError = error.details.map(detail => detail.message);
-                const newError = buildError("Joi Validation: ", validationError, 400);
-                return next(newError);
+                return next(buildError("Joi Validation: ", validationError, 400));
             }
             return next();
         }

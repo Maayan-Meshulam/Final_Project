@@ -12,7 +12,7 @@ const userSchema = mongoose.Schema({
     department: MINI_GENERAL_VALIDATION,
     team: MINI_GENERAL_VALIDATION,
     managerLevel: MANAGER_LEVEL,
-    connectedEmployess: CONNECTEDEMPLOYESS
+    connectedEmployess: CONNECTEDEMPLOYESS,
 });
 
 const User = mongoose.model('user', userSchema);

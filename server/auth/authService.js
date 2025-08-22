@@ -1,3 +1,4 @@
+const { json } = require("express");
 const buildError = require("../helpers/erorrs/errorsHandeling");
 const { verifyToken } = require("./providers/jwt");
 
@@ -9,16 +10,14 @@ const auth = (req, res, next) => {
         console.log("in auth function");
 
         const token = req.header('x-auth-token');
-        console.log(token + "token");
 
-
-        if (!token) {
+        if (!token) {            
             return next(buildError("Authentication Error", "pleae login", 401))
         }
 
-        const payload = verifyToken(token);
+        const payload = verifyToken(token);                
 
-        if (!payload) {
+        if (!payload) {            
             return next(buildError("Authentication Error", "Incorrect details", 401))
         }
 

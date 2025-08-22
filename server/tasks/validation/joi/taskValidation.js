@@ -6,7 +6,7 @@ const taskValidator = (task) => {
         title: GENERAL_VALIDATION,
         subTitle: GENERAL_VALIDATION,
         description: GENERAL_VALIDATION.max(1024),
-        worker: MINI_GENERAL_VALIDATION,
+        workerTaskId: Joi.number(),
         receiptDate: MINI_GENERAL_VALIDATION,
         deadLine: Joi.string(),
         status: MINI_GENERAL_VALIDATION,

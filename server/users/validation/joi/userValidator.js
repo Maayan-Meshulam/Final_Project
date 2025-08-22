@@ -16,7 +16,7 @@ const userValid = (user) => {
         department: MINI_GENERAL_VALIDATION,
         team: MINI_GENERAL_VALIDATION,
         managerLevel: MANAGER_LEVEL,
-        connectedEmployess: CONNECTEDEMPLOYESS
+        connectedEmployess: CONNECTEDEMPLOYESS,
     });
 
     console.log(schema.validate(user, { abortEarly: false }));

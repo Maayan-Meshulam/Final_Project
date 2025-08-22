@@ -3,6 +3,7 @@ const auth = require("../../auth/authService");
 const { createUser, getAllUsers, getUserById, updateUser, deleteUser } = require("../models/userAccessDBService");
 const { userValidation, userLoginValidation } = require("../validation/userValidatorService");
 const { generateToken } = require("../../auth/providers/jwt");
+const buildError = require("../../helpers/erorrs/errorsHandeling");
 const app = express();
 const router = express.Router();
 
@@ -20,14 +21,14 @@ router.post('/', userValidation, async (req, res, next) => {
     }
 });
 
+//login user
 router.get('/login', userLoginValidation, async (req, res, next) => {
     console.log("in login user router");
 
     try {
         let user = req.body;
         //יצירת טוקן - המשתמש קיים
-        const token = generateToken(user);
-        console.log(token + " token");
+        const token = await generateToken(user);
         res.status(200).send(token);
 
     } catch (error) {
@@ -38,8 +39,17 @@ router.get('/login', userLoginValidation, async (req, res, next) => {
 // get all users
 router.get('/', auth, async (req, res, next) => {
     console.log("in get all users");
+    const user = req.userInfo;
+    console.log(JSON.stringify(user) + " user ****************");
 
     try {
+        //נבדוק הרשאות
+        console.log("manager level" + user.managerLevel);
+
+        if (user.managerLevel < 1) {
+            next(buildError("Authentication Error", "user not allow, access block"));
+        }
+
         let allUsers = await getAllUsers();
         res.status(200).send(allUsers);
 

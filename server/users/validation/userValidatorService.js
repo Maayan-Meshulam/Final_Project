@@ -39,10 +39,7 @@ const userLoginValidation = async (req, res, next) => {
         let user = req.body;
         ({ email, password } = user);
 
-        console.log(JSON.stringify(user) + "--");
-
         if (VALIDATOR == "joi") {
-            console.log(77);
 
             const { error } = UserValidLogin(user);
             console.log(error);
@@ -53,7 +50,6 @@ const userLoginValidation = async (req, res, next) => {
             }
 
             user = await User.find({ email, password });
-            console.log(user + "99");
 
             if (!user) {
                 return next(buildError("Error", "user is not exist", 400));

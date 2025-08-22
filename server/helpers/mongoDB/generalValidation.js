@@ -68,6 +68,12 @@ const CONNECTEDEMPLOYESS = {
     required: true
 };
 
+const WORKER = {
+    lowercase: true,
+    required: false,
+    type: Number
+};
+
 module.exports = {
     GENERAL_VALIDATION,
     MINI_GENERAL_VALIDATION,
@@ -78,5 +84,6 @@ module.exports = {
     IMAGE,
     ADDRESS,
     MANAGER_LEVEL,
-    CONNECTEDEMPLOYESS
+    CONNECTEDEMPLOYESS,
+    WORKER
 }

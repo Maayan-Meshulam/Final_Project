@@ -23,13 +23,28 @@ const getUserById = async (userId) => {
     console.log("in get user by id DB");
 
     try {
-        const user = await User.findOne({ id: userId });
+        const user = await User.findOne({ _id: userId });        
         return user;
 
     } catch (error) {
         console.log(error);
     }
 };
+
+
+//get user by email
+const getUserByEmail = async (email) => {
+    console.log("in get user by email DB");
+
+    try {
+        const user = await User.findOne({ email });                
+        return user;
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 
 //get all users
 const getAllUsers = async () => {
@@ -78,5 +93,6 @@ module.exports = {
     getAllUsers,
     getUserById,
     updateUser,
-    deleteUser
+    deleteUser,
+    getUserByEmail
 };
