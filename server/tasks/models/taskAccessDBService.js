@@ -1,73 +1,114 @@
 //Task modle
+const buildError = require("../../helpers/erorrs/errorsHandeling");
 const Task = require("./mongoDB/Task");
 const DB = "MongoDB" // ----> אינטגרציה ??
 
 //add task
 const createTask = async (newTask) => {
-    if (DB == "MongoDB")
-        try {
+    try {
+        if (DB == "MongoDB") {
             console.log("in create task mongo");
-            console.log(newTask);
             let task = new Task(newTask);
             task = await task.save();
-            console.log("after saving task in mongo");
             return task;
-        } catch (error) {
-            console.log(error);
         }
+        return (buildError("Mongoose Error:", "DB type is not exist", 500))
+
+    } catch (error) {
+        return (buildError("Mongoose Error:", error, 500))
+    }
 }
 
 //get all tasks
-const getAllTasks = async () => {
-    if (DB == "MongoDB") {
-        try {
-            const allTasks = await Task.find();
+const getAllTasks = async (connectedEmployess) => {
+    try {
+        if (DB == "MongoDB") {
+
+            const allTasks = await Task.find({ _id: { $in: connectedEmployess } });
+            console.log(JSON.stringify(allTasks));
+
             return allTasks;
-        } catch (error) {
-            console.log(error);
         }
+        return (buildError("Mongoose Error:", "DB type is not exist", 500))
+
+    } catch (error) {
+        return (buildError("Mongoose Error:", error, 500))
     }
+
+
+}
+
+//get my tasks
+const getMyTasks = async (userId) => {
+    console.log(userId + " 8");
+
+    console.log("in my tasks");
+    try {
+        if (DB == "MongoDB") {
+            const myTasks = await Task.find({ userIdCreatorTask: userId });
+            console.log(JSON.stringify(myTasks) + "my tasks");
+            return myTasks;
+        }
+        return (buildError("Mongoose Error:", "DB type is not exist", 500))
+
+    } catch (error) {
+        return (buildError("Mongoose Error:", error, 500))
+    }
+
 }
 
 //get task by id
 const getTaskById = async (taskId) => {
-    if (DB == "MongoDB") {
-        try {
+    console.log("in task by id")
+
+    try {
+        if (DB == "MongoDB") {
             const task = await Task.findById(taskId);
             return task;
-        } catch (error) {
-            console.log(error);
         }
+        return (buildError("Mongoose Error:", "DB type is not exist", 500))
+
+    } catch (error) {
+        return (buildError("Mongoose Error:", error, 500))
     }
 }
 
 //update task
 const updateTask = async (taskId, newTask) => {
-    if (DB == "MongoDB") {
-        try {
+
+    try {
+        if (DB == "MongoDB") {
             const taskUpdated = await Task.findByIdAndUpdate(taskId, newTask, { new: true });
             return taskUpdated;
-        } catch (error) {
-            console.log(error);
         }
+        return (buildError("Mongoose Error:", "DB type is not exist", 500))
+
+    } catch (error) {
+        return (buildError("Mongoose Error:", error, 500))
     }
 }
 
 //delete task
 const deleteTask = async (taskId) => {
-    if (DB == "MongoDB") {
-        try {
+    console.log("in delete task");
+
+    try {
+        if (DB == "MongoDB") {
             const taskRemove = await Task.findByIdAndDelete(taskId);
             return taskRemove;
-        } catch (error) {
-            console.log(error);
         }
+        return (buildError("Mongoose Error:", "DB type is not exist", 500))
+
+    } catch (error) {
+        return (buildError("Mongoose Error:", error, 500))
     }
 }
+
 
 module.exports = {
     createTask,
     getAllTasks,
+    getMyTasks,
     getTaskById,
     updateTask,
     deleteTask

@@ -69,9 +69,6 @@ const CONNECTEDEMPLOYESS = {
 };
 
 const WORKER = {
-    lowercase: true,
-    required: false,
-    type: Number
 };
 
 module.exports = {

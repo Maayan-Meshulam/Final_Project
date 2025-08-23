@@ -6,15 +6,14 @@ const taskValidator = (task) => {
         title: GENERAL_VALIDATION,
         subTitle: GENERAL_VALIDATION,
         description: GENERAL_VALIDATION.max(1024),
-        workerTaskId: Joi.number(),
+        workerTaskId: Joi.required(),
         receiptDate: MINI_GENERAL_VALIDATION,
         deadLine: Joi.string(),
         status: MINI_GENERAL_VALIDATION,
-        type: MINI_GENERAL_VALIDATION
+        type: MINI_GENERAL_VALIDATION,
+        userIdCreatorTask: Joi.required()
     });
-    
-    console.log(schema.validate(task, {abortEarly:false}));
-    
+        
     return schema.validate(task, {abortEarly:false});
 };
 
