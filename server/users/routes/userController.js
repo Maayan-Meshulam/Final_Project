@@ -16,8 +16,9 @@ router.post('/', userValidation, async (req, res, next) => {
         //טיפול בשמירת הנתונים
         user = await createUser(user);
         res.status(201).send(user);
+
     } catch (error) {
-        console.log(error);
+        return next(error);
     }
 });
 
@@ -32,7 +33,7 @@ router.get('/login', userLoginValidation, async (req, res, next) => {
         res.status(200).send(token);
 
     } catch (error) {
-        console.log(error);
+        return next(error);
     }
 });
 
@@ -47,7 +48,10 @@ router.get('/', auth, async (req, res, next) => {
         console.log("manager level" + user.managerLevel);
 
         if (user.managerLevel < 1) {
-            next(buildError("Authentication Error", "user not allow, access block"));
+            next(buildError("Authentication Error", "user not allow, access block", 403));
+        }
+        else if (user.connectedEmployess.length < 1) {
+            next(buildError("Authentication Error", "you dont have employess", 403));
         }
 
         let allUsers = await getAllUsers();
@@ -59,44 +63,70 @@ router.get('/', auth, async (req, res, next) => {
 });
 
 // get user by id
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', auth, async (req, res, next) => {
     console.log("in get user by id");
 
     try {
         console.log(req.params);
         let { id } = req.params;
-        let user = await getUserById(id);
+        let user = req.userInfo;
+
+        //בדיקת הרשאות משתמש - המשתמש עצמו / המנהל
+        if (user.id != id && !(user.connectedEmployess).includes(id)) {
+            next(buildError("Authentication Error", "user not allow, access block", 403));
+        };
+
+        //שמירת נתונים במסד
+        user = await getUserById(id);
         res.status(200).send(user);
 
     } catch (error) {
-        console.log(error);
+        next(error);
     }
 });
 
 
 // update user
-router.put('/:id', async (req, res, next) => {
+router.put('/:id', auth, userValidation, async (req, res, next) => {
     console.log("in update user router");
     try {
         let { id } = req.params;
-        let user = await updateUser(id);
+        let user = req.userInfo;
+
+        //בדיקת הרשאות משתמש - המשתמש עצמו / המנהל
+        if (user.id != id && !(user.connectedEmployess.includes(id))) {
+            return next(buildError("Authentication Error", "user not allow, access block", 403));
+        }
+
+        //שמירת נתונים במסד
+        user = await updateUser(id, req.body);        
         res.status(200).send(user);
+
     } catch (error) {
-        console.log(error);
+        next(error)
     }
 });
 
 
 // delete user
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', auth, async (req, res, next) => {
     console.log("in delte user roiuter");
     try {
         let { id } = req.params;
         console.log(id);
-        let user = await deleteUser(id);
+        let user = req.userInfo;
+
+        //בדיקת הרשאות משתמש - המשתמש עצמו / המנהל
+        if(user.id != id && !(user.connectedEmployess).includes(id)){
+            return next(("Authentication Error", "user not allow, access block", 403))
+        }
+
+        //שמירת נתונים במסד
+        user = await deleteUser(id);
         res.status(200).send(user);
+        
     } catch (error) {
-        console.log(error);
+        next(error);
     }
 });
 

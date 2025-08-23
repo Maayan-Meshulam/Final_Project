@@ -45,7 +45,7 @@ router.get('/', auth, async (req, res, next) => {
         if (employeesId.managerLevel < 1) {
             return next(buildError("Authorization", "access blocked, user not allow", 403));
         }
-        if (employeesId.connectedEmployess.length < 1)
+        else if (employeesId.connectedEmployess.length < 1)
             return next(buildError("Authorization", "you dont have employees", 403));
 
         const allTasks = await getAllTasks(req.userInfo.connectedEmployess);
@@ -57,7 +57,7 @@ router.get('/', auth, async (req, res, next) => {
 });
 
 
-//get all tasks
+//get my tasks
 router.get('/myTasks', auth, async (req, res, next) => {
     console.log("in get all my tasks");
 

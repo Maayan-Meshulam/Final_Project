@@ -1,3 +1,4 @@
+const buildError = require("../../helpers/erorrs/errorsHandeling");
 const User = require("./mongoDB/User");
 const DB = "MongoDB"
 const mongoose = require("mongoose");
@@ -9,12 +10,12 @@ const createUser = async (newUser) => {
     try {
         if (DB == "MongoDB") {
             let user = new User(newUser);
-            user = await user.save();            
+            user = await user.save();
             return user;
         }
 
     } catch (error) {
-        console.log(error);
+        return buildError("mongoose Error", error, 500);
     }
 };
 
@@ -23,11 +24,11 @@ const getUserById = async (userId) => {
     console.log("in get user by id DB");
 
     try {
-        const user = await User.findOne({ _id: userId });        
+        const user = await User.findById({ _id: userId });
         return user;
 
     } catch (error) {
-        console.log(error);
+        return buildError("mongoose Error", error, 500);
     }
 };
 
@@ -37,53 +38,52 @@ const getUserByEmail = async (email) => {
     console.log("in get user by email DB");
 
     try {
-        const user = await User.findOne({ email });                
+        const user = await User.findOne({ email });
         return user;
 
     } catch (error) {
-        console.log(error);
+        return buildError("mongoose Error", error, 500);
     }
 };
 
 
 //get all users
-const getAllUsers = async () => {
+const getAllUsers = async (employess) => {
     console.log("in get all users DB");
 
     try {
-        const allUsers = await User.find({});
+        const allUsers = await User.find({ _id: { $in: employess } });
         return allUsers;
 
     } catch (error) {
-        console.log(error);
+        return buildError("mongoose Error", error, 500);
     }
 };
 
 //update user
-const updateUser = async (userId) => {
+const updateUser = async (userId, newUser) => {
     console.log("in update user DB");
 
     try {
-        const user = await User.findByIdAndUpdate(userId);
+        const user = await User.findByIdAndUpdate(userId, newUser, {new: true});        
         return user;
 
     } catch (error) {
-        console.log(error);
+        return buildError("mongoose Error", error, 500);
     }
 };
 
 //delete user
 const deleteUser = async (userId) => {
     console.log(userId);
-    
+
     console.log("delete user DB");
-    try {        
+    try {
         const user = await User.findByIdAndDelete(userId);
-        console.log(user);
         return user;
 
     } catch (error) {
-        console.log(error);
+        return buildError("mongoose Error", error, 500);
     }
 };
 
