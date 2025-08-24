@@ -18,8 +18,9 @@ const CreateSelects: FunctionComponent<CreateSelectsProps> = ({ formik, name, id
                 onBlur={formik.handleBlur}>
 
                 {children}
-
             </select>
+
+            <p>{formik.touched[id] && formik.errors[id]}</p>
         </div>
 
 

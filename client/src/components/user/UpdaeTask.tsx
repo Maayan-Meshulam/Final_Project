@@ -1,35 +1,38 @@
+import { useFormik } from "formik";
 import type { FunctionComponent } from "react";
-import style from '../../style/addMission/addMission.module.css';
-import { useFormik } from 'formik';
-import CreateInputs from "./CreateInputs.js";
-import CreateSelects from "./CreateSelects.js";
+import { taskSchema } from "../../validation/task/taskValidator";
 import * as Yup from 'yup';
-import { taskSchema } from "../../validation/task/taskValidator.js";
-import { addTask } from "../../services/tasksService.js";
-import { store } from "../../redux/store.js";
+import { addTask } from "../../services/tasksService";
+import style from '../../style/addMission/addMission.module.css';
+import CreateInputs from "./CreateInputs";
+import CreateSelects from "./CreateSelects";
 
 
-
-interface AddMissionProps {
-    oncloseAddMission: (closeBool: boolean) => void,
-    onToggleAllMyTasks: (toggleMyTasks: boolean) => void
+interface updateTaskProps {
+    oncloseAddMission: (closeBool: boolean) => void
 }
-
-const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission, onToggleAllMyTasks }) => {
-
-    //פרטי המשתמש המחובר - שמור בחנות
-    const userInfo = store.getState().userBaseInfo;
-    console.log(JSON.stringify(userInfo));
+ 
+const updateTask: FunctionComponent<updateTaskProps> = ({oncloseAddMission}) => {
+ 
+    const task = {
+        title: "",
+        subTitle: "",
+        description:"",
+        deadLine:"",
+        receiptDate: "",
+        type: "",
+    };
 
     const formik = useFormik({
         initialValues: {
-            title: "",
-            subTitle: "",
-            description: "",
-            deadline: "",
-            receiptDate: "",
-            type: 123,
+            title: task.title,
+            subTitle: task.subTitle,
+            description: task.description,
+            deadline: task.deadLine,
+            receiptDate: task.receiptDate,
+            type: task.type,
         },
+        enableReinitialize:true,
         validationSchema: Yup.object(taskSchema),
         onSubmit: (values) => {
             console.log("values" + values);
@@ -76,10 +79,7 @@ const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission, onT
                     <button
                         className="add_mission_btn"
                         id={style.btnAddMission}
-                        type="submit"
-                        onClick={()=>{
-                            onToggleAllMyTasks(true);
-                        }}>Add
+                        type="submit">Add
                     </button>
 
                     <button
@@ -97,7 +97,7 @@ const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission, onT
                 </div>
             </form>
         </div>
-    </>);
+    </> );
 }
-
-export default AddMission;
+ 
+export default updateTask;

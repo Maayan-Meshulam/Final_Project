@@ -5,21 +5,26 @@ const PORT = 3131;
 //נתיב שמכיל בתוכו את כל הנתיבים
 const router = require("./router/router");
 const connctToDB = require("./DB/DBService");
+const corsMiddleWare = require("../middlewares/corsPolicy");
+const cors = require("cors");
 
-app.use(express.json())
+app.use(express.json());
+
+app.use(cors());
+
 app.use(router);
 
-app.use((err,req, res, next)=>{
+app.use((err, req, res, next) => {
     console.log("error function");
     //ערכים ברירת מחדל - למקרה שלא נשלחו
-    err.type  = err.type ?? "";
+    err.type = err.type ?? "";
     err.status = err.status ?? "";
     err.message = err.message ?? "";
     res.send(`${err.type} ${err.message}, ${err.status}`)
 });
 
 //חיבור לשרת
-app.listen(PORT, ()=>{
+app.listen(PORT, () => {
     console.log("server lisening to port : " + PORT);
     connctToDB();
 });

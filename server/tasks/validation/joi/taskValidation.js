@@ -5,10 +5,10 @@ const taskValidator = (task) => {
     const schema = Joi.object({
         title: GENERAL_VALIDATION,
         subTitle: GENERAL_VALIDATION,
-        description: GENERAL_VALIDATION.max(1024),
+        description: GENERAL_VALIDATION.concat(Joi.max(1024)),
         workerTaskId: Joi.required(),
-        receiptDate: MINI_GENERAL_VALIDATION,
-        deadLine: Joi.string(),
+        receiptDate: Joi.date(),
+        deadLine: Joi.date(),
         status: MINI_GENERAL_VALIDATION,
         type: MINI_GENERAL_VALIDATION,
         userIdCreatorTask: Joi.required()

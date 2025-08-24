@@ -7,8 +7,8 @@ const taskSchema = Schema({
     subTitle: GENERAL_VALIDATION,
     description: { ...GENERAL_VALIDATION, maxLngth: 1024 },
     workerTaskId: WORKER,
-    receiptDate: { type: String }, //לשנות ל date ??
-    deadLine: { type: String },
+    receiptDate: { type: Date }, //לשנות ל date ??
+    deadLine: { type: Date },
     status: MINI_GENERAL_VALIDATION,
     type: MINI_GENERAL_VALIDATION,
     userIdCreatorTask: { type: mongoose.Types.ObjectId, required: true }
