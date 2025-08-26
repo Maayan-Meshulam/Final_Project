@@ -12,8 +12,8 @@ const taskValidation = (req, res, next) => {
 
         let task = req.body;
 
-        //בדיקת תקינות של סוג המשתנה שהועבר בנתיב                
-        if (!mongoose.isObjectIdOrHexString(req.params.id))
+        //בדיקת תקינות של סוג המשתנה שהועבר בנתיב         
+        if (req.params.id && !mongoose.isObjectIdOrHexString(req.params.id))
             return next(buildError("", "invalid id format at url", 400));
 
         task = taskNormalization(task, req.userInfo);
@@ -22,6 +22,8 @@ const taskValidation = (req, res, next) => {
         if (validator == 'Joi') {
 
             const { error } = taskValidator(task);
+            console.log("error" + error);
+            
 
             if (error) {
                 console.log("in task error validation");
@@ -31,6 +33,8 @@ const taskValidation = (req, res, next) => {
             }
 
             req.newTaskNormalize = task;
+            console.log(JSON.stringify( req.newTaskNormalize));
+            
             return next();
         }
         return next(new Error("validator is not defined"));

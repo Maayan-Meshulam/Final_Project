@@ -46,7 +46,6 @@ const getMyTasks = async (userId) => {
     try {
         if (DB == "MongoDB") {
             const myTasks = await Task.find({ userIdCreatorTask: userId });
-            console.log(JSON.stringify(myTasks) + "my tasks");
             return myTasks;
         }
         return (buildError("Mongoose Error:", "DB type is not exist", 500))

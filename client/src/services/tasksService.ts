@@ -2,9 +2,13 @@ import axios from "axios";
 const API_TASK = 'http://localhost:3131/tasks'
 
 //הוספת משימה
-const addTask = (task: any) => {
+const addTask = (task: any, token: string | null) => {
     console.log("in add task");
-    return axios.post(API_TASK, task);
+    return axios.post(API_TASK, task, {
+        headers: {
+            'x-auth-token' : token
+        }
+    });
 }
 
 //עריכת משימה
@@ -19,13 +23,15 @@ const deleteTask = (taskId: number) => {
     return axios.post(`${API_TASK}/${taskId}`, taskId);
 }
 
-const getMyCards = (userId: number) => {
-    console.log("in my cards");
-    return axios.get(`${API_TASK}/${userId}`);
+const getMyTasks = (token: string | null) => {
+    console.log("in my tasks");
+    return axios.get(`${API_TASK}/myTasks`, {
+        headers: { "x-auth-token": token }
+    });
 }
 export {
     addTask,
     updateTask,
     deleteTask,
-    getMyCards
+    getMyTasks
 }

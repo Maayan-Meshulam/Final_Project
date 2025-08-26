@@ -61,7 +61,7 @@ const userLoginValidation = async (req, res, next) => {
         return next(buildError("", "validation type not exist", 400));
 
     } catch (error) {
-        console.log(error);
+        return next(buildError("Error:", error, 500))
     }
 
 }

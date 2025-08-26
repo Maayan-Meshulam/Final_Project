@@ -13,10 +13,9 @@ router.post('/', auth, taskValidation, async (req, res, next) => {
     console.log("in router-post");
 
     try {
-        let task = req.body;
+        let task = req.newTaskNormalize;
         let user = req.userInfo;
 
-        task = taskNormalization(task, user);
         console.log(JSON.stringify(task) + "*******788");
 
 
@@ -60,9 +59,10 @@ router.get('/', auth, async (req, res, next) => {
 //get my tasks
 router.get('/myTasks', auth, async (req, res, next) => {
     console.log("in get all my tasks");
-
+    console.log(JSON.stringify(req.userInfo) + "*************");
+    
     try {
-        const allTasks = await getMyTasks(req.user);
+        const allTasks = await getMyTasks(req.userInfo.id);
         res.status(200).send(allTasks);
 
     } catch (error) {

@@ -28,7 +28,7 @@ const updateTask: FunctionComponent<updateTaskProps> = ({oncloseAddMission}) => 
             title: task.title,
             subTitle: task.subTitle,
             description: task.description,
-            deadline: task.deadLine,
+            deadLine: task.deadLine,
             receiptDate: task.receiptDate,
             type: task.type,
         },

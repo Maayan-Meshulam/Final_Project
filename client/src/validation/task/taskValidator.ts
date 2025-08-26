@@ -6,8 +6,12 @@ export const taskSchema :any = {
     title: GENERAL_VALID,
     subTitle: GENERAL_VALID,
     description: GENERAL_VALID.concat(Yup.string().max(1024)),
-    deadline: Yup.string().required(),
+    deadLine: Yup.string().required(),
     receiptDate: Yup.string().required(),
     type: Yup.string().required(),
-}
+    status: Yup.string().required()
+};
+
+console.log("after validaion acheama");
+
 

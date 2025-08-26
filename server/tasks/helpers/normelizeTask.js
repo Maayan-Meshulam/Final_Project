@@ -2,11 +2,10 @@
 //נוסיף תמונה במידה ואין
 //נוסיף userIdCreatorTask
 //נוסיף workerTaskId
-const {isObjectIdOrHexString} = require("mongoose");
-const buildError = require("../../helpers/erorrs/errorsHandeling");
-const mongoose = require("mongoose");
 
 const taskNormalization = (task, user) => {
+
+    console.log(user.id + "******");
     console.log("in task normalize");
     
     return ({

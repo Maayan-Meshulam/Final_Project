@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-
-import userBaseInfoReducer from "./userInfoState";
+import { presistReducer } from "./userInfoState";
+import { persistStore } from "redux-persist";
 
 export const store = configureStore({
-    reducer:{
-        userBaseInfo: userBaseInfoReducer 
+    reducer: {
+        userBaseInfo: presistReducer,
     }
 });
+
+export const persistor = persistStore(store);

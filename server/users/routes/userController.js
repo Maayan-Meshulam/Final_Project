@@ -23,11 +23,12 @@ router.post('/', userValidation, async (req, res, next) => {
 });
 
 //login user
-router.get('/login', userLoginValidation, async (req, res, next) => {
+router.post('/login', userLoginValidation, async (req, res, next) => {
     console.log("in login user router");
 
     try {
         let user = req.body;
+
         //יצירת טוקן - המשתמש קיים
         const token = await generateToken(user);
         res.status(200).send(token);

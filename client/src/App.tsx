@@ -23,7 +23,7 @@ function App() {
           <Routes>
             <Route path='/' element={<><Home /></>} />
             <Route path='/users/login' element={<><Login /></>} />
-            <Route path='/manageAllMissions' element={<><ManageAllMissions /></>} />
+            <Route path='/tasks/myTasks' element={<><ManageAllMissions /></>} />
             <Route path='/singleProject' element={<><SingleProject /></>} />
             <Route path='/singleMission' element={<><SingleMission /></>} />
             <Route path='/managerDash' element={<><ManagerDash /></>} />

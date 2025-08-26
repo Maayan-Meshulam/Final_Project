@@ -1,30 +1,44 @@
 const Jwt = require("jsonwebtoken");
 const { getUserById, getUserByEmail } = require("../../users/models/userAccessDBService");
+const buildError = require("../../helpers/erorrs/errorsHandeling");
 const SECRET_KEY = "secret"
 
 //יצירת טוקן
-const generateToken = async(user) => {
-    console.log("in genertae func");    
-    
-    const userFromDB = await getUserByEmail(user.email);    
-    
-    const payload = {
-        id: userFromDB._id,
-        managerLevel: userFromDB.managerLevel,
-        connectedEmployess: userFromDB.connectedEmployess ?? [],
-    }    
-
-    console.log(payload);
+const generateToken = async (user) => {
+    console.log("in genertae func");
+    console.log("email", user.email);
     
 
-    const token = Jwt.sign(payload, SECRET_KEY);
-    return token;
+    try {
+        const [userFromDB] = await getUserByEmail(user.email);
+        console.log(JSON.stringify(userFromDB) + "***");
+        
+        if(!userFromDB){
+            return next(buildError("Mongoode Error", "user's datails not rigth / need registeration"));
+        }
+
+        const payload = {
+            id: userFromDB._id,
+            managerLevel: userFromDB.managerLevel,
+            connectedEmployess: userFromDB.connectedEmployess ?? [],
+        }
+
+        console.log(userFromDB._id);
+        
+        console.log(payload);
+
+        const token = Jwt.sign(payload, SECRET_KEY);
+        return token;
+
+    } catch (error) {
+
+    }
 };
 
 //בדיקת תקינות הטוקן
 const verifyToken = (token) => {
     console.log("in verify token");
-        
+
     try {
         //בדיקת מהימנות הטוקן
         const payload = Jwt.verify(token, SECRET_KEY);
@@ -36,4 +50,4 @@ const verifyToken = (token) => {
 };
 
 
-module.exports = {generateToken, verifyToken};
+module.exports = { generateToken, verifyToken };

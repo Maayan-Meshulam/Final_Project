@@ -1,13 +1,11 @@
 const buildError = (type, message, status) => {
     console.log("in build error");
     
-    const err = new Error();    
+    const error = new Error(`${type}: ${message}`);    
+    error.status = status;
 
-    err.type = type;
-    err.status = status;
-    err.message = message;
-    
-    return err;
+    console.log(error.status);    
+    return error;
 };
 
 module.exports = buildError;

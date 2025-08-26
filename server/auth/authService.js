@@ -15,7 +15,9 @@ const auth = (req, res, next) => {
             return next(buildError("Authentication Error", "pleae login", 401))
         }
 
-        const payload = verifyToken(token);                
+        const payload = verifyToken(token);        
+        console.log(JSON.stringify(payload) + "from verify");
+                        
 
         if (!payload) {            
             return next(buildError("Authentication Error", "Incorrect details", 401))

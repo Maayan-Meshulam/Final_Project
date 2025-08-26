@@ -8,6 +8,7 @@ import CreateInputs from "./CreateInputs";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setState } from "../../redux/userInfoState";
+import { saveTokenInStorage, tokenDecoding } from "../../services/tokenService";
 
 
 interface LoginProps {
@@ -26,13 +27,17 @@ const Login: FunctionComponent<LoginProps> = () => {
         },
         validationSchema: Yup.object(userLoginValidation),
         onSubmit: (values => {
-            console.log(values + " values");
+            console.log(JSON.stringify(values) + " values");
             loginUser(values)
                 .then(res => {
-                    console.log(res.data);
-                    dispatch(setState(res.data)); // נאחסן בחנות את המידע עבור המשתמש שהתחבר
+                    const token = res.data;
+                    saveTokenInStorage(token); //שמירת הטוקן בזיכרון
+                    const userInfo = tokenDecoding(token); // פענוח הטוקן
+                    console.log(JSON.stringify(userInfo) + "888888888888888");
+                    
+                    dispatch(setState(userInfo)); // נאחסן בחנות את המידע עבור המשתמש שהתחבר
                     formik.resetForm();
-                    nav('/manageAllTaks');
+                    nav('/tasks/myTasks');
                 })
                 .catch(error => console.log(error))
         })
@@ -46,7 +51,7 @@ const Login: FunctionComponent<LoginProps> = () => {
 
                 <CreateInputs type="text" id="email" name="אימייל" formik={formik} placeholder="example@example.com" />
 
-                <CreateInputs type="password" id="pass" name="סיסמא" formik={formik} />
+                <CreateInputs type="password" id="password" name="סיסמא" formik={formik} />
 
                 <div className={style.Btn_Form_Container}>
                     <button

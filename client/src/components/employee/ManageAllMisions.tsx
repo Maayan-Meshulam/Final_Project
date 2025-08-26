@@ -1,8 +1,9 @@
 import { useEffect, useState, type FunctionComponent } from "react";
 import style from '../../style/previewMission/preivewDiaplayMission.module.css';
 import AddMission from "../user/AddMission";
-import { getMyCards } from "../../services/tasksService";
-import { boolean } from "yup";
+import { getMyTasks } from "../../services/tasksService";
+import { getTokenInStorage } from "../../services/tokenService";
+import { useSelector } from "react-redux";
 
 interface ManageAllMissionsProps {
 
@@ -14,139 +15,75 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
     const [toggleAllMyTasks, setToggleAllMyTasks] = useState<boolean>(false);
     const [allMyTasks, setAllMyTasks] = useState<any>([]);
 
+
+    let user = useSelector((state: any) => state.userBaseInfo);
+    console.log("........." + JSON.stringify(user));
+
+    const token = getTokenInStorage();
+    console.log(token + "token from storage");
+    console.log(JSON.stringify(user) + "user");
+
+
     //בטעינה ראשונית / כשיש שינוי במערך המשימות
-    useEffect(() => { 
-        getMyCards()
-        .then(res=>{
-            console.log(res.data);
-            setAllMyTasks(res.data);
-        })
-        .catch(error=>{
-            console.log(error);
-        })
-    }, [toggleAllMyTasks]);
+    useEffect(() => {
+        getMyTasks(token)
+            .then(res => {
+                console.log((res.data));
+                setAllMyTasks(res.data);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }, [toggleAllMyTasks, user]);
 
+    if (!user.id) {
+        return (<>
+            <p>אין לך הרשאה לפעולה זו</p>
+        </>)
+    }
+    else {
+        return (<>
+            <div className="container_page">
 
-    return (<>
-        <div className="container_page">
+                {/* add mission - click will open a popUp form to add mission */}
+                <div onClick={() => setDisplayAddMission(true)}>Add Mission</div>
+                {displayAddMission && <AddMission oncloseAddMission={setDisplayAddMission} onToggleAllMyTasks={setToggleAllMyTasks} />}
 
-            {/* add mission - click will open a popUp form to add mission */}
-            <div onClick={() => setDisplayAddMission(true)}>Add Mission</div>
-            {displayAddMission && <AddMission oncloseAddMission={setDisplayAddMission} onToggleAllMyTasks={setToggleAllMyTasks} />}
+                <div className={style.filter_Bar}>
+                    <div>
+                        <span id={style.resultFilter}>results : 8</span>
+                        <input type="text" className={style.search_input_filter_bar} />
+                    </div>
 
-            <div className={style.filter_Bar}>
-                <div>
-                    <span id={style.resultFilter}>results : 8</span>
-                    <input type="text" className={style.search_input_filter_bar} />
+                    <div>
+                        <span id={style.sort}>SORT</span>
+                        <span id={style.filter}>FILTER</span>
+                    </div>
+                    <button id={style.claerAllFiltersBtn}>clear all</button>
+
                 </div>
 
-                <div>
-                    <span id={style.sort}>SORT</span>
-                    <span id={style.filter}>FILTER</span>
+                <div className={style.scroller_container}>
+                    <div className={style.all_preview_mission_container}>
+                        {
+                            allMyTasks.map((task: any) => (
+                                <div className={style.preview_mission} key={task._id}>
+                                    <h5>{task.title}</h5>
+                                    <div>
+                                        <span id={task.statusMission}>{task.status}</span>
+                                        <span id={task.typeMission}>{task.type}</span>
+                                    </div>
+                                    <span>{task.receiptDate}</span>
+                                </div>
+                            ))
+                        }
+                    </div>
                 </div>
-                <button id={style.claerAllFiltersBtn}>clear all</button>
+
 
             </div>
-
-            <div className={style.scroller_container}>
-                <div className={style.all_preview_mission_container}>
-
-                    {
-                        allMyTasks ?? 
-                    }
-
-                    <div className={style.preview_mission}>
-                        <h5>שם המשימה</h5>
-                        <div>
-                            <span id={style.statusMission}>ממתינה</span>
-                            <span id={style.typeMission}>אישית</span>
-                        </div>
-                        <span>13/12/2025</span>
-                    </div>
-                    <div className={style.preview_mission}>
-                        <h5>שם המשימה</h5>
-                        <div>
-                            <span id={style.statusMission}>ממתינה</span>
-                            <span id={style.typeMission}>קבוצתית</span>
-                        </div>
-                        <span>13/12/2025</span>
-                    </div>
-                    <div className={style.preview_mission}>
-                        <h5>שם המשימה</h5>
-                        <div>
-                            <span id={style.statusMission}>בתהליך</span>
-                            <span id={style.typeMission}>מנהל</span>
-                        </div>
-                        <span>13/12/2025</span>
-                    </div>
-                    <div className={style.preview_mission}>
-                        <h5>שם המשימה</h5>
-                        <div>
-                            <span id={style.statusMission}>בוצעה</span>
-                            <span id={style.typeMission}>אישית</span>
-                        </div>
-                        <span>13/12/2025</span>
-                    </div>
-                    <div className={style.preview_mission}>
-                        <h5>שם המשימה</h5>
-                        <div>
-                            <span id={style.statusMission}>ממתינה</span>
-                            <span id={style.typeMission}>אישית</span>
-                        </div>
-                        <span>13/12/2025</span>
-                    </div>
-                    <div className={style.preview_mission}>
-                        <h5>שם המשימה</h5>
-                        <div>
-                            <span id={style.statusMission}>ממתינה</span>
-                            <span id={style.typeMission}>קבוצתית</span>
-                        </div>
-                        <span>13/12/2025</span>
-                    </div>
-                    <div className={style.preview_mission}>
-                        <h5>שם המשימה</h5>
-                        <div>
-                            <span id={style.statusMission}>בתהליך</span>
-                            <span id={style.typeMission}>מנהל</span>
-                        </div>
-                        <span>13/12/2025</span>
-                    </div>
-                    <div className={style.preview_mission}>
-                        <h5>שם המשימה</h5>
-                        <div>
-                            <span id={style.statusMission}>בוצעה</span>
-                            <span id={style.typeMission}>אישית</span>
-                        </div>
-                        <span>13/12/2025</span>
-                    </div>
-                    <div className={style.preview_mission}>
-                        <h5>שם המשימה</h5>
-                        <div>
-                            <span id={style.statusMission}>ממתינה</span>
-                            <span id={style.typeMission}>אישית</span>
-                        </div>
-                        <span>13/12/2025</span>
-                    </div>
-                    <div className={style.preview_mission}>
-                        <h5>שם המשימה</h5>
-                        <div>
-                            <span id={style.statusMission}>ממתינה</span>
-                            <span id={style.typeMission}>קבוצתית</span>
-                        </div>
-                        <span>13/12/2025</span>
-                    </div>
-                    <div className={style.preview_mission}>
-                        <h5>שם המשימה</h5>
-                        <div>
-                            <span id={style.statusMission}>בתהליך</span>
-                            <span id={style.typeMission}>מנהל</span>
-                        </div>
-                        <span>13/12/2025</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </>);
+        </>);
+    }
 }
 
 export default ManageAllMissions;
