@@ -11,9 +11,12 @@ const taskValidation = (req, res, next) => {
     try {
 
         let task = req.body;
+        let {id} = req.params;
+        console.log(id+ "............");
+        
 
         //בדיקת תקינות של סוג המשתנה שהועבר בנתיב         
-        if (req.params.id && !mongoose.isObjectIdOrHexString(req.params.id))
+        if (id && !mongoose.isObjectIdOrHexString(id))
             return next(buildError("", "invalid id format at url", 400));
 
         task = taskNormalization(task, req.userInfo);

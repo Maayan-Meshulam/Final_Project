@@ -16,7 +16,8 @@ const CreateSelects: FunctionComponent<CreateSelectsProps> = ({ formik, name, id
             <select
                 id={id}
                 onChange={formik.handleChange}
-                onBlur={formik.handleBlur}>
+                onBlur={formik.handleBlur}
+                value= {formik.values[id]} >
                 <option value="">בחר</option>
                 {children}
             </select>

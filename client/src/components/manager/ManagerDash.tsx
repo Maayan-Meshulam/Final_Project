@@ -37,7 +37,7 @@ const ManagerDash: FunctionComponent<ManagerDashProps> = () => {
                 <Link to="/addMission" onMouseOver={PreLoadAddMission}>הוספת משימה</Link>
             </div> */}
 
-    if (!user.id) {
+    if (!user.id || user.managerLevel < 1) {
         return <p>אין לך הרשאות לדף זה</p>
     }
     else {

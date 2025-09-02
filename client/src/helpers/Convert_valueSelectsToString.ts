@@ -10,7 +10,7 @@ const statusConvert :any= {
 };
 
 const workerTaskIdConvert:any = {
-    "": "",
+    "0": "אין עובדים משויכים",
     "1": "מעיין",
     "2": "רותם",
     "3" : "הדר" 

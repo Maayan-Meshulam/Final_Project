@@ -8,7 +8,7 @@ import sessionStorage from "redux-persist/lib/storage/session";
 //ערך התחלתי
 const initialState: any = {
     id: null,
-    managerLevel: -1,
+    managerLevel: 0,
     connectedEmployess: [],
 }
 

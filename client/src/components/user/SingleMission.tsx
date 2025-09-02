@@ -4,6 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { deleteTask, getTaskById } from "../../services/tasksService";
 import { getTokenInStorage } from "../../services/tokenService";
 import { statusConvert, typeConvert } from "../../helpers/Convert_valueSelectsToString";
+import UpdateTask from '../user/UpdaeTask';
+import DeleteTask from "./DeleteTask";
 
 interface SingleMissionProps {
 
@@ -11,22 +13,26 @@ interface SingleMissionProps {
 
 const SingleMission: FunctionComponent<SingleMissionProps> = () => {
 
-    const nav = useNavigate();
     const { id } = useParams();
     const token = getTokenInStorage();
     const [task, setTask] = useState<any>(null);
+    const [toggleupdatedTask, setToggleUpdaedTask] = useState<boolean>(false)
+    const [closeDeleting, setCloseDeleting] = useState<boolean>(false);
+    const [closeUpdating, setCloseUpdating] = useState<boolean>(false);
 
     useEffect(() => {
         getTaskById(id as string, token as string)
             .then(res => setTask(res.data))
             .catch(err => console.log(err))
-    }, []);
+    }, [toggleupdatedTask]);
 
     return (<>
         {task ? (<div className="container_page">
             <div className={style.mission_container}>
                 <div className={style.task_characterization}>
                     <h1>{task.title}</h1>
+                    <h3>{task.subTitle}</h3>
+                    <p>{task.description}</p>
                     <p>{statusConvert[task.status]}</p>
                     <p>{typeConvert[task.type]}</p>
                     <div style={{ textAlign: "justify" }}>
@@ -38,23 +44,23 @@ const SingleMission: FunctionComponent<SingleMissionProps> = () => {
                         <p><span>end date: </span>{task.deadLine}</p>
                     </div>
                     <div className={style.buttons_container}>
-                        <button
-                            type="button"
-                            onClick={() => nav('/updateTask')}
-                        >Edit</button>
 
                         <button
                             type="button"
                             onClick={() => {
-                                deleteTask(id as string)
-                                    .then(res => {
-                                        console.log(res.data);
-                                    })
-                                    .catch(error => {
-                                        console.log(error);
-                                    })
+                                setCloseUpdating(true);
+                            }}
+                        >Edit</button>
+
+                        {closeUpdating && <UpdateTask oncloseUpdating={setCloseUpdating} task={task} onToggleUetUpdaedTask={setToggleUpdaedTask} />}
+
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setCloseDeleting(true);
                             }}
                         >Delete</button>
+                        {closeDeleting && <DeleteTask onCloseDeleting={setCloseDeleting} task={task} />}
 
                     </div>
                 </div>

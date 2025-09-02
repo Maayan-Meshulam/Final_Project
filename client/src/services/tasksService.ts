@@ -1,4 +1,3 @@
-import { retry } from "@reduxjs/toolkit/query";
 import axios from "axios";
 const API_TASK = 'http://localhost:3131/tasks'
 
@@ -13,15 +12,23 @@ const addTask = (task: any, token: string) => {
 }
 
 //עריכת משימה
-const updateTask = (task: any) => {
+const updatedTask = (task: any, taskId: number, token: string) => {
     console.log("in update task");
-    return axios.put(API_TASK, task);
+    return axios.put(`${API_TASK}/${taskId}`, task, {
+        headers: {
+            'x-auth-token': token
+        }
+    });
 }
 
 //מחיקת משימה
-const deleteTask = (taskId: string) => {
+const deleteTask = (taskId: string, token: string) => {
     console.log("in delete task");
-    return axios.post(`${API_TASK}/${taskId}`, taskId);
+    return axios.delete(`${API_TASK}/${taskId}`, {
+        headers: {
+            'x-auth-token': token
+        }
+    });
 }
 
 const getMyTasks = (token: string) => {
@@ -40,7 +47,7 @@ const getTaskById = (id: string, token: string) => {
 
 export {
     addTask,
-    updateTask,
+    updatedTask,
     deleteTask,
     getMyTasks,
     getTaskById

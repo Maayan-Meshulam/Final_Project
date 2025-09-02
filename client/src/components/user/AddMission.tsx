@@ -13,7 +13,7 @@ import { getTokenInStorage } from "../../services/tokenService.js";
 
 interface AddMissionProps {
     oncloseAddMission: (closeBool: boolean) => void,
-    onToggleAllMyTasks: (toggleMyTasks: boolean) => void
+    onToggleAllMyTasks?: (toggleMyTasks: boolean) => void
 }
 
 const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission, onToggleAllMyTasks }) => {
@@ -44,7 +44,7 @@ const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission, onT
             addTask(values, token)
                 .then(res => {
                     console.log(res.data);
-                    onToggleAllMyTasks(true);
+                    if(onToggleAllMyTasks) onToggleAllMyTasks((prev:boolean)=>!prev);
                     oncloseAddMission(false);
                     formik.resetForm();
                 })
@@ -82,7 +82,7 @@ const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission, onT
                     </CreateSelects>
 
                     <CreateSelects id="workerTaskId" name="עובד משויך" formik={formik}>
-                        <option value="">ללא</option>
+                        <option value="0">ללא</option>
                         <option value="1">maayan</option>
                         <option value="2">rotem</option>
                         <option value="3">hadar</option>
