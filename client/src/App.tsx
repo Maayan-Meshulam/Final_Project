@@ -24,9 +24,8 @@ function App() {
             <Route path='/' element={<><Home /></>} />
             <Route path='/users/login' element={<><Login /></>} />
             <Route path='/tasks/myTasks' element={<><ManageAllMissions /></>} />
-            <Route path='/singleProject' element={<><SingleProject /></>} />
-            <Route path='/singleMission' element={<><SingleMission /></>} />
-            <Route path='/managerDash' element={<><ManagerDash /></>} />
+            <Route path='/tasks/:id' element={<><SingleMission /></>} />
+            <Route path='users/managerDash' element={<><ManagerDash /></>} />
             <Route path='/manageEmployee' element={<><ManageEmployee /></>} />
           </Routes>
           {/* </Suspense> */}

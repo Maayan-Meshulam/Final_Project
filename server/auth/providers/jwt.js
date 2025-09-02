@@ -7,14 +7,17 @@ const SECRET_KEY = "secret"
 const generateToken = async (user) => {
     console.log("in genertae func");
     console.log("email", user.email);
-    
+
 
     try {
         const [userFromDB] = await getUserByEmail(user.email);
-        console.log(JSON.stringify(userFromDB) + "***");
-        
-        if(!userFromDB){
-            return next(buildError("Mongoode Error", "user's datails not rigth / need registeration"));
+        console.log(userFromDB);
+
+        console.log(userFromDB + "***");
+
+        if (!userFromDB) {
+            console.log("noooooo");
+            throw new Error("Mongoode Error, user's datails not rigth / need registeration");
         }
 
         const payload = {
@@ -24,14 +27,14 @@ const generateToken = async (user) => {
         }
 
         console.log(userFromDB._id);
-        
+
         console.log(payload);
 
         const token = Jwt.sign(payload, SECRET_KEY);
         return token;
 
     } catch (error) {
-
+        throw new Error(error);
     }
 };
 

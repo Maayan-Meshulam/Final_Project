@@ -5,7 +5,8 @@ const GENERAL_VALID = Yup.string().required().min(2).max(256);
 export const taskSchema :any = {
     title: GENERAL_VALID,
     subTitle: GENERAL_VALID,
-    description: GENERAL_VALID.concat(Yup.string().max(1024)),
+    description: GENERAL_VALID.max(1024),
+    // description: GENERAL_VALID.concat(Yup.string().max(1024)), // זה מוחק את השדה של החובה - שלחתי הודעה לחברה של YUP
     deadLine: Yup.string().required(),
     receiptDate: Yup.string().required(),
     type: Yup.string().required(),

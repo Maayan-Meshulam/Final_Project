@@ -46,9 +46,11 @@ const ADDRESS = Joi.object({
 
 
 const MANAGER_LEVEL = Joi.number()
-.required()
+    .required()
 
 const CONNECTEDEMPLOYESS = Joi.array()
+
+const MINI_GENERAL_DATES = Joi.date().required()
 
 
 module.exports = {
@@ -61,5 +63,7 @@ module.exports = {
     IMAGE,
     ADDRESS,
     MANAGER_LEVEL,
-    CONNECTEDEMPLOYESS
+    CONNECTEDEMPLOYESS,
+    MINI_GENERAL_DATES,
+
 }

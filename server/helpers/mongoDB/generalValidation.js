@@ -1,4 +1,4 @@
-const { required } = require("joi");
+const { required, date } = require("joi");
 const { Schema } = require("mongoose");
 
 const GENERAL_VALIDATION = {
@@ -71,6 +71,12 @@ const CONNECTEDEMPLOYESS = {
 const WORKER = {
 };
 
+const MINI_GENERAL_DATES = {
+    type: Date,
+    required: true
+}
+
+
 module.exports = {
     GENERAL_VALIDATION,
     MINI_GENERAL_VALIDATION,
@@ -82,5 +88,6 @@ module.exports = {
     ADDRESS,
     MANAGER_LEVEL,
     CONNECTEDEMPLOYESS,
-    WORKER
+    WORKER,
+    MINI_GENERAL_DATES
 }

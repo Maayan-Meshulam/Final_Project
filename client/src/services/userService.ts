@@ -7,6 +7,12 @@ const loginUser = (user: any) => {
     return axios.post(`${API_USERS}/login`, user);
 };
 
+const addUser = (user: any)=>{
+    console.log("in add user");
+    return axios.post(`${API_USERS}/addUser`, user);
+}
+
 export {
-    loginUser
+    loginUser,
+    addUser
 }

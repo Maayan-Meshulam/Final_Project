@@ -5,13 +5,14 @@ interface CreateInputsProps {
     id: string,
     name: string
     formik: any,
-    placeholder?:string
+    placeholder?:string,
+    classAddEmployess?:any
 }
 
-const CreateInputs: FunctionComponent<CreateInputsProps> = ({ formik, type, name, id}) => {
+const CreateInputs: FunctionComponent<CreateInputsProps> = ({ formik, type, name, id, classAddEmployess}) => {
     return (<>
         <div>
-            <div className="form-floating">
+            <div className={`form-floating ${classAddEmployess}`}>
 
                 <label>{name}:</label>
                 <input

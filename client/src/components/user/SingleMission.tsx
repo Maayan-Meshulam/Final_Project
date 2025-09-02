@@ -1,7 +1,8 @@
-import type { FunctionComponent } from "react";
+import { useEffect, useState, type FunctionComponent } from "react";
 import style from '../../style/singleMission/singleMission.module.css';
 import { useNavigate, useParams } from "react-router-dom";
-import { deleteTask } from "../../services/tasksService";
+import { deleteTask, getTaskById } from "../../services/tasksService";
+import { getTokenInStorage } from "../../services/tokenService";
 
 interface SingleMissionProps {
 
@@ -10,24 +11,29 @@ interface SingleMissionProps {
 const SingleMission: FunctionComponent<SingleMissionProps> = () => {
 
     const nav = useNavigate();
-    const {id} = useParams();
+    const { id } = useParams();
+    const token = getTokenInStorage();
+    const [task, setTask]: any = useState(null);
+
+    useEffect(() => {
+        getTaskById(id as string, token as string)
+            .then(res => setTask(res.data))
+            .catch(err => console.log(err))
+    }, []);
 
     return (<>
-        <div className="container_page">
+        {task ? (<div className="container_page">
             <div className={style.mission_container}>
                 <div className={style.task_characterization}>
-                    <h1>Mission Name</h1>
-                    <p>in process</p>
-                    <p><span>catagory: </span>part of project</p>
+                    <h1>{task.title}</h1>
+                    <p>{task.status}</p>
                     <div style={{ textAlign: "justify" }}>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste, delectus omnis.
-                        Aliquid, aperiam sint facere aliquam odit neque sit debitis aut ex porro autem delectus asperiores,
-                        optio quidem, quae eaque?
+                        {style.description}
                     </div>
-                    <p><span>responibility: </span>maayan meshulam</p>
+                    {/* <p><span>responibility: </span>maayan meshulam</p> */}
                     <div>
-                        <p><span>start date: </span>15/06/2025</p>
-                        <p><span>end date: </span>08/08/2025</p>
+                        <p><span>start date: </span>{task.receiptDate}</p>
+                        <p><span>end date: </span>{task.deadLine}</p>
                     </div>
                     <div className={style.buttons_container}>
                         <button
@@ -37,17 +43,17 @@ const SingleMission: FunctionComponent<SingleMissionProps> = () => {
 
                         <button
                             type="button"
-                            onClick={()=>{
-                                deleteTask(id)
-                                .then(res=>{
-                                    console.log(res.data);                                    
-                                })
-                                .catch(error=>{
-                                    console.log(error);
-                                })
+                            onClick={() => {
+                                deleteTask(id as string)
+                                    .then(res => {
+                                        console.log(res.data);
+                                    })
+                                    .catch(error => {
+                                        console.log(error);
+                                    })
                             }}
                         >Delete</button>
-                        
+
                     </div>
                 </div>
 
@@ -62,7 +68,8 @@ const SingleMission: FunctionComponent<SingleMissionProps> = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div>) : (<p>אין הרשאה לפעולה</p>)}
+
     </>);
 }
 

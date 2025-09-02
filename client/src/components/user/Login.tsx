@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setState } from "../../redux/userInfoState";
 import { saveTokenInStorage, tokenDecoding } from "../../services/tokenService";
+import type { JwtPayload } from "jwt-decode";
 
 
 interface LoginProps {
@@ -32,12 +33,12 @@ const Login: FunctionComponent<LoginProps> = () => {
                 .then(res => {
                     const token = res.data;
                     saveTokenInStorage(token); //שמירת הטוקן בזיכרון
-                    const userInfo = tokenDecoding(token); // פענוח הטוקן
+                    let userInfo = tokenDecoding(token) as any // פענוח הטוקן
                     console.log(JSON.stringify(userInfo) + "888888888888888");
-                    
+
                     dispatch(setState(userInfo)); // נאחסן בחנות את המידע עבור המשתמש שהתחבר
                     formik.resetForm();
-                    nav('/tasks/myTasks');
+                    userInfo.managerLevel < 1 ? nav('/tasks/myTasks') : nav('/users/managerDash');
                 })
                 .catch(error => console.log(error))
         })

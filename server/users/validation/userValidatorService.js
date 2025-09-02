@@ -8,12 +8,13 @@ const userValidation = (req, res, next) => {
 
     try {
         const user = req.body;
+        console.log(JSON.stringify(user));
+        
 
-
-        if (VALIDATOR == "joi") {
+        if (VALIDATOR == "joi") {            
 
             const { error } = userValid(user);
-
+            
             if (error) {
                 console.log("in user error validation");
                 console.log(error.details);
@@ -26,10 +27,10 @@ const userValidation = (req, res, next) => {
             return next();
         }
 
-        return next(buildError("", "validation type not exist", 400));
+        return next(buildError("validation Type Error", "validation type not exist", 400));
 
     } catch (error) {
-        next(error);
+        next(buildError("Genral Error:", error, 500));
     }
 };
 

@@ -38,7 +38,11 @@ const getUserByEmail = async (email) => {
     console.log("in get user by email DB");
 
     try {
+        console.log("inn");
+
         const user = await User.find({ email });
+        console.log(user);
+
         return user;
 
     } catch (error) {
@@ -65,7 +69,7 @@ const updateUser = async (userId, newUser) => {
     console.log("in update user DB");
 
     try {
-        const user = await User.findByIdAndUpdate(userId, newUser, {new: true});        
+        const user = await User.findByIdAndUpdate(userId, newUser, { new: true });
         return user;
 
     } catch (error) {
@@ -87,6 +91,20 @@ const deleteUser = async (userId) => {
     }
 };
 
+const verifyLogin = async (email, password) => {
+    console.log("in verify login");
+    console.log(email, password);
+
+    try {
+        const isUserExist = await User.exists({ email, password });
+        console.log(isUserExist + "*****");
+        
+        return isUserExist;
+    } catch (error) {
+        return buildError("mongoose Error", error, 500)
+    }
+}
+
 
 module.exports = {
     createUser,
@@ -94,5 +112,6 @@ module.exports = {
     getUserById,
     updateUser,
     deleteUser,
-    getUserByEmail
+    getUserByEmail,
+    verifyLogin
 };

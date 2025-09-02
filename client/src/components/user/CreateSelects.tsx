@@ -4,19 +4,20 @@ interface CreateSelectsProps {
     id: string,
     name: string
     formik: any,
-    children: ReactNode
+    children: ReactNode,
+    classAddEmployess?: any
 
 }
 
-const CreateSelects: FunctionComponent<CreateSelectsProps> = ({ formik, name, id, children }) => {
+const CreateSelects: FunctionComponent<CreateSelectsProps> = ({ formik, name, id, classAddEmployess, children }) => {
     return (<>
-        <div>
+        <div className={classAddEmployess}>
             <label>{name} </label>
             <select
                 id={id}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}>
-
+                <option value="">בחר</option>
                 {children}
             </select>
 

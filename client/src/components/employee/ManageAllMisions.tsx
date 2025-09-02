@@ -4,6 +4,7 @@ import AddMission from "../user/AddMission";
 import { getMyTasks } from "../../services/tasksService";
 import { getTokenInStorage } from "../../services/tokenService";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 interface ManageAllMissionsProps {
 
@@ -22,6 +23,8 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
     const token = getTokenInStorage();
     console.log(token + "token from storage");
     console.log(JSON.stringify(user) + "user");
+
+    const nav = useNavigate();
 
 
     //בטעינה ראשונית / כשיש שינוי במערך המשימות
@@ -67,7 +70,7 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
                     <div className={style.all_preview_mission_container}>
                         {
                             allMyTasks.map((task: any) => (
-                                <div className={style.preview_mission} key={task._id}>
+                                <div className={style.preview_mission} key={task._id} onClick={()=>{nav(`/tasks/${task._id}`)}}>
                                     <h5>{task.title}</h5>
                                     <div>
                                         <span id={task.statusMission}>{task.status}</span>
