@@ -11,7 +11,7 @@ const taskNormalization = (task, user) => {
     return ({
         ...task,
         userIdCreatorTask: user.id,
-        workerTaskId: task.workerTaskId ?? user.id
+        workerTaskId: task.workerTaskId == "" ? user.id :  task.workerTaskId 
     });
 
 };

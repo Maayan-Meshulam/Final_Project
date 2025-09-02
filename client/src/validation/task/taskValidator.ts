@@ -10,7 +10,8 @@ export const taskSchema :any = {
     deadLine: Yup.string().required(),
     receiptDate: Yup.string().required(),
     type: Yup.string().required(),
-    status: Yup.string().required()
+    status: Yup.string().required(),
+    workerTaskId: Yup.string().required()
 };
 
 console.log("after validaion acheama");

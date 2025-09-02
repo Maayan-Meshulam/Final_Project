@@ -5,6 +5,7 @@ import { getMyTasks } from "../../services/tasksService";
 import { getTokenInStorage } from "../../services/tokenService";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { statusConvert, typeConvert } from "../../helpers/Convert_valueSelectsToString";
 
 interface ManageAllMissionsProps {
 
@@ -73,8 +74,8 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
                                 <div className={style.preview_mission} key={task._id} onClick={()=>{nav(`/tasks/${task._id}`)}}>
                                     <h5>{task.title}</h5>
                                     <div>
-                                        <span id={task.statusMission}>{task.status}</span>
-                                        <span id={task.typeMission}>{task.type}</span>
+                                        <span id={task.statusMission}>{statusConvert[task.status]}</span>
+                                        <span id={task.typeMission}>{typeConvert[task.type]}</span>
                                     </div>
                                     <span>{task.receiptDate}</span>
                                 </div>

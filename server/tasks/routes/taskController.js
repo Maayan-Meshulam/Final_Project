@@ -3,7 +3,6 @@ const { createTask, getAllTasks, getTaskById, updateTask, deleteTask, getMyTasks
 const taskValidation = require("../validation/taskValidationService");
 const buildError = require("../../helpers/erorrs/errorsHandeling");
 const auth = require("../../auth/authService");
-const { taskNormalization } = require("../helpers/normelizeTask");
 const mongoose = require("mongoose");
 const router = express.Router();
 
@@ -17,6 +16,9 @@ router.post('/', auth, taskValidation, async (req, res, next) => {
         let user = req.userInfo;
 
         console.log(JSON.stringify(task) + "*******788");
+
+console.log(task.workerTaskId);
+console.log(user.id);
 
 
         //בדיקת הרשאות - האם זה המשתמש עצמו / עובד שמושיך למנהל

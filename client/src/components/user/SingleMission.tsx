@@ -3,6 +3,7 @@ import style from '../../style/singleMission/singleMission.module.css';
 import { useNavigate, useParams } from "react-router-dom";
 import { deleteTask, getTaskById } from "../../services/tasksService";
 import { getTokenInStorage } from "../../services/tokenService";
+import { statusConvert, typeConvert } from "../../helpers/Convert_valueSelectsToString";
 
 interface SingleMissionProps {
 
@@ -13,7 +14,7 @@ const SingleMission: FunctionComponent<SingleMissionProps> = () => {
     const nav = useNavigate();
     const { id } = useParams();
     const token = getTokenInStorage();
-    const [task, setTask]: any = useState(null);
+    const [task, setTask] = useState<any>(null);
 
     useEffect(() => {
         getTaskById(id as string, token as string)
@@ -26,7 +27,8 @@ const SingleMission: FunctionComponent<SingleMissionProps> = () => {
             <div className={style.mission_container}>
                 <div className={style.task_characterization}>
                     <h1>{task.title}</h1>
-                    <p>{task.status}</p>
+                    <p>{statusConvert[task.status]}</p>
+                    <p>{typeConvert[task.type]}</p>
                     <div style={{ textAlign: "justify" }}>
                         {style.description}
                     </div>

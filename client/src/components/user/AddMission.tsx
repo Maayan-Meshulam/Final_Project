@@ -33,7 +33,8 @@ const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission, onT
             deadLine: "",
             receiptDate: "",
             type: "",
-            status: ""
+            status: "",
+            workerTaskId: ""
         },
         validationSchema: Yup.object(taskSchema),
         onSubmit: (values) => {
@@ -70,14 +71,12 @@ const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission, onT
                     <CreateInputs type="Date" id="receiptDate" name="תאריך קבלה" formik={formik} />
 
                     <CreateSelects id="type" name="סוג" formik={formik}>
-                        <option value="">בחר סוג</option>
                         <option value="1">אישית</option>
                         <option value="2">מנהל</option>
                     </CreateSelects>
 
 
                     <CreateSelects id="status" name="סטטוס" formik={formik}>
-                        <option value="">בחר סטטוס</option>
                         <option value="1">בטיפול</option>
                         <option value="2">בוצע</option>
                     </CreateSelects>
