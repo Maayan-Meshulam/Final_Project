@@ -7,12 +7,55 @@ const loginUser = (user: any) => {
     return axios.post(`${API_USERS}/login`, user);
 };
 
-const addUser = (user: any)=>{
+const addUser = (user: any, token: string) => {
     console.log("in add user");
-    return axios.post(`${API_USERS}/addUser`, user);
+    return axios.post(`${API_USERS}/addUser`, user, {
+        headers: { "x-auth-token": token }
+    });
+}
+
+const getAllUsers = (managerEmployeesArray: string, token: string) => {
+    console.log("in get all users axios");
+    console.log(managerEmployeesArray + "manger id");
+
+    return axios.get(`${API_USERS}?ArrEmployess=${managerEmployeesArray}`, {
+        headers: { "x-auth-token": token }
+    });
+
+}
+
+const getUserById = (userId: string, token: string) => {
+    console.log("----------------" + userId);
+
+    console.log("in get by id axios");
+    return axios.get(`${API_USERS}/${userId}`, {
+        headers: { "x-auth-token": token }
+    });
+
+}
+
+const deleteUser = (userId: string, token: string) => {
+
+    console.log("in delete user");
+    return axios.delete(`${API_USERS}/${userId}`, {
+        headers: { 'x-auth-token': token }
+    })
+}
+
+const updatingUser = (userId: string, token: string, newUser: any) => {
+    console.log("in axios update user");
+    console.log(JSON.stringify(newUser));
+
+    return axios.put(`${API_USERS}:${userId}`, newUser, {
+        headers: { 'x-auth-token': token }
+    })
 }
 
 export {
     loginUser,
-    addUser
+    addUser,
+    getAllUsers,
+    getUserById,
+    deleteUser,
+    updatingUser
 }

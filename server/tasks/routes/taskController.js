@@ -17,8 +17,8 @@ router.post('/', auth, taskValidation, async (req, res, next) => {
 
         console.log(JSON.stringify(task) + "*******788");
 
-console.log(task.workerTaskId);
-console.log(user.id);
+        console.log(task.workerTaskId);
+        console.log(user.id);
 
 
         //בדיקת הרשאות - האם זה המשתמש עצמו / עובד שמושיך למנהל
@@ -62,15 +62,34 @@ router.get('/', auth, async (req, res, next) => {
 router.get('/myTasks', auth, async (req, res, next) => {
     console.log("in get all my tasks");
     console.log(JSON.stringify(req.userInfo) + "*************");
-    
+
     try {
         const allTasks = await getMyTasks(req.userInfo.id);
         res.status(200).send(allTasks);
 
     } catch (error) {
-        next(error);
+        return next(buildError("General Error", error, 500))
     }
 });
+
+//קבלת כל המשימות של העבודים - עבור מנהלים
+//לנסות לשנותconst ואז לראות את השגיאה - חובה לטפל !!
+router.get('/allTasks', auth, async (req, res, next) => {
+    console.log("in all tasks");
+    let { arrEmployes } = req.query;
+    console.log(JSON.stringify(arrEmployes) + ".........................33333");
+    arrEmployes = arrEmployes.split(',');
+    console.log(JSON.stringify(arrEmployes) + ".........................33333");
+
+    try {
+        const allTasks = await getAllTasks(arrEmployes);
+        console.log(allTasks);
+        res.status(200).send(allTasks);
+    } catch (error) {
+        return next(buildError("General Error", error, 500))
+    }
+
+})
 
 //get task by id
 router.get('/:id', auth, async (req, res, next) => {
@@ -101,8 +120,8 @@ router.put('/:id', auth, taskValidation, async (req, res, next) => {
     try {
         const { id } = req.params;
         const newtask = req.newTaskNormalize;
-        console.log("new task "+ newtask);
-        
+        console.log("new task " + newtask);
+
         const user = req.userInfo;
 
         const taskFromDB = await getTaskById(id);

@@ -24,9 +24,8 @@ const getAllTasks = async (connectedEmployess) => {
     try {
         if (DB == "MongoDB") {
 
-            const allTasks = await Task.find({ _id: { $in: connectedEmployess } });
-            console.log(JSON.stringify(allTasks));
-
+            const allTasks = await Task.find({ userIdCreatorTask: { $in: connectedEmployess } });
+            console.log(JSON.stringify(allTasks) + "////////////////");
             return allTasks;
         }
         return (buildError("Mongoose Error:", "DB type is not exist", 500))
@@ -45,7 +44,7 @@ const getMyTasks = async (userId) => {
     console.log("in my tasks");
     try {
         if (DB == "MongoDB") {
-            const myTasks = await Task.find({ userIdCreatorTask: userId });
+            const myTasks = await Task.find({ workerTaskId: userId });
             return myTasks;
         }
         return (buildError("Mongoose Error:", "DB type is not exist", 500))
@@ -62,7 +61,7 @@ const getTaskById = async (taskId) => {
 
     try {
         if (DB == "MongoDB") {
-            const task = await Task.findById(taskId);
+            const task = await Task.findById(taskId);            
             return task;
         }
         return (buildError("Mongoose Error:", "DB type is not exist", 500))

@@ -13,6 +13,8 @@ const addTask = (task: any, token: string) => {
 
 //עריכת משימה
 const updatedTask = (task: any, taskId: number, token: string) => {
+    console.log(token + "___________token");
+
     console.log("in update task");
     return axios.put(`${API_TASK}/${taskId}`, task, {
         headers: {
@@ -39,10 +41,19 @@ const getMyTasks = (token: string) => {
 }
 
 const getTaskById = (id: string, token: string) => {
+    console.log("token" + token);
+
     console.log("in get task by id");
     return axios.get(`${API_TASK}/${id}`, {
         headers: { "x-auth-token": token }
     })
+}
+
+const getAllTasks = (connectedEmployees: any, token: string) => {
+    console.log("get all tasks from axios");
+    return axios.get(`${API_TASK}/allTasks?arrEmployes=${connectedEmployees}`, {
+        headers: { 'x-auth-token': token }
+    });
 }
 
 export {
@@ -50,5 +61,6 @@ export {
     updatedTask,
     deleteTask,
     getMyTasks,
-    getTaskById
+    getTaskById,
+    getAllTasks
 }

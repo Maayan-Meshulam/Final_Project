@@ -22,9 +22,11 @@ const createUser = async (newUser) => {
 //get user by id
 const getUserById = async (userId) => {
     console.log("in get user by id DB");
+    console.log(userId + "/////");
 
     try {
         const user = await User.findById({ _id: userId });
+        console.log(JSON.stringify(user));
         return user;
 
     } catch (error) {
@@ -52,11 +54,15 @@ const getUserByEmail = async (email) => {
 
 
 //get all users
-const getAllUsers = async (employess) => {
+const getAllUsers = async (managerEmployeesArray) => {
     console.log("in get all users DB");
+    console.log(managerEmployeesArray + "***************************");
+    
 
     try {
-        const allUsers = await User.find({ _id: { $in: employess } });
+        const allUsers = await User.find({_id : {$in : managerEmployeesArray}});
+        console.log(allUsers + " all users");
+
         return allUsers;
 
     } catch (error) {
@@ -98,7 +104,7 @@ const verifyLogin = async (email, password) => {
     try {
         const isUserExist = await User.exists({ email, password });
         console.log(isUserExist + "*****");
-        
+
         return isUserExist;
     } catch (error) {
         return buildError("mongoose Error", error, 500)

@@ -1,4 +1,4 @@
-import type { FunctionComponent } from "react";
+import { useEffect, useState, type FunctionComponent } from "react";
 import style from '../../style/addMission/addMission.module.css';
 import { useFormik } from 'formik';
 import CreateInputs from "./CreateInputs.js";
@@ -8,12 +8,13 @@ import { taskSchema } from "../../validation/task/taskValidator.js";
 import { addTask } from "../../services/tasksService.js";
 import { useSelector } from "react-redux";
 import { getTokenInStorage } from "../../services/tokenService.js";
+import { getAllUsers } from "../../services/userService.js";
 
 
 
 interface AddMissionProps {
     oncloseAddMission: (closeBool: boolean) => void,
-    onToggleAllMyTasks?: (toggleMyTasks: boolean) => void
+    onToggleAllMyTasks?: any
 }
 
 const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission, onToggleAllMyTasks }) => {
@@ -23,6 +24,25 @@ const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission, onT
     console.log(JSON.stringify(user) + "  from add task");
 
     const token = getTokenInStorage() as string
+
+    const [arrEmployess, setArrEmployess] = useState<any>([]);
+
+    console.log(typeof user.id + " ypeeee");
+
+
+    useEffect(() => {
+        if (user.managerLevel > 0) {
+            console.log(user.connectedEmployess + "7090909000000000000000000");
+            
+            getAllUsers(user.connectedEmployess, token)
+                .then((res: any) => {
+                    console.log(JSON.stringify(res.data) + "......................");
+                    setArrEmployess(res.data);
+                    return res.data;
+                })
+                .catch(err => { console.log(err) })
+        }
+    }, []);
 
 
     const formik = useFormik({
@@ -44,7 +64,7 @@ const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission, onT
             addTask(values, token)
                 .then(res => {
                     console.log(res.data);
-                    if(onToggleAllMyTasks) onToggleAllMyTasks((prev:boolean)=>!prev);
+                    if (onToggleAllMyTasks) onToggleAllMyTasks((prev: boolean) => !prev);
                     oncloseAddMission(false);
                     formik.resetForm();
                 })
@@ -81,12 +101,15 @@ const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission, onT
                         <option value="2">בוצע</option>
                     </CreateSelects>
 
-                    <CreateSelects id="workerTaskId" name="עובד משויך" formik={formik}>
-                        <option value="0">ללא</option>
-                        <option value="1">maayan</option>
-                        <option value="2">rotem</option>
-                        <option value="3">hadar</option>
-                    </CreateSelects>
+                    {
+                        user.managerLevel > 0 && <CreateSelects id="workerTaskId" name="עובד משויך" formik={formik}>
+                            <option value="0">ללא</option>
+
+                            {arrEmployess.length > 0 && arrEmployess.map((epmloyee: any) => (
+                                <option value={epmloyee._id}>{epmloyee.name.first}{epmloyee.name.last}</option>
+                            ))}
+                        </CreateSelects>
+                    }
                 </div>
 
                 <div className={style.btns_add_mission_container} id={style.containerBtnsFormAddMission}>

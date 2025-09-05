@@ -38,10 +38,10 @@ const ADDRESS = Joi.object({
     street: GENERAL_VALIDATION,
     houseNumber: Joi.number()
         .required()
-        .min(2),
+        .min(1),
     zip: Joi.number()
         .required()
-        .min(2)
+        .min(1)
 });
 
 

@@ -2,6 +2,7 @@ import type { FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { clearState } from "../../redux/userInfoState";
+import { removeTokenFromStorage } from "../../services/tokenService";
 
 interface NavbarProps {
 
@@ -22,7 +23,8 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                 <>
                     <Link to="/users/login" onClick={() => {
                         dispatch(clearState()); //איפוס מידע על המשתמש
-                    }}>Exis</Link>
+                        removeTokenFromStorage();
+                    }}>Exit</Link>
                     <Link to="/tasks/myTasks">My Tasks</Link>
                 </>
             )}
@@ -32,7 +34,8 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                 <>
                     <Link to="/users/login" onClick={() => {
                         dispatch(clearState()); //איפוס מידע על המשתמש
-                    }}>Exis</Link>
+                        removeTokenFromStorage()
+                    }}>Exit</Link>
                     <Link to="/tasks/myTasks">My Tasks</Link>
                     <Link to="/users/managerDash">Manager Dash</Link>
 

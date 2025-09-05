@@ -10,6 +10,8 @@ const auth = (req, res, next) => {
         console.log("in auth function");
 
         const token = req.header('x-auth-token');
+        console.log(token + "____________");
+        
 
         if (!token) {            
             return next(buildError("Authentication Error", "pleae login", 401))

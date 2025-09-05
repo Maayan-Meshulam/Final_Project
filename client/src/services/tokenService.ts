@@ -26,9 +26,14 @@ const getTokenInStorage = () => {
     return null;
 }
 
+const removeTokenFromStorage = () => {
+    sessionStorage.removeItem("token")
+}
+
 
 export {
     tokenDecoding,
     saveTokenInStorage,
-    getTokenInStorage
+    getTokenInStorage,
+    removeTokenFromStorage
 }

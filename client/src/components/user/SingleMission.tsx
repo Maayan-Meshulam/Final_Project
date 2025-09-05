@@ -6,6 +6,8 @@ import { getTokenInStorage } from "../../services/tokenService";
 import { statusConvert, typeConvert } from "../../helpers/Convert_valueSelectsToString";
 import UpdateTask from '../user/UpdaeTask';
 import DeleteTask from "./DeleteTask";
+import { getUserById } from "../../services/userService";
+import { useSelector } from "react-redux";
 
 interface SingleMissionProps {
 
@@ -13,17 +15,30 @@ interface SingleMissionProps {
 
 const SingleMission: FunctionComponent<SingleMissionProps> = () => {
 
+    const user = useSelector((state: any) => state.userBaseInfo);   
+
     const { id } = useParams();
-    const token = getTokenInStorage();
+    const token = getTokenInStorage() as string;
     const [task, setTask] = useState<any>(null);
     const [toggleupdatedTask, setToggleUpdaedTask] = useState<boolean>(false)
     const [closeDeleting, setCloseDeleting] = useState<boolean>(false);
     const [closeUpdating, setCloseUpdating] = useState<boolean>(false);
+    const [workerTaskName, setWorkerTaskName] = useState<string>("");
 
     useEffect(() => {
-        getTaskById(id as string, token as string)
-            .then(res => setTask(res.data))
+        getTaskById(id as string, token)
+            .then(res => {
+                setTask(res.data);
+
+                getUserById(res.data.workerTaskId, token)
+                    .then(res => {
+                        setWorkerTaskName(`${res.data.name.first} ${res.data.name.last}`);
+                    })
+                    .catch(err => console.log(err))
+            })
             .catch(err => console.log(err))
+
+
     }, [toggleupdatedTask]);
 
     return (<>
@@ -38,11 +53,11 @@ const SingleMission: FunctionComponent<SingleMissionProps> = () => {
                     <div style={{ textAlign: "justify" }}>
                         {style.description}
                     </div>
-                    {/* <p><span>responibility: </span>maayan meshulam</p> */}
                     <div>
                         <p><span>start date: </span>{task.receiptDate}</p>
                         <p><span>end date: </span>{task.deadLine}</p>
                     </div>
+                    {user.managerLevel > 0 && <p>{workerTaskName}</p>}
                     <div className={style.buttons_container}>
 
                         <button

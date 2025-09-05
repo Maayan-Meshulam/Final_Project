@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import type { FunctionComponent } from "react";
+import { useEffect, useState, type FunctionComponent } from "react";
 import { taskSchema } from "../../validation/task/taskValidator";
 import * as Yup from 'yup';
 import { updatedTask } from "../../services/tasksService";
@@ -8,23 +8,35 @@ import CreateInputs from "./CreateInputs";
 import CreateSelects from "./CreateSelects";
 import { useSelector } from "react-redux";
 import { getTokenInStorage } from "../../services/tokenService";
+import { getAllUsers } from "../../services/userService";
 
 
 interface updateTaskProps {
     oncloseUpdating: (closeBool: boolean) => void
     task: any,
-    onToggleUetUpdaedTask: (state: boolean) => void
+    onToggleUetUpdaedTask: any
 }
 
 const updateTask: FunctionComponent<updateTaskProps> = ({ oncloseUpdating, task, onToggleUetUpdaedTask }) => {
 
     const userInfo = useSelector((state: any) => state.userBaseInfo)
+    console.log(userInfo.id + " user id" + userInfo.managerLevel);
 
-    console.log(userInfo.id);
+    const [arrEmployess, setArrEmployess] = useState<any>([]);
+    const token = getTokenInStorage() as string;
 
-    console.log(task._id + "      999999999999999");
-    console.log(JSON.stringify(task));
-
+    useEffect(() => {
+        //רק במידה והוא מנהל נבקש את כל המשתמשים
+        if (userInfo.managerLevel > 0) {
+            getAllUsers(userInfo.connectedEmployess, token)
+                .then(res => {
+                    setArrEmployess(res.data);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+    }, [])
 
     const formik = useFormik({
         initialValues: {
@@ -79,12 +91,17 @@ const updateTask: FunctionComponent<updateTaskProps> = ({ oncloseUpdating, task,
                         <option value="2">בוצע</option>
                     </CreateSelects>
 
-                    <CreateSelects id="workerTaskId" name="עובד משויך" formik={formik}>
-                        <option value="0">ללא</option>
-                        <option value="68a772a8257f9f74a63016c7">maayan</option>
-                        <option value="68a84d999840ec7dc79fc96e">rotem</option>
-                        <option value="68a8707693357413756cf287">hadar</option>
-                    </CreateSelects>
+                    {userInfo.managerLevel > 0 &&
+                        <CreateSelects id="workerTaskId" name="עובד משויך" formik={formik}>
+                            <option value="0">ללא</option>
+
+                            {arrEmployess.length > 0 && arrEmployess.map((epmloyee: any) => (
+                                <option value={epmloyee._id}>
+                                    {epmloyee.name.first}{epmloyee.name.last}
+                                </option>
+                            ))}
+                        </CreateSelects>
+                    }
                 </div>
 
                 <div className={style.btns_add_mission_container} id={style.containerBtnsFormAddMission}>

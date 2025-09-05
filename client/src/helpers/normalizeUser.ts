@@ -1,11 +1,11 @@
 const normaliztionUser = (user:any) => {
 
-    const { firstName, lastName, phone, email, password, birthDay, imageUrl, alt,
-        city, street, houseNumber, zip,startDate, jobType,role, fromWhereWorking, managerName
+    const { firstName, lastName, phone, email, password, birthDay, url, alt,
+        city, street, houseNumber, zip,startDate, jobType,role, fromWhereWorking, directManager
         , department, team, managerLevel, connectedEmployess
     } = { ...user }
 
-    console.log(imageUrl+ " img url");
+    console.log(url+ " img url");
     
     return {
         name: {
@@ -17,7 +17,7 @@ const normaliztionUser = (user:any) => {
         password: password ,
         birthDay: birthDay,
         image:{
-            url:imageUrl == "" ? "client/src/images/profile.png" : imageUrl,
+            url:url == "" ? "client/src/images/profile.png" : url,
             alt: alt == "" ? "defult profile" : alt,
         },
         address:{
@@ -30,7 +30,7 @@ const normaliztionUser = (user:any) => {
         role: role,
         jobType: jobType ,
         fromWhereWorking: fromWhereWorking,
-        managerName:managerName ,
+        directManager:directManager ,
         department: department,
         team: team,
         managerLevel: managerLevel,

@@ -11,11 +11,11 @@ const router = express.Router();
 router.post('/addUser', auth, userValidation, async (req, res, next) => {
     console.log("in post user");
     try {
-        let user = req.body;
+        let user = req.userInfo;
 
         //נבדוק הרשאות
         if (user.managerLevel < 1) {
-            next(buildError("Authentication Error", "user not allow, access block", 403))
+            return next(buildError("Authentication Error", "user not allow, access block", 403))
         }
 
         //טיפול בשמירת הנתונים
@@ -55,20 +55,25 @@ router.post('/login', userLoginValidation, async (req, res, next) => {
 router.get('/', auth, async (req, res, next) => {
     console.log("in get all users");
     const user = req.userInfo;
-    console.log(JSON.stringify(user) + " user ****************");
+    let { ArrEmployess } = (req.query)
+    console.log(JSON.stringify(ArrEmployess) + "11111111111111111111111111111");
+    ArrEmployess = ArrEmployess.split(',')
+    console.log(JSON.stringify(ArrEmployess) + "11111111111111111111111111111");
 
     try {
         //נבדוק הרשאות
         console.log("manager level" + user.managerLevel);
 
         if (user.managerLevel < 1) {
-            next(buildError("Authentication Error", "user not allow, access block", 403));
+            return next(buildError("Authentication Error", "user not allow, access block", 403));
         }
-        else if (user.connectedEmployess.length < 1) {
-            next(buildError("Authentication Error", "you dont have employess", 403));
-        }
+        // else if (user.connectedEmployess.length < 1) {
+        //     next(buildError("Authentication Error", "you dont have employess", 403));
+        // }
 
-        let allUsers = await getAllUsers();
+        let allUsers = await getAllUsers(ArrEmployess);
+        console.log("hiiiiiiiiiii" + allUsers);
+
         res.status(200).send(allUsers);
 
     } catch (error) {
@@ -85,9 +90,10 @@ router.get('/:id', auth, async (req, res, next) => {
         let { id } = req.params;
         let user = req.userInfo;
 
+
         //בדיקת הרשאות משתמש - המשתמש עצמו / המנהל
         if (user.id != id && !(user.connectedEmployess).includes(id)) {
-            next(buildError("Authentication Error", "user not allow, access block", 403));
+            return next(buildError("Authentication Error", "user not allow, access block", 403));
         };
 
         //שמירת נתונים במסד

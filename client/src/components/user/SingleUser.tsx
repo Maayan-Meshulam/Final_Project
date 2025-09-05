@@ -1,0 +1,95 @@
+import { useEffect, useState, type FunctionComponent } from "react";
+import style from '../../style/singleMission/singleMission.module.css';
+import { useNavigate, useParams } from "react-router-dom";
+import { deleteTask, getTaskById } from "../../services/tasksService";
+import { getTokenInStorage } from "../../services/tokenService";
+import { statusConvert, typeConvert } from "../../helpers/Convert_valueSelectsToString";
+import UpdateTask from '../user/UpdaeTask';
+import DeleteTask from "./DeleteTask";
+import { getUserById } from "../../services/userService";
+import { useSelector } from "react-redux";
+import DeleteUser from "./DeleteUser";
+import UpdateUser from "./UpdateUser";
+
+interface SingleUserProps {
+
+}
+
+const SingleUser: FunctionComponent<SingleUserProps> = () => {
+
+    const userInfo = useSelector((state: any) => state.userBaseInfo);
+
+    const token = getTokenInStorage() as string;
+    const [user, setUser] = useState<any>()
+
+    const [closeDeleting, setCloseDeleting] = useState<boolean>(false);
+    const [closeUpdating, setCloseUpdating] = useState<boolean>(false);
+    const [toggleUpdaedUser, settoggleUpdaedUser]= useState<boolean>(false)
+
+    const {id} = useParams() as any
+
+    useEffect(() => {
+        getUserById(id, token)
+            .then(res => {
+                console.log(res.data);
+                setUser(res.data);
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }, [toggleUpdaedUser]);
+
+    return (<>
+        {user ? (<div className="container_page">
+            <div className={style.mission_container}>
+
+                <div className={style.task_characterization}>
+                    <h1>{user.name.first} {user.name.last}</h1>
+                    <h3>{user.role}</h3>
+                    <p>{user.phone} {user.email}</p>
+                    <p>{user.birthDay}</p>
+                    <p>{user.address.city}, {user.address.street}, {user.address.houseNumber}, {user.address.zip}</p>
+                    <p>{user.startDate}</p>
+                    <p>{user.jobType}, {user.fromWhereWorking}</p>
+                    <p>{user.directManager}</p>
+                    <p>{user.department}, {user.team}</p>
+                    <p>{user.managerLevel}</p>
+                    <p>{user.connectedEmployess}</p>
+
+                    <div className={style.buttons_container}>
+
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setCloseUpdating(true);
+                            }}
+                        >Edit</button>
+
+                        {closeUpdating && <UpdateUser oncloseUpdating={setCloseUpdating} user={user} onToggleUpdateUser={settoggleUpdaedUser} />}
+
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setCloseDeleting(true);
+                            }}
+                        >Delete</button>
+                        {closeDeleting && <DeleteUser onCloseDeleting={setCloseDeleting} user={user}/>}
+
+                    </div>
+                </div>
+
+                {/* <div className={style.Marginal_information_task}>
+                    <p>image</p>
+                    <div className={style.comments_container}>
+                        <h6>{user.image.alt}</h6>
+                        <img src={user.image.url} />
+                    </div>
+                </div> */}
+            </div>
+        </div >) : (<p>אין הרשאה לפעולה</p>)
+        }
+
+    </>);
+}
+
+export default SingleUser;

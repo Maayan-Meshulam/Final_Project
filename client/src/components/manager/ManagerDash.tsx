@@ -75,7 +75,9 @@ const ManagerDash: FunctionComponent<ManagerDashProps> = () => {
                         <button onClick={() => setDisplayAddNewEmployee(true)} >add new Employee</button>
                         {displayAddNewEmployee && <AddNewEmployee oncloseAddNewEmployee={setDisplayAddNewEmployee} />}
 
-                        <Link to='/AddProject'>add new project</Link>
+                        <Link to='/tasks/myTasks'>my tasks</Link>
+                        <Link to='/users/allTasks'>All my employess tasks</Link>
+
                         <button>chat</button>
                     </div>
 

@@ -13,7 +13,7 @@ const userSchema = mongoose.Schema({
         role: MINI_GENERAL_VALIDATION,
         jobType: MINI_GENERAL_VALIDATION,
         fromWhereWorking: MINI_GENERAL_VALIDATION,
-        managerName: MINI_GENERAL_VALIDATION,
+        directManager: MINI_GENERAL_VALIDATION,
         department: MINI_GENERAL_VALIDATION,
         team: MINI_GENERAL_VALIDATION,
         managerLevel: MANAGER_LEVEL,

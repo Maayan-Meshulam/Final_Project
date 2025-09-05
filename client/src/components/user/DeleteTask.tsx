@@ -33,7 +33,7 @@ const DeleteTask: FunctionComponent<DeleteTaskProps> = ({ task, onCloseDeleting 
                 deleteTask(task._id as string, token)
                     .then(res => {
                         onCloseDeleting(false);
-                        nav('/tasks/myTasks');
+                        // nav('/tasks/myTasks');
                     })
                     .catch(error => {
                         console.log(error);

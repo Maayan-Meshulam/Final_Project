@@ -1,72 +1,88 @@
-import type { FunctionComponent } from "react";
-import style from '../../style/addEmployee/addEmployee.module.css';
 import { useFormik } from "formik";
+import { useEffect, useState, type FunctionComponent } from "react";
+import { taskSchema } from "../../validation/task/taskValidator";
+import * as Yup from 'yup';
+import { updatedTask } from "../../services/tasksService";
+import style from '../../style/addMission/addMission.module.css';
 import CreateInputs from "./CreateInputs";
 import CreateSelects from "./CreateSelects";
-import { addUser } from "../../services/userService";
-import normaliztionUser from "../../helpers/normalizeUser";
-import { userRegisterValidation } from "../../validation/user/userValidation";
-import * as Yup from 'yup'
+import { useSelector } from "react-redux";
 import { getTokenInStorage } from "../../services/tokenService";
+import { getAllUsers, updatingUser } from "../../services/userService";
 
-interface AddNewEmployeeProps {
-    oncloseAddNewEmployee: (NewEmployeesCloseBoll: boolean) => void
+
+interface UpdateUserProps {
+    oncloseUpdating: (closeBool: boolean) => void
+    user: any,
+    onToggleUpdateUser: any
 }
 
-const token = getTokenInStorage() as string;
+const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user, onToggleUpdateUser }) => {
 
-const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewEmployee }) => {
+    const userInfo = useSelector((state: any) => state.userBaseInfo)
+    console.log(userInfo.id + " user id" + userInfo.managerLevel);
+
+    const [arrEmployess, setArrEmployess] = useState<any>([]);
+    const token = getTokenInStorage() as string;
+
+    useEffect(() => {
+        //רק במידה והוא מנהל נבקש את כל המשתמשים
+        if (userInfo.managerLevel > 0) {
+            getAllUsers(userInfo.connectedEmployess, token)
+                .then(res => {
+                    setArrEmployess(res.data);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+    }, [])
 
     const formik = useFormik({
         initialValues: {
-            firstName: "",
-            lastName: "",
-            phone: "",
-            email: "",
-            password: "",
-            birthDay: "",
-            url: "",
-            alt: "",
-            city: "",
-            street: "",
-            houseNumber: "",
-            zip: "",
-            startDate: "",
-            role: "",
-            jobType: "",
-            fromWhereWorking: "",
-            directManager: "",
-            department: "",
-            team: "",
-            managerLevel: "0",
-            connectedEmployess: []
+            firstName: user.name.first,
+            lastName: user.name.last,
+            phone: user.phone,
+            email: user.email,
+            password: user.password,
+            birthDay: user.birthDay,
+            url: user.image.url,
+            alt: user.image.alt,
+            city: user.address.city,
+            street: user.address.street,
+            houseNumber: user.address.houseNumber,
+            zip: user.address.zip,
+            startDate: user.startDate,
+            role: user.role,
+            jobType: user.jobType,
+            fromWhereWorking: user.fromWhereWorking,
+            directManager: user.directManager,
+            department: user.department,
+            team: user.team,
+            managerLevel: user.managerLevel,
+            connectedEmployess: user.connectedEmployess
         },
-        validationSchema: Yup.object(userRegisterValidation),
-        onSubmit: (values: any) => {
-            console.log(JSON.stringify(values));
-            const userNomalize = normaliztionUser(values)
-            console.log(JSON.stringify(userNomalize) + "****");
-            
-            addUser(userNomalize, token)
-                .then((res) => {
-                    console.log(res.data);
-                    oncloseAddNewEmployee(false);
+        enableReinitialize: true,
+        validationSchema: Yup.object(taskSchema),
+        onSubmit: (values) => {
+            const token = getTokenInStorage() as string;
+            updatingUser(user._id, token, values)
+                .then(res => {
                     formik.resetForm();
+                    oncloseUpdating(false);
+                    onToggleUpdateUser((prev: boolean) => !prev);
                 })
-                .catch(err => {
-                    console.log(err)
-                })
+                .catch(error => console.log(error));
         }
     });
 
     console.log(formik);
 
-
     return (<>
 
-        <div className="container_popUp">
+        <div className={style.warpper_form}>
 
-            <h4>Add Employee</h4>
+            <div id={style.AddMissionTitle}>update user</div>
 
             <form className={style.warpper_form} onSubmit={formik.handleSubmit}>
                 <div className={style.inline_form_wrapper}>
@@ -154,9 +170,9 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
                     </fieldset>
 
                     <select multiple id="connectedEmployess" name="connectedEmployess" className={style.field_wrapper}>
-                      <option value="moshe">moshe</option>
-                            <option value="david">david</option>
-                            <option value="ronen">ronen</option>
+                        <option value="moshe">moshe</option>
+                        <option value="david">david</option>
+                        <option value="ronen">ronen</option>
                     </select>
 
                     <div className={style.field_wrapper}>
@@ -166,17 +182,18 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
                 </div>
 
                 <div className={style.btns_add_mission_container} id={style.containerBtnsFormAddMission}>
-                    <button className="add_mission_btn" id={style.btnAddMission} type="submit">Add</button>
+                    <button className="add_mission_btn" id={style.btnAddMission} type="submit"/>
                     <button className="reset_btn" id={style.btnReset} type="reset">reset</button>
                     <button
                         className="close_popUp_btn"
                         id={style.btnclosePopUp}
                         type="button"
-                        onClick={() => oncloseAddNewEmployee(false)}>close
+                        onClick={() => oncloseUpdating(false)}>close
                     </button>
                 </div>
             </form>
-        </div>    </>);
+        </div>
+    </>);
 }
 
-export default AddNewEmployee;
+export default UpdateUser;

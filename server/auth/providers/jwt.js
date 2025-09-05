@@ -11,19 +11,20 @@ const generateToken = async (user) => {
 
     try {
         const [userFromDB] = await getUserByEmail(user.email);
-        console.log(userFromDB);
-
-        console.log(userFromDB + "***");
+        console.log(JSON.stringify(userFromDB) + "******************");
 
         if (!userFromDB) {
             console.log("noooooo");
             throw new Error("Mongoode Error, user's datails not rigth / need registeration");
         }
 
+        console.log("importent!! "+ userFromDB.connectedEmployess);
+        
+
         const payload = {
             id: userFromDB._id,
             managerLevel: userFromDB.managerLevel,
-            connectedEmployess: userFromDB.connectedEmployess ?? [],
+            connectedEmployess: userFromDB.connectedEmployess,
         }
 
         console.log(userFromDB._id);

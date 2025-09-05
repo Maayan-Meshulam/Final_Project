@@ -1,5 +1,5 @@
 const { required, date } = require("joi");
-const { Schema } = require("mongoose");
+const { Schema, default: mongoose } = require("mongoose");
 
 const GENERAL_VALIDATION = {
     type: String,
@@ -64,8 +64,9 @@ const MANAGER_LEVEL = {
 };
 
 const CONNECTEDEMPLOYESS = {
-    type: [Number],
-    required: true
+    type: [mongoose.Types.ObjectId],
+    required: true,
+    defult: []
 };
 
 const WORKER = {
