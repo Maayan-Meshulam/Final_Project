@@ -17,6 +17,8 @@ const ManageEmployee: FunctionComponent<ManageEmployeeProps> = () => {
     const token = getTokenInStorage() as string;
     const [closeDeleting, setCloseDeleting] = useState<any>(false);
     const [closeUpdating, setCloseUpdating] = useState<any>(false);
+    const [toggleCloseUpdating, setToggleCloseUpdating] = useState<any>(false);
+
 
     const [allUsers, setAllUsers] = useState<any>([]);
 
@@ -31,7 +33,7 @@ const ManageEmployee: FunctionComponent<ManageEmployeeProps> = () => {
             .catch((err) => {
                 console.log(err)
             })
-    }, [])
+    }, [toggleCloseUpdating]);
 
 
     return (<>
@@ -82,11 +84,12 @@ const ManageEmployee: FunctionComponent<ManageEmployeeProps> = () => {
                             setCloseUpdating(true);
                         }}>עריכה</td>
                         <td>
-                            {closeUpdating && <UpdateUser oncloseUpdating={setCloseUpdating} user={user} />}
+                            {closeUpdating && <UpdateUser oncloseUpdating={setCloseUpdating} user={user} onToggleUpdateUser={setToggleCloseUpdating} />}
                         </td>
 
                         <td onClick={() => {
                             setCloseDeleting(true);
+                            window.location.reload();
                         }}>מחיקה</td>
                         <td>
                             {closeDeleting && <DeleteUser onCloseDeleting={setCloseDeleting} user={user} />}

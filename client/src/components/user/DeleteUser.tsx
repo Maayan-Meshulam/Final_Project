@@ -6,16 +6,15 @@ import { useNavigate } from "react-router-dom";
 
 interface DeleteUserProps {
     onCloseDeleting: any,
-    user: any
+    user: any,
 }
 
 const DeleteUser: FunctionComponent<DeleteUserProps> = ({ onCloseDeleting, user }) => {
 
-    const userInfo = useSelector((state: any) => state.userBaseInfo);
     const nav = useNavigate();
 
     return (<>
-        <div style={{ backgroundColor: "gray", position: "absolute" }}>
+        <div style={{ backgroundColor: "gray", position: "absolute", left:"50%" }}>
             <h3>Are you sure you want to delete this user ?</h3>
             <div>
                 <h1>{user.name.first} {user.name.last}</h1>
@@ -34,9 +33,10 @@ const DeleteUser: FunctionComponent<DeleteUserProps> = ({ onCloseDeleting, user 
 
             <button type="button" onClick={() => {
                 const token = getTokenInStorage() as string;
-                deleteUser(userInfo.id, token)
+                deleteUser(user._id, token)
                     .then(res => {
                         onCloseDeleting(false);
+                        nav('/users/manageEmployess');
                     })
                     .catch(err => console.log(err));
             }}>

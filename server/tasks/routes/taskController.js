@@ -31,31 +31,31 @@ router.post('/', auth, taskValidation, async (req, res, next) => {
         res.status(201).send(task);
 
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 
-//get all tasks
-router.get('/', auth, async (req, res, next) => {
-    console.log("in get all tasks");
+// //get all tasks
+// router.get('/', auth, async (req, res, next) => {
+//     console.log("in get all tasks");
 
-    try {
-        const employeesId = req.userInfo;
-        console.log(employeesId);
+//     try {
+//         const employeesId = req.userInfo;
+//         console.log(employeesId);
 
-        if (employeesId.managerLevel < 1) {
-            return next(buildError("Authorization", "access blocked, user not allow", 403));
-        }
-        else if (employeesId.connectedEmployess.length < 1)
-            return next(buildError("Authorization", "you dont have employees", 403));
+//         if (employeesId.managerLevel < 1) {
+//             return next(buildError("Authorization", "access blocked, user not allow", 403));
+//         }
+//         else if (employeesId.connectedEmployess.length < 1)
+//             return next(buildError("Authorization", "you dont have employees", 403));
 
-        const allTasks = await getAllTasks(req.userInfo.connectedEmployess);
-        res.status(200).send(allTasks);
+//         const allTasks = await getAllTasks(req.userInfo.connectedEmployess);
+//         res.status(200).send(allTasks);
 
-    } catch (error) {
-        next(error);
-    }
-});
+//     } catch (error) {
+//         return next(error);
+//     }
+// });
 
 
 //get my tasks
@@ -74,7 +74,7 @@ router.get('/myTasks', auth, async (req, res, next) => {
 
 //קבלת כל המשימות של העבודים - עבור מנהלים
 //לנסות לשנותconst ואז לראות את השגיאה - חובה לטפל !!
-router.get('/allTasks', auth, async (req, res, next) => {
+router.get('/', auth, async (req, res, next) => {
     console.log("in all tasks");
     let { arrEmployes } = req.query;
     console.log(JSON.stringify(arrEmployes) + ".........................33333");
@@ -94,24 +94,27 @@ router.get('/allTasks', auth, async (req, res, next) => {
 //get task by id
 router.get('/:id', auth, async (req, res, next) => {
     try {
+        console.log("in get task by id");
+
         const { id } = req.params;
+        console.log("/// " + id);
 
         //בדיקת תקינות של סוג המשתנה שהועבר בנתיב        
         if (!mongoose.isObjectIdOrHexString(id))
-            return next(buildError("", "invalid id format at url", 400));
+            return next(buildError("Id Format Error", "invalid id format at url", 400));
 
-        const task = await getTaskById(id);
         const user = req.userInfo;
+        const task = await getTaskById(id);
 
-        //בדיקת הרשאות - האם זה המשתמש עצמו / עובד שמושיך למנהל
-        if (user.id != task.userIdCreatorTask && !(user.connectedEmployess).includes(id)) {
+        // בדיקת הרשאות - האם זה המשתמש עצמו / עובד שמושיך למנהל / משימה משויכת לעובד
+        if (user.id != task.workerTaskId && !(user.connectedEmployess).includes(task.workerTaskId)) {
             return next(buildError("Authorization", "access blocked, user not allow", 403));
         }
 
         res.status(200).send(task);
 
     } catch (error) {
-        next(error)
+        return next(buildError(error.message))
     }
 });
 
@@ -136,7 +139,7 @@ router.put('/:id', auth, taskValidation, async (req, res, next) => {
         res.status(201).send(updatedTask);
 
     } catch (error) {
-        next(error);
+        return next(error);
     }
 });
 

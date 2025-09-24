@@ -1,33 +1,43 @@
-.mission_container{
-    width: 100%;
+.containerWithImg {
     display: flex;
-    gap: 100px;
+    gap: 50px;
+    direction: rtl;
+    background-color: #f2f2f2;
+    max-width: 1200px;
+    width: 100%;
+    padding: 50px;
 }
 
-.task_characterization{
-    width: 60%;
+.task_characterization {
     display: flex;
     flex-direction: column;
+    width: fit-content;
+    width: 50%;
     gap: 15px;
+    text-align: right;
 }
 
-.buttons_container{
+.imgTask {
+    width: 50%;
+}
+
+.buttons_container {
     display: flex;
-    gap:15px
+    gap: 15px
 }
 
-.buttons_container button{
+.buttons_container button {
     border: none;
     border-radius: 20px;
     padding: 10px 15px;
     background-color: #e7e7fb;
 }
 
-.Marginal_information_task{
+.Marginal_information_task {
     width: 40%;
 }
 
-.comments_container{
+.comments_container {
     background-color: #f0f0ff;
     min-height: 150px;
     max-width: 500px;
@@ -35,6 +45,6 @@
     padding: 20px;
 }
 
-.comments_container li{
+.comments_container li {
     padding: 10px;
 }

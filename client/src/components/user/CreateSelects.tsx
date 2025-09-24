@@ -1,12 +1,13 @@
 import type { FunctionComponent, ReactNode } from "react";
+import style from '../../style/addMission/addMission.module.css';
+
 
 interface CreateSelectsProps {
     id: string,
     name: string
     formik: any,
     children: ReactNode,
-    classAddEmployess?: any
-
+    classAddEmployess?: any,
 }
 
 const CreateSelects: FunctionComponent<CreateSelectsProps> = ({ formik, name, id, classAddEmployess, children }) => {
@@ -17,7 +18,9 @@ const CreateSelects: FunctionComponent<CreateSelectsProps> = ({ formik, name, id
                 id={id}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                value= {formik.values[id]} >
+                value={formik.values[id]}
+                className={style.formInputs}>
+                    
                 <option value="">בחר</option>
                 {children}
             </select>

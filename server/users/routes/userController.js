@@ -1,6 +1,6 @@
 const express = require("express");
 const auth = require("../../auth/authService");
-const { createUser, getAllUsers, getUserById, updateUser, deleteUser, verifyLogin } = require("../models/userAccessDBService");
+const { createUser, getAllUsers, getUserById, updateUser, deleteUser, verifyLogin, connectEmployeToManager } = require("../models/userAccessDBService");
 const { userValidation, userLoginValidation } = require("../validation/userValidatorService");
 const { generateToken, verifyToken } = require("../../auth/providers/jwt");
 const buildError = require("../../helpers/erorrs/errorsHandeling");
@@ -11,15 +11,23 @@ const router = express.Router();
 router.post('/addUser', auth, userValidation, async (req, res, next) => {
     console.log("in post user");
     try {
-        let user = req.userInfo;
+        let user = req.body;
+        let userConnectInfo = req.userInfo;
+        console.log(userConnectInfo);
+
 
         //נבדוק הרשאות
-        if (user.managerLevel < 1) {
+        if (userConnectInfo.managerLevel < 1) {
             return next(buildError("Authentication Error", "user not allow, access block", 403))
         }
 
         //טיפול בשמירת הנתונים
         user = await createUser(user);
+
+        console.log(userConnectInfo.connectedEmployess);
+        
+        user = await connectEmployeToManager(userConnectInfo.id, user._id, userConnectInfo.connectedEmployess);
+        
         res.status(201).send(user);
 
     } catch (error) {
@@ -98,6 +106,7 @@ router.get('/:id', auth, async (req, res, next) => {
 
         //שמירת נתונים במסד
         user = await getUserById(id);
+        console.log("after saving");
         res.status(200).send(user);
 
     } catch (error) {
@@ -150,5 +159,22 @@ router.delete('/:id', auth, async (req, res, next) => {
     }
 });
 
+//שינוי עובדים משויכים של מנהל
+router.patch('/:id', async (req, res, next) => {
+    try {
+        console.log("in patch axios");
+        const { id } = req.params;
+        console.log("id + " +id);
+        
+
+        console.log(JSON.stringify(req.body) + "bodyyyyyy");
+
+        const user = await connectEmployeToManager(id, req.body);
+        res.status(200).send(user);
+
+    } catch (error) {
+        return next(buildError("General Error", error, 403));
+    }
+})
 
 module.exports = router;

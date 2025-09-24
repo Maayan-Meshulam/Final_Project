@@ -15,7 +15,7 @@ const normaliztionUser = (user:any) => {
         phone: phone,
         email: email,
         password: password ,
-        birthDay: birthDay,
+        birthDay: new Date(birthDay),
         image:{
             url:url == "" ? "client/src/images/profile.png" : url,
             alt: alt == "" ? "defult profile" : alt,
@@ -26,7 +26,7 @@ const normaliztionUser = (user:any) => {
             houseNumber: houseNumber,
             zip: zip
         },
-        startDate: startDate,
+        startDate: new Date(startDate),
         role: role,
         jobType: jobType ,
         fromWhereWorking: fromWhereWorking,

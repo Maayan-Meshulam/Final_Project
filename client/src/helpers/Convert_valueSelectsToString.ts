@@ -10,15 +10,23 @@ const statusConvert :any= {
 };
 
 const workerTaskIdConvert:any = {
-    "0": "אין עובדים משויכים",
+    "0": "אין",
     "1": "מעיין",
     "2": "רותם",
     "3" : "הדר" 
 }
 
+const priorityConvert : any = {
+    "0": "ללא",
+    "1": "נמוך",
+    "2":"בינוני",
+    "3":"גבוה",
+    "4": "גבוה מאוד"
+}
 
 export {
     typeConvert, 
     statusConvert,
-    workerTaskIdConvert
+    workerTaskIdConvert,
+    priorityConvert
 };

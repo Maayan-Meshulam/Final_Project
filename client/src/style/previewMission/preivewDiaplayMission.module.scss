@@ -3,39 +3,80 @@
     max-height: 500px;
     overflow-y: auto;
     width: 100%;
-    max-width: 900px;
+    max-width: 1200px;
     margin: 50px auto;
+
 }
 
-.all_preview_mission_container {
-    width: 100%;
+.containerAbove {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    padding-right: 20px;
+    position: relative;
+    padding: 70px 50px;
+    margin-top: 50px;
 }
 
-.preview_mission {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    background-color: white;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    color: #656565;
+.dashBoardTasks {
     direction: rtl;
-    padding: 12px 25px;
+    text-align: center;
+    width: 100%;
+    background-color: white;
     border-radius: 10px;
 }
 
-#statusMission {
-    color: green;
-    margin-left: 15px;
-    font-weight: 500;
+.dashBoardTasks tr {
+    border-bottom: 1px solid #a1a1a1;
 }
 
-#typeMission {
-    color: blue;
+.dashBoardTasks th {
+    padding: 15px;
+
 }
+
+.dashBoardTasks td {
+    padding: 12px;
+
+}
+
+.containerQuickBtn {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    direction: rtl;
+    gap: 15px;
+}
+
+.btnDiv {
+    padding: 10px 15px;
+    background-color: white;
+    border: 1px solid #dadada;
+    border-radius: 10px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+#inProcessTasks{box-shadow: 1px 1px 2px orange;}
+#urgentTasks{box-shadow: 1px 1px 2px red;}
+#conpleteTasks{box-shadow: 1px 1px 2px green;}
+#allTasks{box-shadow: 1px 1px 2px blue;}
+
+#addTaskBtn{
+    border: 1px solid blue;
+    background-color: #010179;
+    color: white;
+    border-radius: 10px;
+    padding: 5px 7px;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+
+.priority0{color:gray;}
+.priority1{color: yellow;}
+.priority2{color: orange;}
+.priority3{color: #fa5656;}
+.priority4{color: red;}
 
 
 .filter_Bar {
@@ -63,10 +104,19 @@
 .search_input_filter_bar {
     border: 1px solid gray;
     border-radius: 30px;
+    padding: 5px;
 }
 
 #resultFilter {
     margin-right: 20px;
 }
 
+.searchContainer{
+    position: relative;
+}
 
+.searchIcon{
+    position: absolute;
+    right: 5px;
+    
+}

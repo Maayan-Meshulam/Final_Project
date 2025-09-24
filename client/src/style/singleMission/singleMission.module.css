@@ -1,14 +1,25 @@
-.mission_container {
-  width: 100%;
+.containerWithImg {
   display: flex;
-  gap: 100px;
+  gap: 50px;
+  direction: rtl;
+  background-color: #f2f2f2;
+  max-width: 1200px;
+  width: 100%;
+  padding: 50px;
 }
 
 .task_characterization {
-  width: 60%;
   display: flex;
   flex-direction: column;
+  width: -moz-fit-content;
+  width: fit-content;
+  width: 50%;
   gap: 15px;
+  text-align: right;
+}
+
+.imgTask {
+  width: 50%;
 }
 
 .buttons_container {

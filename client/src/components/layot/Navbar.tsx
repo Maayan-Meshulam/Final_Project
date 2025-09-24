@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { clearState } from "../../redux/userInfoState";
 import { removeTokenFromStorage } from "../../services/tokenService";
+import style from "../../style/navber_footer/navbar_footer.module.css";
+
 
 interface NavbarProps {
 
@@ -16,41 +18,68 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
     const dispatch = useDispatch();
 
     return (<>
-        <div id="navbarContainer" style={{ display: "flex", padding: "15px", background: "lightBlue" }}>
+        <nav className="navbar navbar-expand-lg" id={style.navbarContainer}>
 
-            {/* מנהל מחובר */}
-            {userInfo.id && userInfo.managerLevel < 1 && (
-                <>
-                    <Link to="/users/login" onClick={() => {
-                        dispatch(clearState()); //איפוס מידע על המשתמש
-                        removeTokenFromStorage();
-                    }}>Exit</Link>
-                    <Link to="/tasks/myTasks">My Tasks</Link>
-                </>
-            )}
+            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span className="navbar-toggler-icon"></span>
+            </button>
+            <div className="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul className="navbar-nav">
+                    {/* משתמש רגיל מחובר  */}
+                    {userInfo.id && userInfo.managerLevel < 1 && (
+                        <>
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/users/login" onClick={() => {
+                                    dispatch(clearState()); //איפוס מידע על המשתמש
+                                    removeTokenFromStorage()
+                                }}>Exit</Link>
+                            </li>
 
-            {/* משתמש רגיל מחובר */}
-            {userInfo.id && userInfo.managerLevel >= 1 && (
-                <>
-                    <Link to="/users/login" onClick={() => {
-                        dispatch(clearState()); //איפוס מידע על המשתמש
-                        removeTokenFromStorage()
-                    }}>Exit</Link>
-                    <Link to="/tasks/myTasks">My Tasks</Link>
-                    <Link to="/users/managerDash">Manager Dash</Link>
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/tasks/myTasks">My Tasks</Link >
+                            </li>
+                        </>
+                    )}
 
-                </>
-            )}
+                    {/* מנהל מחובר*/}
+                    {userInfo.id && userInfo.managerLevel >= 1 && (
+                        <>
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/users/login" onClick={() => {
+                                    dispatch(clearState()); //איפוס מידע על המשתמש
+                                    removeTokenFromStorage()
+                                }}>Exit</Link>
+                            </li>
 
-            {/* משתמש לא מחובר */}
-            {!userInfo.id && (
-                <>
-                    <Link to="/users/login">login</Link>
-                </>
-            )}
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/tasks/myTasks">My Tasks</Link >
+                            </li>
 
-        </div>
+                            <li className="nav-item dropdown">
+                                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Manager
+                                </a>
+                                <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <Link className="dropdown-item" to="/users/managerDash">ManagerDash</Link >
+                                    <Link className="dropdown-item" to="/users/manageEmployess">Manage Employees</Link >
+                                    <Link className="dropdown-item" to="/tasks/manageEmployessTasks">Manage Employees Tasks</Link >
+                                </div>
+                            </li>
+                        </>
+                    )}
+
+                    {/* משתמש לא מחובר */}
+                    {!userInfo.id && (
+                        <>
+                            <li className="nav-item active">
+                                <Link className="nav-link" to="/users/login">Login</Link>
+                            </li>
+                        </>
+                    )}
+
+                </ul>
+            </div>
+        </nav>
     </>);
 }
-
 export default Navbar;

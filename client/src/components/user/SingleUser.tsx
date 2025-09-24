@@ -24,9 +24,10 @@ const SingleUser: FunctionComponent<SingleUserProps> = () => {
 
     const [closeDeleting, setCloseDeleting] = useState<boolean>(false);
     const [closeUpdating, setCloseUpdating] = useState<boolean>(false);
-    const [toggleUpdaedUser, settoggleUpdaedUser]= useState<boolean>(false)
+    const [toggleUpdaedUser, settoggleUpdaedUser] = useState<boolean>(false);
 
-    const {id} = useParams() as any
+
+    const { id } = useParams() as any
 
     useEffect(() => {
         getUserById(id, token)
@@ -40,7 +41,7 @@ const SingleUser: FunctionComponent<SingleUserProps> = () => {
     }, [toggleUpdaedUser]);
 
     return (<>
-        {user ? (<div className="container_page">
+        {user ? (<div className="container">
             <div className={style.mission_container}>
 
                 <div className={style.task_characterization}>
@@ -73,7 +74,7 @@ const SingleUser: FunctionComponent<SingleUserProps> = () => {
                                 setCloseDeleting(true);
                             }}
                         >Delete</button>
-                        {closeDeleting && <DeleteUser onCloseDeleting={setCloseDeleting} user={user}/>}
+                        {closeDeleting && <DeleteUser onCloseDeleting={setCloseDeleting} user={user} />}
 
                     </div>
                 </div>

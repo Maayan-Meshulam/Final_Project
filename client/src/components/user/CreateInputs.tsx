@@ -1,4 +1,5 @@
 import type { FunctionComponent } from "react";
+import style from '../../style/addMission/addMission.module.css';
 
 interface CreateInputsProps {
     type?: string,
@@ -9,7 +10,7 @@ interface CreateInputsProps {
     classAddEmployess?: any
 }
 
-const CreateInputs: FunctionComponent<CreateInputsProps> = ({ formik, type, name, id, classAddEmployess }) => {
+const CreateInputs: FunctionComponent<CreateInputsProps> = ({ formik, type, name, id, classAddEmployess}) => {
     return (<>
         <div>
             <div className={`form-floating ${classAddEmployess}`}>
@@ -21,7 +22,7 @@ const CreateInputs: FunctionComponent<CreateInputsProps> = ({ formik, type, name
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values[id]}
-                    className="form-control"
+                    className={`form-control ${style.formInputs}`}
                 />
             </div>
 

@@ -1,8 +1,9 @@
 import type { FunctionComponent } from "react";
-import { statusConvert, typeConvert, workerTaskIdConvert } from "../../helpers/Convert_valueSelectsToString";
+import { priorityConvert, statusConvert, typeConvert, workerTaskIdConvert } from "../../helpers/Convert_valueSelectsToString";
 import { deleteTask } from "../../services/tasksService";
 import { getTokenInStorage } from "../../services/tokenService";
 import { useNavigate } from "react-router-dom";
+import style from '../../style/addMission/addMission.module.css';
 
 interface DeleteTaskProps {
     task: any,
@@ -14,39 +15,47 @@ const DeleteTask: FunctionComponent<DeleteTaskProps> = ({ task, onCloseDeleting 
     const nav = useNavigate();
 
     return (<>
-        <div style={{ backgroundColor: "gray", position:"absolute" }}>
-            <h3>Are you sure you want to delete this Task ?</h3>
+        <div className={style.warpper_form}>
+            <button
+                className="close_popUp_btn"
+                id={style.btnclosePopUp}
+                type="button"
+                onClick={() => onCloseDeleting(false)}
+            >&#10060;</button>
+
+            <h3 style={{color:"red"}}>אתה בטוחה שברצונך למחוק משימה זו ?</h3>
+            <br /><br />
             <div>
                 <h1>{task.title}</h1>
                 <p>{task.subTitle}</p>
                 <p>{task.description}</p>
-                <p>{statusConvert[task.status]}</p>
-                <p>{typeConvert[task.type]}</p>
-                <p><span>start date: </span>{task.receiptDate}</p>
-                <p><span>end date: </span>{task.deadLine}</p>
-                <p><span>worker task Id :</span>{workerTaskIdConvert[task.workerTaskId]}</p>
-                <p><span>user id creator task :</span>{workerTaskIdConvert[task.userIdCreatorTask]}</p>
+                <div style={{ display: "flex", gap: "20px" }}>
+                    <p>{statusConvert[task.status]}</p> |
+                    <p>{typeConvert[task.type]}</p> |
+                    <p>{priorityConvert[task.priority]}</p>
+                </div>
+                <p><span>תאריך תחילה : </span>{task.receiptDate}</p>
+                <p><span>תאריך סיום : </span>{task.deadLine}</p>
+                <p><span>עובד משויך :</span>{workerTaskIdConvert[task.workerTaskId]}</p>
+                <p><span>יוצר המשימה :</span>{task.userIdCreatorTask}</p>
 
             </div>
-            <button type="button" onClick={() => {
-                const token = getTokenInStorage() as string
-                deleteTask(task._id as string, token)
-                    .then(res => {
-                        onCloseDeleting(false);
-                        // nav('/tasks/myTasks');
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    })
-            }}>
+
+            <button type="submit" id={style.btnAddMission} className={style.add_task_btn}
+                onClick={() => {
+                    const token = getTokenInStorage() as string
+                    deleteTask(task._id as string, token)
+                        .then(res => {
+                            onCloseDeleting(false);
+                            window.location.reload()
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                }}>
                 delete
             </button>
 
-            <button type="button" onClick={()=>{
-                onCloseDeleting(false)
-            }}>
-                close
-            </button>
         </div>
     </>);
 }

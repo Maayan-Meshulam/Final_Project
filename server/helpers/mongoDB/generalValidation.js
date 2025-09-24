@@ -59,14 +59,14 @@ const ADDRESS = Schema({
 
 
 const MANAGER_LEVEL = {
-    type: Number,
+    type: String,
     required: true
 };
 
 const CONNECTEDEMPLOYESS = {
     type: [mongoose.Types.ObjectId],
     required: true,
-    defult: []
+    default: []
 };
 
 const WORKER = {

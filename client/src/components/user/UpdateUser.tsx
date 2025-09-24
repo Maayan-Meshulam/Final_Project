@@ -9,6 +9,8 @@ import CreateSelects from "./CreateSelects";
 import { useSelector } from "react-redux";
 import { getTokenInStorage } from "../../services/tokenService";
 import { getAllUsers, updatingUser } from "../../services/userService";
+import { userRegisterValidation } from "../../validation/user/userValidation";
+import normaliztionUser from "../../helpers/normalizeUser";
 
 
 interface UpdateUserProps {
@@ -45,28 +47,29 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
             phone: user.phone,
             email: user.email,
             password: user.password,
-            birthDay: user.birthDay,
-            url: user.image.url,
-            alt: user.image.alt,
+            // birthDay: user.birthDay,
+            // url: user.image.url,
+            // alt: user.image.alt,
             city: user.address.city,
             street: user.address.street,
             houseNumber: user.address.houseNumber,
             zip: user.address.zip,
             startDate: user.startDate,
-            role: user.role,
-            jobType: user.jobType,
-            fromWhereWorking: user.fromWhereWorking,
-            directManager: user.directManager,
+            // role: user.role,
+            // jobType: user.jobType,
+            // fromWhereWorking: user.fromWhereWorking,
+            // directManager: user.directManager,
             department: user.department,
             team: user.team,
             managerLevel: user.managerLevel,
             connectedEmployess: user.connectedEmployess
         },
         enableReinitialize: true,
-        validationSchema: Yup.object(taskSchema),
+        validationSchema: Yup.object(userRegisterValidation),
         onSubmit: (values) => {
             const token = getTokenInStorage() as string;
-            updatingUser(user._id, token, values)
+            const normalizeUser = normaliztionUser(values);
+            updatingUser(user._id, token, normalizeUser)
                 .then(res => {
                     formik.resetForm();
                     oncloseUpdating(false);
@@ -80,7 +83,7 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
 
     return (<>
 
-        <div className={style.warpper_form}>
+        <div className={style.warpper_form} style={{ backgroundColor: "gray", position: "absolute", left:"50%" }}>
 
             <div id={style.AddMissionTitle}>update user</div>
 
@@ -182,7 +185,7 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
                 </div>
 
                 <div className={style.btns_add_mission_container} id={style.containerBtnsFormAddMission}>
-                    <button className="add_mission_btn" id={style.btnAddMission} type="submit"/>
+                    <button className="add_mission_btn" id={style.btnAddMission} type="submit" />
                     <button className="reset_btn" id={style.btnReset} type="reset">reset</button>
                     <button
                         className="close_popUp_btn"

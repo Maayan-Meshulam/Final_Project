@@ -1,92 +1,75 @@
 .warpper_form {
     width: 100%;
-    max-width: 900px;
-    height: 600px;
+    max-width: 450px;
     position: absolute;
-    background-color: #f0f0f0;
+    background-color: #fdfcfc;
+    border-radius: 30px;
+    box-shadow: 0 0 10px 0.5px #505050df;
+    padding: 30px 25px;
+    direction: rtl;
+    z-index: 100;
 }
 
 .add_mission_form {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    width: 100%;
-    padding: 20px;
-}
-
-#titleWrapper {
-    grid-area: 1 / 1 / span 1 / span 2
-}
-
-#subTitleWrapper {
-    grid-area: 1 / 3 / span 1 / span 2;
-}
-
-#descriptionWrapper {
-    grid-area: 2 / 1 / span 1 / span 4;
-}
-
-#endDateWrapper {
-    grid-area: 3 / 1 / span 1 / span 1;
-}
-
-#startDateWrapper {
-    grid-area: 3 / 2 / span 1 / span 1;
-}
-
-#typeWrapper {
-    grid-area: 3 / 3 / span 1 / span 1;
-}
-
-#btnclosePopUp {
-    grid-area: 4 / 4 / span 1 / span 1;
-}
-
-#btnAddMission {
-    grid-area: 4 / 1 / span 1 / span 1;
-}
-
-#btnReset {
-    grid-area: 4 / 2 / span 1 / span 1;
-}
-
-
-.field_wrapper {
     display: flex;
     flex-direction: column;
+    gap: 10px;
     width: 100%;
 }
 
-.field_wrapper>input,
-.field_wrapper>textarea,
-.field_wrapper>select {
-    border: 1px solid gray;
-    border-radius: 5px;
-    padding: 0 7px;
-    height: 45px;
-    // outline: none;
+.add_task_title {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 20px;
 }
 
-.field_wrapper>textarea {
-    height: 60px;
-}
-
-
-#AddMissionTitle {
-    background-color: #6772ea;
-    padding: 10px;
-}
-
-
-.btns_add_mission_container {
+.inlineFormDiv {
     display: flex;
 }
 
-.btns_add_mission_container button {
-    height: 45px;
-    width: 49%;
-    border: none;
+.formInputs {
+    width: 100%;
+    height: 30px;
     border-radius: 10px;
-    color: white;
-    background-color: black;
+    flex: 1;
+    direction: rtl;
 }
+
+.add_task_btn {
+    width: 100%;
+    padding: 7px;
+    border: 1px solid green;
+    border-radius: 10px;
+    background-color: green;
+    color: white;
+}
+
+.top_btns_form {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    display: flex;
+    gap: 5px;
+}
+
+#btnclosePopUp, .top_btns_form > button{
+    border: none;
+    background-color:inherit;
+}
+
+.reset_btn{
+    font-size: 20px;
+}
+
+
+.defaultPriority{
+    padding: 7px 15px;
+    border: 1px solid #b9b7b7;
+    border-radius: 10px;
+}
+
+#nonePriority{background-color: lightgray;}
+#lowPriority{background-color: #f9f961;}
+#middlePriority{background-color: #ffc559;}
+#highPriority{background-color: #fda2a2}
+#veryHighPriority{background-color: red;}

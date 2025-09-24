@@ -1,0 +1,28 @@
+#navbarContainer,
+.footerContainer {
+  padding: 15px 25px;
+  background-color: #f3f6fa !important;
+  font-size: 18px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2745098039);
+}
+
+.footerContainer {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.footerInlineContainer {
+  display: flex;
+  gap: 10px;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
+.footer-link,
+.footer-link:visited,
+.footer-link:hover,
+.footer-link:active {
+  color: rgba(0, 0, 0, 0.65) !important;
+  text-decoration: none !important;
+}/*# sourceMappingURL=navbar_footer.module.css.map */

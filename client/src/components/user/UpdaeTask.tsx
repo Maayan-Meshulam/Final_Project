@@ -11,19 +11,19 @@ import { getTokenInStorage } from "../../services/tokenService";
 import { getAllUsers } from "../../services/userService";
 
 
-interface updateTaskProps {
-    oncloseUpdating: (closeBool: boolean) => void
+interface UpdateTaskProps {
+    oncloseUpdating: any
     task: any,
-    onToggleUetUpdaedTask: any
 }
 
-const updateTask: FunctionComponent<updateTaskProps> = ({ oncloseUpdating, task, onToggleUetUpdaedTask }) => {
+const UpdateTask: FunctionComponent<UpdateTaskProps> = ({ oncloseUpdating, task }) => {
 
     const userInfo = useSelector((state: any) => state.userBaseInfo)
     console.log(userInfo.id + " user id" + userInfo.managerLevel);
 
     const [arrEmployess, setArrEmployess] = useState<any>([]);
     const token = getTokenInStorage() as string;
+
 
     useEffect(() => {
         //רק במידה והוא מנהל נבקש את כל המשתמשים
@@ -47,6 +47,7 @@ const updateTask: FunctionComponent<updateTaskProps> = ({ oncloseUpdating, task,
             receiptDate: task.receiptDate,
             type: task.type,
             status: task.status,
+            priority: task.priority,
             workerTaskId: task.workerTaskId == userInfo.id ? "0" : task.workerTaskId
         },
         enableReinitialize: true,
@@ -57,7 +58,8 @@ const updateTask: FunctionComponent<updateTaskProps> = ({ oncloseUpdating, task,
                 .then(res => {
                     formik.resetForm();
                     oncloseUpdating(false);
-                    onToggleUetUpdaedTask((prev: boolean) => !prev);
+                    // onToggleUetUpdaedTask((prev: boolean) => !prev);
+                    window.location.reload();
                 })
                 .catch(error => console.log(error));
         }
@@ -69,9 +71,26 @@ const updateTask: FunctionComponent<updateTaskProps> = ({ oncloseUpdating, task,
 
         <div className={style.warpper_form}>
 
-            <div id={style.AddMissionTitle}>update task</div>
+            <div className={style.add_task_title}>update Mission</div>
 
-            <form onSubmit={formik.handleSubmit} >
+            <form onSubmit={formik.handleSubmit} className={style.add_mission_form}>
+
+                <div className={style.top_btns_form}>
+                    <button
+                        id={style.btnclosePopUp}
+                        type="button"
+                        onClick={() => {
+                            oncloseUpdating(false);
+                            // window.location.reload()
+                        }}
+                    >&#10060;</button>
+
+                    <button
+                        className={style.reset_btn}
+                        type="button"
+                        onClick={() => { formik.resetForm() }}
+                    >&#8635;</button>
+                </div>
 
                 <div className={style.add_mission_form}>
                     <CreateInputs type="text" id="title" name="כותרת ראשית" formik={formik} />
@@ -80,48 +99,46 @@ const updateTask: FunctionComponent<updateTaskProps> = ({ oncloseUpdating, task,
                     <CreateInputs type="Date" id="deadLine" name="תאריך סיום" formik={formik} />
                     <CreateInputs type="Date" id="receiptDate" name="תאריך קבלה" formik={formik} />
 
-                    <CreateSelects id="type" name="סוג" formik={formik}>
-                        <option value="1">אישית</option>
-                        <option value="2">מנהל</option>
-                    </CreateSelects>
-
-
-                    <CreateSelects id="status" name="סטטוס" formik={formik}>
-                        <option value="1">בטיפול</option>
-                        <option value="2">בוצע</option>
-                    </CreateSelects>
-
-                    {userInfo.managerLevel > 0 &&
-                        <CreateSelects id="workerTaskId" name="עובד משויך" formik={formik}>
-                            <option value="0">ללא</option>
-
-                            {arrEmployess.length > 0 && arrEmployess.map((epmloyee: any) => (
-                                <option value={epmloyee._id}>
-                                    {epmloyee.name.first}{epmloyee.name.last}
-                                </option>
-                            ))}
+                    <div className={style.inlineFormDiv}>
+                        <CreateSelects id="type" name="סוג" formik={formik}>
+                            <option value="1">אישית</option>
+                            <option value="2">מנהל</option>
                         </CreateSelects>
-                    }
+
+
+                        <CreateSelects id="status" name="סטטוס" formik={formik}>
+                            <option value="1">בטיפול</option>
+                            <option value="2">בוצע</option>
+                        </CreateSelects>
+
+                        <CreateSelects id="priority" name="דחיפות" formik={formik}>
+                            <option value="0" className={style.priorityOption}>ללא</option>
+                            <option value="1" className={style.priorityOption}>נמוך</option>
+                            <option value="2" className={style.priorityOption}>בינוני</option>
+                            <option value="3" className={style.priorityOption}>גבוה</option>
+                            <option value="4" className={style.priorityOption}>גבוה מאוד</option>
+                        </CreateSelects>
+
+
+                        {userInfo.managerLevel > 0 &&
+                            <CreateSelects id="workerTaskId" name="עובד משויך" formik={formik}>
+                                <option value="0">ללא</option>
+
+                                {arrEmployess.length > 0 && arrEmployess.map((epmloyee: any) => (
+                                    <option value={epmloyee._id}>
+                                        {epmloyee.name.first}{epmloyee.name.last}
+                                    </option>
+                                ))}
+                            </CreateSelects>
+                        }
+                    </div>
                 </div>
 
                 <div className={style.btns_add_mission_container} id={style.containerBtnsFormAddMission}>
                     <button
-                        className="add_mission_btn"
+                        className={style.add_task_btn}
                         id={style.btnAddMission}
                         type="submit">update
-                    </button>
-
-                    <button
-                        className="reset_btn"
-                        id={style.btnReset}
-                        type="reset">reset
-                    </button>
-
-                    <button
-                        className="close_popUp_btn"
-                        id={style.btnclosePopUp}
-                        type="button"
-                        onClick={() => oncloseUpdating(false)}>close
                     </button>
                 </div>
             </form>
@@ -129,4 +146,4 @@ const updateTask: FunctionComponent<updateTaskProps> = ({ oncloseUpdating, task,
     </>);
 }
 
-export default updateTask;
+export default UpdateTask;

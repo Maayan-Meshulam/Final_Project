@@ -42,7 +42,7 @@ const ManagerDash: FunctionComponent<ManagerDashProps> = () => {
     }
     else {
         return (<>
-            <div className="container_page">
+            <div className="container">
                 <div className={style.managerDash_conatainer}>
                     <div id={style.argentTasks}>
                         <h6> Argent tasks</h6>
@@ -76,9 +76,8 @@ const ManagerDash: FunctionComponent<ManagerDashProps> = () => {
                         {displayAddNewEmployee && <AddNewEmployee oncloseAddNewEmployee={setDisplayAddNewEmployee} />}
 
                         <Link to='/tasks/myTasks'>my tasks</Link>
-                        <Link to='/users/allTasks'>All my employess tasks</Link>
+                        <Link to='/tasks/manageEmployessTasks'>All my employess tasks</Link>
 
-                        <button>chat</button>
                     </div>
 
                     <div id={style.managmentSide}>

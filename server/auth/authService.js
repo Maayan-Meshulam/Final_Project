@@ -18,9 +18,10 @@ const auth = (req, res, next) => {
         }
 
         const payload = verifyToken(token);        
-        console.log(JSON.stringify(payload) + "from verify");
+        console.log(payload + "from verify");
+        console.log(payload.connectedEmployess);
+        
                         
-
         if (!payload) {            
             return next(buildError("Authentication Error", "Incorrect details", 401))
         }

@@ -11,7 +11,8 @@ export const taskSchema :any = {
     receiptDate: Yup.string().required(),
     type: Yup.string().required(),
     status: Yup.string().required(),
-    workerTaskId: Yup.string().required()
+    workerTaskId: Yup.string().required(),
+    priority: Yup.string().required()
 };
 
 console.log("after validaion acheama");

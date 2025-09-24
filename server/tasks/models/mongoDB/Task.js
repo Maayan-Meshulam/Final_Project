@@ -11,7 +11,8 @@ const taskSchema = Schema({
     deadLine: { type: Date },
     status: MINI_GENERAL_VALIDATION,
     type: MINI_GENERAL_VALIDATION,
-    userIdCreatorTask: { type: mongoose.Types.ObjectId, required: true }
+    userIdCreatorTask: { type: mongoose.Types.ObjectId, required: true },
+    priority: { type: String, required: true }
 });
 
 

@@ -43,7 +43,7 @@ const getMyTasks = (token: string) => {
 const getTaskById = (id: string, token: string) => {
     console.log("token" + token);
 
-    console.log("in get task by id");
+    console.log("in get task by id axios");
     return axios.get(`${API_TASK}/${id}`, {
         headers: { "x-auth-token": token }
     })
@@ -51,7 +51,7 @@ const getTaskById = (id: string, token: string) => {
 
 const getAllTasks = (connectedEmployees: any, token: string) => {
     console.log("get all tasks from axios");
-    return axios.get(`${API_TASK}/allTasks?arrEmployes=${connectedEmployees}`, {
+    return axios.get(`${API_TASK}/?arrEmployes=${connectedEmployees}`, {
         headers: { 'x-auth-token': token }
     });
 }

@@ -2,6 +2,7 @@ const buildError = require("../../helpers/erorrs/errorsHandeling");
 const User = require("./mongoDB/User");
 const DB = "MongoDB"
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt")
 
 //create user - register
 const createUser = async (newUser) => {
@@ -42,7 +43,7 @@ const getUserByEmail = async (email) => {
     try {
         console.log("inn");
 
-        const user = await User.find({ email });
+        const user = await User.findOne({ email });
         console.log(user);
 
         return user;
@@ -57,10 +58,10 @@ const getUserByEmail = async (email) => {
 const getAllUsers = async (managerEmployeesArray) => {
     console.log("in get all users DB");
     console.log(managerEmployeesArray + "***************************");
-    
+
 
     try {
-        const allUsers = await User.find({_id : {$in : managerEmployeesArray}});
+        const allUsers = await User.find({ _id: { $in: managerEmployeesArray } });
         console.log(allUsers + " all users");
 
         return allUsers;
@@ -102,15 +103,57 @@ const verifyLogin = async (email, password) => {
     console.log(email, password);
 
     try {
-        const isUserExist = await User.exists({ email, password });
-        console.log(isUserExist + "*****");
+        const user = await User.find({ email, password }, { email });
+        console.log(JSON.stringify(isUserExist) + "*****");
 
-        return isUserExist;
+        const isVaid = false;
+        if (user) isVaid = bcrypt.compare(password, user.password);
+
+        return isVaid;
     } catch (error) {
-        return buildError("mongoose Error", error, 500)
+        return buildError("mongoose Error", error, 500);
     }
 }
 
+const connectEmployeToManager = async (managerId, userToAddId, newArrayEmployees) => {
+    try {
+
+        console.log("form db patch");
+
+        let directManagerEmployeesArray = newArrayEmployees;
+        //במידה ומגיע מהדפדפן
+        if (newArrayEmployees.connectedEmployess) {
+            directManagerEmployeesArray = (newArrayEmployees.connectedEmployess).map(employeId => new mongoose.Types.ObjectId(employeId));
+        }
+
+        directManagerEmployeesArray.push(userToAddId);
+
+        //לשייך את העובד גם לאדמין הראשי
+        const root = await getUserByEmail("root@gmail.com");
+        let rootConnectedEmployess = root.connectedEmployess;
+        rootConnectedEmployess = [...root.connectedEmployess, userToAddId]
+
+        const rootId = root._id;
+
+
+        await User.findOneAndUpdate({ _id: rootId },
+            { $set: { connectedEmployess: rootConnectedEmployess } },
+            { new: true })
+
+        console.log("finish root");
+        
+        const user = await User.findOneAndUpdate({ _id: managerId },
+            { $set: { connectedEmployess: directManagerEmployeesArray } },
+            { new: true });
+
+        return user;
+
+    } catch (error) {
+        console.log("erorr", error.message, 500);
+
+        return buildError("mongoose Error", error, 500)
+    }
+}
 
 module.exports = {
     createUser,
@@ -119,5 +162,6 @@ module.exports = {
     updateUser,
     deleteUser,
     getUserByEmail,
-    verifyLogin
+    verifyLogin,
+    connectEmployeToManager
 };

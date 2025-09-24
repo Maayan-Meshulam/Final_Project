@@ -45,7 +45,7 @@ const ADDRESS = Joi.object({
 });
 
 
-const MANAGER_LEVEL = Joi.number()
+const MANAGER_LEVEL = Joi.string()
     .required()
 
 const CONNECTEDEMPLOYESS = Joi.array()

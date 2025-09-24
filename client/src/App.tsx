@@ -1,5 +1,4 @@
 import './App.css';
-
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import Login from './components/user/Login';
@@ -8,6 +7,7 @@ import SingleMission from './components/user/SingleMission';
 import Navbar from './components/layot/Navbar';
 import ManageAllEmployesTasks from './components/manager/ManageEmployesTasks';
 import SingleUser from './components/user/SingleUser';
+import Footer from './components/layot/Footer';
 
 
 //componemts - lazy loading
@@ -22,12 +22,12 @@ function App() {
       <BrowserRouter>
         {/* <Suspense fallback={"hii im stil loading..."}> */}
         <Routes>
-          <Route path='/users/login' element={<><Login /><Navbar /></>} />
-          <Route path='/tasks/myTasks' element={<><ManageAllMissions /><Navbar /></>} />
-          <Route path='/tasks/:id' element={<><SingleMission /><Navbar /></>} />
-          <Route path='users/managerDash' element={<><ManagerDash /><Navbar /></>} />
+          <Route path='/users/login' element={<><Login /><Navbar /><Footer/></>} />
+          <Route path='/tasks/myTasks' element={<><Navbar /><ManageAllMissions /><Footer/></>} />
+          <Route path='/tasks/:id' element={<><Navbar /><SingleMission /><Footer/></>} />
+          <Route path='users/managerDash' element={<><Navbar /><ManagerDash /><Footer/></>} />
           <Route path='/users/manageEmployess' element={<><ManageEmployee /></>} />
-          <Route path='/users/manageEmployessTasks' element={<><ManageAllEmployesTasks /></>} />
+          <Route path='/tasks/manageEmployessTasks' element={<><ManageAllEmployesTasks /></>} />
           <Route path='/users/:id' element={<><SingleUser /></>} />
         </Routes>
         {/* </Suspense> */}

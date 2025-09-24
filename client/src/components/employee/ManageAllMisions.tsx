@@ -5,7 +5,9 @@ import { getMyTasks } from "../../services/tasksService";
 import { getTokenInStorage } from "../../services/tokenService";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { statusConvert, typeConvert } from "../../helpers/Convert_valueSelectsToString";
+import { priorityConvert, statusConvert, typeConvert } from "../../helpers/Convert_valueSelectsToString";
+import UpdateTask from "../user/UpdaeTask";
+import DeleteTask from "../user/DeleteTask";
 
 interface ManageAllMissionsProps {
 
@@ -16,6 +18,33 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
     const [displayAddMission, setDisplayAddMission] = useState<boolean>(false);
     const [toggleAllMyTasks, setToggleAllMyTasks] = useState<boolean>(false);
     const [allMyTasks, setAllMyTasks] = useState<any>([]);
+    const [closeDeleting, setCloseDeleting] = useState<boolean>(false);
+    const [closeUpdating, setCloseUpdating] = useState<boolean>(false);
+    const [toggleUpdaedUser, settoggleUpdaedUser] = useState<boolean>(false);
+    const [arrDeepSearch, setArrDeepSearch] = useState<any>([]);
+    const [termSearch, setSearchTerm] = useState<string>("");
+    const [typeSearch, setTypeSearch] = useState<string>("All");
+    const [selectedTask, setSelectedTask] = useState<any>(null);
+
+    const filterdArr = () => {
+        console.log(termSearch, typeSearch);
+        switch (typeSearch) {
+            case "All":
+                setArrDeepSearch(allMyTasks);
+                break;
+            case "Completed":
+                setArrDeepSearch(allMyTasks.filter((task: any) => task.status == "2"));
+                break;
+            case "Urgent":
+                setArrDeepSearch(allMyTasks.filter((task: any) => task.priority == "3" || task.priority == "4"));
+                break;
+            case "Process":
+                setArrDeepSearch(allMyTasks.filter((task: any) => task.status == "1"));
+                break;
+        }
+
+        setArrDeepSearch((prev: any) => prev.filter((task: any) => task.title.toLowerCase().includes(termSearch.toLowerCase())));
+    }
 
 
     let user = useSelector((state: any) => state.userBaseInfo);
@@ -34,11 +63,16 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
             .then(res => {
                 console.log((res.data));
                 setAllMyTasks(res.data);
+                setArrDeepSearch(res.data);
             })
             .catch(error => {
                 console.log(error);
             })
     }, [toggleAllMyTasks, user]);
+
+    useEffect(() => {
+        filterdArr();
+    }, [termSearch, typeSearch, allMyTasks]);
 
     if (!user.id) {
         return (<>
@@ -47,45 +81,124 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
     }
     else {
         return (<>
-            <div className="container_page">
+            <div className="container">
 
-                {/* add mission - click will open a popUp form to add mission */}
-                <div onClick={() => setDisplayAddMission(true)}>Add Mission</div>
-                {displayAddMission && <AddMission oncloseAddMission={setDisplayAddMission} onToggleAllMyTasks={setToggleAllMyTasks} />}
 
-                <div className={style.filter_Bar}>
+                <div className={style.containerAbove}>
+                    <button id={style.addTaskBtn} onClick={() => setDisplayAddMission(true)}>
+                        Add Task <i className="fa-solid fa-plus"></i>
+                    </button>
+
+                    {displayAddMission && <AddMission oncloseAddMission={setDisplayAddMission} onToggleAllMyTasks={setToggleAllMyTasks} />}
+
+                    <div className={`${style.containerQuickBtn} row`}>
+                        <div className={`${style.btnDiv} col`} id={style.allTasks} onClick={() => {
+                            setTypeSearch("All");
+
+                        }}>
+                            <i className="fa-solid fa-list"></i>
+                            <span>כל המשימות</span>
+                        </div>
+
+
+                        <div className={`${style.btnDiv} col`} id={style.conpleteTasks} onClick={() => {
+                            setTypeSearch("Completed");
+
+                        }}>
+                            <i className="fa-regular fa-circle-check"></i>
+                            <span>הושלמו</span>
+                        </div>
+
+
+                        <div className={`${style.btnDiv} col`} id={style.urgentTasks} onClick={() => {
+                            setTypeSearch("Urgent");
+
+                        }}>
+                            <i className="fa-solid fa-exclamation"></i>
+                            <span>דחופות</span>
+                        </div>
+
+
+                        <div className={`${style.btnDiv} col`} id={style.inProcessTasks} onClick={() => {
+                            setTypeSearch("Process");
+
+                        }}>
+                            <i className="fa-solid fa-hourglass-half"></i>
+                            <span>בתהליך</span>
+                        </div>
+
+                        <div className={`${style.searchContainer} col`}>
+                            <input type="text" className={style.search_input_filter_bar} onInput={(e: any) => {
+                                setSearchTerm(e.target.value);
+                            }} />
+                            <i className={`fa-solid fa-magnifying-glass ${style.searchIcon}`}></i>
+                        </div>
+                    </div>
+
+
+
                     <div>
-                        <span id={style.resultFilter}>results : 8</span>
-                        <input type="text" className={style.search_input_filter_bar} />
-                    </div>
+                        <div className={style.scroller_container}>
+                            <table className={style.dashBoardTasks}>
+                                <thead>
+                                    <tr>
+                                        <th>כותרת</th>
+                                        <th>סטטוס</th>
+                                        <th>סוג</th>
+                                        <th>דחיפות</th>
+                                        <th>תאריך התחלה</th>
+                                        <th>תאריך סיום</th>
+                                        <th>פרטים נוספים</th>
+                                        <th>עריכה</th>
+                                        <th>מחיקה</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        arrDeepSearch && arrDeepSearch.map((task: any) => (
+                                            <tr key={task._id}>
+                                                <td>{task.title}</td>
+                                                <td>{statusConvert[task.status]}</td>
+                                                <td>{typeConvert[task.type]}</td>
+                                                <td className={style[`priority${task.priority}`]}>{priorityConvert[task.priority]}</td>
+                                                <td>{task.receiptDate}</td>
+                                                <td>{task.deadLine}</td>
+                                                <td onClick={() => { nav(`/tasks/${task._id}`) }}>
+                                                    <i className="fa-solid fa-eye"></i>
+                                                </td>
 
-                    <div>
-                        <span id={style.sort}>SORT</span>
-                        <span id={style.filter}>FILTER</span>
+                                                {
+                                                    (task.type == "1" || user.managerLevel > 1) ? (<>
+                                                        <td onClick={() => {
+                                                            setCloseUpdating(true);
+                                                            setSelectedTask(task);
+                                                        }}> <i className="fa-solid fa-pen-to-square"></i>
+                                                        </td>
+                                                        <td><i className="fa-solid fa-trash" onClick={() => {
+                                                            setSelectedTask(task);
+                                                            setCloseDeleting(true);
+                                                        }}></i>
+                                                        </td>
+                                                    </>
+                                                    ) : (
+                                                        <>
+                                                            <td> <i className="fa-solid fa-pen-to-square" style={{ color: "gray" }}></i>
+                                                            </td>
+                                                            <td><i className="fa-solid fa-trash" style={{ color: "gray" }}></i>
+                                                            </td>
+                                                        </>
+                                                    )}
+                                            </tr>
+                                        ))
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <button id={style.claerAllFiltersBtn}>clear all</button>
-
+                    {closeDeleting && selectedTask && <DeleteTask onCloseDeleting={setCloseDeleting} task={selectedTask} />}
+                    {closeUpdating && selectedTask && <UpdateTask oncloseUpdating={setCloseUpdating} task={selectedTask} />}
                 </div>
-
-                <div className={style.scroller_container}>
-                    <div className={style.all_preview_mission_container}>
-                        {
-                            allMyTasks.map((task: any) => (
-                                <div className={style.preview_mission} key={task._id} onClick={()=>{nav(`/tasks/${task._id}`)}}>
-                                    <h5>{task.title}</h5>
-                                    <div>
-                                        <span id={task.statusMission}>{statusConvert[task.status]}</span>
-                                        <span id={task.typeMission}>{typeConvert[task.type]}</span>
-                                    </div>
-                                    <span>{task.receiptDate}</span>
-                                </div>
-                            ))
-                        }
-                    </div>
-                </div>
-
-
-            </div>
+            </div >
         </>);
     }
 }

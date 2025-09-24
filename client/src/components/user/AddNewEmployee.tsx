@@ -1,21 +1,40 @@
-import type { FunctionComponent } from "react";
+import { useEffect, useState, type FunctionComponent } from "react";
 import style from '../../style/addEmployee/addEmployee.module.css';
 import { useFormik } from "formik";
 import CreateInputs from "./CreateInputs";
 import CreateSelects from "./CreateSelects";
-import { addUser } from "../../services/userService";
+import { addUser, getAllUsers, getUserById, patchConnectedEmployees } from "../../services/userService";
 import normaliztionUser from "../../helpers/normalizeUser";
 import { userRegisterValidation } from "../../validation/user/userValidation";
 import * as Yup from 'yup'
 import { getTokenInStorage } from "../../services/tokenService";
+import { useSelector } from "react-redux";
 
 interface AddNewEmployeeProps {
     oncloseAddNewEmployee: (NewEmployeesCloseBoll: boolean) => void
 }
 
-const token = getTokenInStorage() as string;
-
 const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewEmployee }) => {
+
+    const token = getTokenInStorage() as string;
+    const userInfo = useSelector((state: any) => state.userBaseInfo);
+    const managerId = userInfo.id;
+    const [manager, setManager] = useState<any>();
+    const [allEmployees, setAllEmployees] = useState<any>([]);
+
+
+    useEffect(() => {
+        getUserById(managerId, token)
+            .then(res => {
+                const name = `${res.data.name.first} ${res.data.name.last}`;
+                console.log(name + " name");
+                setManager(name);
+            });
+
+        // getAllUsers()
+    }, [])
+
+
 
     const formik = useFormik({
         initialValues: {
@@ -35,27 +54,39 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
             role: "",
             jobType: "",
             fromWhereWorking: "",
-            directManager: "",
+            directManager: manager,
             department: "",
             team: "",
             managerLevel: "0",
             connectedEmployess: []
         },
+        enableReinitialize: true,
         validationSchema: Yup.object(userRegisterValidation),
         onSubmit: (values: any) => {
             console.log(JSON.stringify(values));
             const userNomalize = normaliztionUser(values)
             console.log(JSON.stringify(userNomalize) + "****");
-            
+
             addUser(userNomalize, token)
                 .then((res) => {
                     console.log(res.data);
                     oncloseAddNewEmployee(false);
                     formik.resetForm();
+
+                    //הוספת המשתמש למנהל
+                    console.log(res.data._id + "--------");
+
+                    console.log(res.data._id, managerId, userInfo.connectedEmployess, token);
+                    patchConnectedEmployees(managerId, res.data._id, userInfo.connectedEmployess, token)
+                        .then(res => {
+                            console.log(res.data);
+                        })
+                        .catch(err => console.log(err));
                 })
                 .catch(err => {
                     console.log(err)
                 })
+
         }
     });
 
@@ -140,29 +171,42 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
                             <option value="בית">בית</option>
                         </CreateSelects>
 
-                        <CreateSelects id="managerLevel" name="managerLevel" formik={formik} classAddEmployess={style.field_wrapper}>
+                       <div>
+                         <CreateSelects id="managerLevel" name="managerLevel" formik={formik} classAddEmployess={style.field_wrapper}>
                             <option value="0">0 - regular worker</option>
                             <option value="1">1 - entry manager</option>
                             <option value="1">2 - senior manager</option>
                         </CreateSelects>
+                        <p>על מנת לשייך עובדים למנהל יש ליצור קשר עם אדמין</p>
+                       </div>
 
-                        <CreateSelects id="directManager" name="Manager name" formik={formik} classAddEmployess={style.field_wrapper}>
-                            <option value="moshe">moshe</option>
-                            <option value="david">david</option>
-                            <option value="ronen">ronen</option>
-                        </CreateSelects>
+
+                        <div>
+                            <label>מנהל ישיר</label>
+                            <input
+                                type="text"
+                                id="directManager"
+                                name="manager name"
+                                value={manager}
+                                className={style.field_wrapper}
+                                disabled
+                            />
+                        </div>
+
                     </fieldset>
 
-                    <select multiple id="connectedEmployess" name="connectedEmployess" className={style.field_wrapper}>
-                      <option value="moshe">moshe</option>
-                            <option value="david">david</option>
-                            <option value="ronen">ronen</option>
-                    </select>
+                    {/* <select multiple id="connectedEmployess" name="connectedEmployess" className={style.field_wrapper}>
+                        {
+                            (userInfo.connectedEmployess).map((employee: any) => (
+                                <option value={employee}>{employee}</option>
+                            ))
+                        }
+                    </select> */}
 
-                    <div className={style.field_wrapper}>
+                    {/* <div className={style.field_wrapper}>
                         <label>comments : </label>
                         <textarea />
-                    </div>
+                    </div> */}
                 </div>
 
                 <div className={style.btns_add_mission_container} id={style.containerBtnsFormAddMission}>

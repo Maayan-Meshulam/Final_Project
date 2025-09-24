@@ -13,7 +13,8 @@ const taskValidator = (task) => {
         deadLine: Joi.date().required(),
         status: MINI_GENERAL_VALIDATION,
         type: MINI_GENERAL_VALIDATION,
-        userIdCreatorTask: Joi.required()
+        userIdCreatorTask: Joi.required(),
+        priority: Joi.string().required()
     });
             
     return schema.validate(task, {abortEarly:false});

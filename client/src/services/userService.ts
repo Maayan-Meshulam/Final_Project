@@ -46,9 +46,21 @@ const updatingUser = (userId: string, token: string, newUser: any) => {
     console.log("in axios update user");
     console.log(JSON.stringify(newUser));
 
-    return axios.put(`${API_USERS}:${userId}`, newUser, {
+    return axios.put(`${API_USERS}/${userId}`, newUser, {
         headers: { 'x-auth-token': token }
     })
+}
+
+const patchConnectedEmployees = (managerId: string, userId: string, prevConnectingEmployes: any, token: string) => {
+    console.log("in patch axios");
+    console.log(managerId + " manager id");
+    console.log(userId + " user id");
+    console.log(JSON.stringify([...prevConnectingEmployes, userId]));
+
+
+    return axios.patch(`${API_USERS}/${managerId}`, { "connectedEmployess": [...prevConnectingEmployes, userId] },
+        { headers: { 'x-auth-token': token } }
+    )
 }
 
 export {
@@ -57,5 +69,6 @@ export {
     getAllUsers,
     getUserById,
     deleteUser,
-    updatingUser
+    updatingUser,
+    patchConnectedEmployees
 }
