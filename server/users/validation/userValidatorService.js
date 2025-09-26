@@ -1,13 +1,15 @@
 const { userValid, UserValidLogin } = require("./joi/userValidator");
 const buildError = require("../../helpers/erorrs/errorsHandeling");
 const User = require("../models/mongoDB/User");
+const {normaliztionUser} = require("../helpers/normalizeUser")
 const VALIDATOR = "joi";
 
 const userValidation = (req, res, next) => {
+
     console.log("in user validator");
 
     try {
-        const user = req.body;
+        const user = normaliztionUser(req.body);
         console.log(JSON.stringify(user));
         
 
@@ -62,7 +64,7 @@ const userLoginValidation = async (req, res, next) => {
         return next(buildError("", "validation type not exist", 400));
 
     } catch (error) {
-        return next(buildError("Error:", error, 500))
+        return next(buildError("Error:", error.message, 500))
     }
 
 }

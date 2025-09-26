@@ -10,7 +10,7 @@ const generateToken = async (user) => {
 
 
     try {
-        const [userFromDB] = await getUserByEmail(user.email);
+        const userFromDB = await getUserByEmail(user.email);
         console.log(JSON.stringify(userFromDB) + "******************");
 
         if (!userFromDB) {

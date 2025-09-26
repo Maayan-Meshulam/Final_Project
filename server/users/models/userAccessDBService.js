@@ -103,15 +103,22 @@ const verifyLogin = async (email, password) => {
     console.log(email, password);
 
     try {
-        const user = await User.find({ email, password }, { email });
-        console.log(JSON.stringify(isUserExist) + "*****");
 
-        const isVaid = false;
-        if (user) isVaid = bcrypt.compare(password, user.password);
+        const user = await User.findOne({ email });
+        console.log(typeof user);
+
+        console.log(user + "*****");
+        console.log(user.password, password);
+        
+
+        let isVaid = false;
+        if (user) isVaid = await bcrypt.compare(password, user.password);
+
+        console.log(isVaid + "1212123132");
 
         return isVaid;
     } catch (error) {
-        return buildError("mongoose Error", error, 500);
+        return buildError("mongoose Error", error.message, 500);
     }
 }
 
@@ -141,7 +148,7 @@ const connectEmployeToManager = async (managerId, userToAddId, newArrayEmployees
             { new: true })
 
         console.log("finish root");
-        
+
         const user = await User.findOneAndUpdate({ _id: managerId },
             { $set: { connectedEmployess: directManagerEmployeesArray } },
             { new: true });

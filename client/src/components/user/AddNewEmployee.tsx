@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import CreateInputs from "./CreateInputs";
 import CreateSelects from "./CreateSelects";
 import { addUser, getAllUsers, getUserById, patchConnectedEmployees } from "../../services/userService";
-import normaliztionUser from "../../helpers/normalizeUser";
+// import normaliztionUser from "../../helpers/normalizeUser";
 import { userRegisterValidation } from "../../validation/user/userValidation";
 import * as Yup from 'yup'
 import { getTokenInStorage } from "../../services/tokenService";
@@ -64,24 +64,14 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
         validationSchema: Yup.object(userRegisterValidation),
         onSubmit: (values: any) => {
             console.log(JSON.stringify(values));
-            const userNomalize = normaliztionUser(values)
-            console.log(JSON.stringify(userNomalize) + "****");
+            // const userNomalize = normaliztionUser(values)
+            // console.log(JSON.stringify(userNomalize) + "****");
 
-            addUser(userNomalize, token)
+            addUser(values, token)
                 .then((res) => {
                     console.log(res.data);
                     oncloseAddNewEmployee(false);
                     formik.resetForm();
-
-                    //הוספת המשתמש למנהל
-                    console.log(res.data._id + "--------");
-
-                    console.log(res.data._id, managerId, userInfo.connectedEmployess, token);
-                    patchConnectedEmployees(managerId, res.data._id, userInfo.connectedEmployess, token)
-                        .then(res => {
-                            console.log(res.data);
-                        })
-                        .catch(err => console.log(err));
                 })
                 .catch(err => {
                     console.log(err)

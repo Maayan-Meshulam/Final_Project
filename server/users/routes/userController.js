@@ -4,6 +4,7 @@ const { createUser, getAllUsers, getUserById, updateUser, deleteUser, verifyLogi
 const { userValidation, userLoginValidation } = require("../validation/userValidatorService");
 const { generateToken, verifyToken } = require("../../auth/providers/jwt");
 const buildError = require("../../helpers/erorrs/errorsHandeling");
+const { hash } = require("bcrypt");
 const app = express();
 const router = express.Router();
 
@@ -36,7 +37,7 @@ router.post('/addUser', auth, userValidation, async (req, res, next) => {
 });
 
 //login user
-router.post('/login', userLoginValidation, async (req, res, next) => {
+router.post('/login', async (req, res, next) => {
     console.log("in login user router");
 
     try {
@@ -44,9 +45,12 @@ router.post('/login', userLoginValidation, async (req, res, next) => {
         console.log(JSON.stringify(user));
 
         console.log(user.email, user.password + " verify");
+        
 
         //בדיקת זהות המשתמש - האם קיים ופרטיו נכונים
         if (!await verifyLogin(user.email, user.password)) {
+            console.log("innnnnnnnnnnnnnnnnnnnn");
+            
             return next(buildError("Authentication Error", "user not register / details not right", 403))
         }
 
