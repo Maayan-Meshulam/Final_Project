@@ -12,22 +12,23 @@ const router = express.Router();
 router.post('/addUser', auth, userValidation, async (req, res, next) => {
     console.log("in post user");
     try {
-        let user = req.body;
-        let userConnectInfo = req.userInfo;
-        console.log(userConnectInfo);
+        let user = req.userValid;
+        //נצטרך לקחת פרטים ישירות מהמסד - למקרה שיווצרו כמה עובדים אחד אחרי השני ולא יהיה בניהם חיבור מחדש למערכת
+        //אם אין חיבור הפיילואד לא מתעדכן
+        let manageronnect = await getUserById(req.userInfo.id);
+        
+        console.log(manageronnect);
 
 
         //נבדוק הרשאות
-        if (userConnectInfo.managerLevel < 1) {
+        if (manageronnect.managerLevel < 1) {
             return next(buildError("Authentication Error", "user not allow, access block", 403))
         }
 
         //טיפול בשמירת הנתונים
         user = await createUser(user);
-
-        console.log(userConnectInfo.connectedEmployess);
         
-        user = await connectEmployeToManager(userConnectInfo.id, user._id, userConnectInfo.connectedEmployess);
+        user = await connectEmployeToManager(manageronnect.managerLevel, manageronnect._id, user._id, manageronnect.connectedEmployess);
         
         res.status(201).send(user);
 

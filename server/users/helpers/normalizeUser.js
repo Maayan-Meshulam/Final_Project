@@ -1,12 +1,15 @@
-const normaliztionUser = (user) => {
+const { hash } = require("bcrypt");
 
-    const { firstName, lastName, phone, email, password, birthDay, url, alt,
-        city, street, houseNumber, zip,startDate, jobType,role, fromWhereWorking, directManager
+const normaliztionUser = (user, bycrptPassword) => {
+
+    const { firstName, lastName, phone, email, birthDay, url, alt,
+        city, street, houseNumber, zip, startDate, jobType, role, fromWhereWorking, directManager
         , department, team, managerLevel, connectedEmployess
     } = { ...user }
 
-    console.log(url+ " img url");
-    
+
+    console.log(url + " img url");
+
     return {
         name: {
             first: firstName,
@@ -14,23 +17,23 @@ const normaliztionUser = (user) => {
         },
         phone: phone,
         email: email,
-        password: password ,
+        password: bycrptPassword ,
         birthDay: new Date(birthDay),
-        image:{
-            url:url == "" ? "client/src/images/profile.png" : url,
+        image: {
+            url: url == "" ? "client/src/images/profile.png" : url,
             alt: alt == "" ? "defult profile" : alt,
         },
-        address:{
+        address: {
             city: city,
-            street: street ,
+            street: street,
             houseNumber: houseNumber,
             zip: zip
         },
         startDate: new Date(startDate),
         role: role,
-        jobType: jobType ,
+        jobType: jobType,
         fromWhereWorking: fromWhereWorking,
-        directManager:directManager ,
+        directManager: directManager,
         department: department,
         team: team,
         managerLevel: managerLevel,

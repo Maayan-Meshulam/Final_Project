@@ -109,7 +109,7 @@ const verifyLogin = async (email, password) => {
 
         console.log(user + "*****");
         console.log(user.password, password);
-        
+
 
         let isVaid = false;
         if (user) isVaid = await bcrypt.compare(password, user.password);
@@ -122,7 +122,7 @@ const verifyLogin = async (email, password) => {
     }
 }
 
-const connectEmployeToManager = async (managerId, userToAddId, newArrayEmployees) => {
+const connectEmployeToManager = async (managerLevel, managerId, userToAddId, newArrayEmployees) => {
     try {
 
         console.log("form db patch");
@@ -136,18 +136,20 @@ const connectEmployeToManager = async (managerId, userToAddId, newArrayEmployees
         directManagerEmployeesArray.push(userToAddId);
 
         //לשייך את העובד גם לאדמין הראשי
-        const root = await getUserByEmail("root@gmail.com");
-        let rootConnectedEmployess = root.connectedEmployess;
-        rootConnectedEmployess = [...root.connectedEmployess, userToAddId]
+        if (managerLevel != 3) {
+            const root = await getUserByEmail("root@gmail.com");
+            let rootConnectedEmployess = root.connectedEmployess;
+            rootConnectedEmployess = [...root.connectedEmployess, userToAddId]
 
-        const rootId = root._id;
+            const rootId = root._id;
 
+            await User.findOneAndUpdate({ _id: rootId },
+                { $set: { connectedEmployess: rootConnectedEmployess } },
+                { new: true })
 
-        await User.findOneAndUpdate({ _id: rootId },
-            { $set: { connectedEmployess: rootConnectedEmployess } },
-            { new: true })
+            console.log("finish root");
+        }
 
-        console.log("finish root");
 
         const user = await User.findOneAndUpdate({ _id: managerId },
             { $set: { connectedEmployess: directManagerEmployeesArray } },

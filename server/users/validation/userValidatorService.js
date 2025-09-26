@@ -1,22 +1,27 @@
 const { userValid, UserValidLogin } = require("./joi/userValidator");
 const buildError = require("../../helpers/erorrs/errorsHandeling");
 const User = require("../models/mongoDB/User");
-const {normaliztionUser} = require("../helpers/normalizeUser")
+const normaliztionUser = require("../helpers/normalizeUser");
+const { hash } = require("bcrypt");
 const VALIDATOR = "joi";
 
-const userValidation = (req, res, next) => {
+const userValidation = async (req, res, next) => {
 
     console.log("in user validator");
 
     try {
-        const user = normaliztionUser(req.body);
-        console.log(JSON.stringify(user));
+        const bycrptPassword = await hash(req.body.password, 10);
+        console.log(bycrptPassword);
         
 
-        if (VALIDATOR == "joi") {            
+        const user = normaliztionUser(req.body, bycrptPassword);
+        console.log(JSON.stringify(user));
+
+
+        if (VALIDATOR == "joi") {
 
             const { error } = userValid(user);
-            
+
             if (error) {
                 console.log("in user error validation");
                 console.log(error.details);
@@ -26,6 +31,7 @@ const userValidation = (req, res, next) => {
                 return next(buildError("Joi Validation", errorValidation, 400));
             }
 
+            req.userValid = user;
             return next();
         }
 
