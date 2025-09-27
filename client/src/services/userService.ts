@@ -34,11 +34,12 @@ const getUserById = (userId: string, token: string) => {
 
 }
 
-const deleteUser = (userId: string, token: string) => {
+const deleteUser = (userId: string, managerId:string , token: string) => {
 
     console.log("in delete user");
     return axios.delete(`${API_USERS}/${userId}`, {
-        headers: { 'x-auth-token': token }
+        headers: { 'x-auth-token': token },
+        data:{manager_id : managerId}
     })
 }
 

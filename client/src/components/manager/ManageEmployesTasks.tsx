@@ -22,6 +22,7 @@ const ManageAllEmployesTasks: FunctionComponent<ManageAllEmployesTasksProps> = (
 
     const [closeDeleting, setCloseDeleting] = useState<boolean>(false);
     const [closeUpdating, setCloseUpdating] = useState<boolean>(false);
+    const [selectedTask, setSelectedTask] = useState<any>(null);
 
 
     const nav = useNavigate();
@@ -104,35 +105,29 @@ const ManageAllEmployesTasks: FunctionComponent<ManageAllEmployesTasksProps> = (
                                             <td>{statusConvert[task.status]}</td>
                                             <td>{typeConvert[task.type]}</td>
                                             <td>{task.userIdCreatorTask}</td>
-                                            <td onClick={() => {
-                                                console.log('click on', task._id);
-                                                getTaskById(task._id, token)
-                                                    .then(res => nav(`/tasks/${task._id}`))
-                                                    .catch(err => console.log(err))
-                                            }}>פרטים נוספים</td>
 
                                             <td onClick={() => {
                                                 setCloseUpdating(true);
-                                            }}>עריכה</td>
-                                            {/* <td>
-                                                {closeUpdating && <UpdateTask oncloseUpdating={setCloseUpdating} task={task} />}
-                                            </td> */}
-
-                                            <td onClick={() => {
+                                                setSelectedTask(task);
+                                            }}> <i className="fa-solid fa-pen-to-square"></i>
+                                            </td>
+                                            <td><i className="fa-solid fa-trash" onClick={() => {
+                                                setSelectedTask(task);
                                                 setCloseDeleting(true);
-                                                window.location.reload();
-                                            }}>מחיקה</td>
-                                            {/* <td>
-                                                {closeDeleting && <DeleteTask onCloseDeleting={setCloseDeleting} task={task} />}
-                                            </td> */}
+                                            }}></i>
+                                            </td>
+
                                         </tr>
                                     ))
                                 }
                             </tbody>
                         </table>
+
                     </div>
                 </div>
             </div>
+            {closeDeleting && selectedTask && <DeleteTask onCloseDeleting={setCloseDeleting} task={selectedTask} />}
+            {closeUpdating && selectedTask && <UpdateTask oncloseUpdating={setCloseUpdating} task={selectedTask} />}
         </div >
     </>);
 }

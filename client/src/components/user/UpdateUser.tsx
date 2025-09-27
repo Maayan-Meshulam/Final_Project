@@ -16,10 +16,9 @@ import normaliztionUser from "../../helpers/normalizeUser";
 interface UpdateUserProps {
     oncloseUpdating: (closeBool: boolean) => void
     user: any,
-    onToggleUpdateUser: any
 }
 
-const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user, onToggleUpdateUser }) => {
+const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user }) => {
 
     const userInfo = useSelector((state: any) => state.userBaseInfo)
     console.log(userInfo.id + " user id" + userInfo.managerLevel);
@@ -73,7 +72,7 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
                 .then(res => {
                     formik.resetForm();
                     oncloseUpdating(false);
-                    onToggleUpdateUser((prev: boolean) => !prev);
+                    window.location.reload()
                 })
                 .catch(error => console.log(error));
         }
@@ -83,12 +82,30 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
 
     return (<>
 
-        <div className={style.warpper_form} style={{ backgroundColor: "gray", position: "absolute", left:"50%" }}>
+        <div className={style.warpper_form}>
 
-            <div id={style.AddMissionTitle}>update user</div>
+            <div className={style.add_task_title}>update Mission</div>
 
-            <form className={style.warpper_form} onSubmit={formik.handleSubmit}>
-                <div className={style.inline_form_wrapper}>
+            <form onSubmit={formik.handleSubmit} className={style.add_mission_form}>
+
+                <div className={style.top_btns_form}>
+                    <button
+                        id={style.btnclosePopUp}
+                        type="button"
+                        onClick={() => {
+                            oncloseUpdating(false);
+                            // window.location.reload()
+                        }}
+                    >&#10060;</button>
+
+                    <button
+                        className={style.reset_btn}
+                        type="button"
+                        onClick={() => { formik.resetForm() }}
+                    >&#8635;</button>
+                </div>
+
+                <div className={style.add_mission_form}>
 
                     <fieldset id={style.PersonalDetails}>
                         <legend>פרטים איישים</legend>
@@ -164,34 +181,26 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
                             <option value="1">1 - entry manager</option>
                             <option value="1">2 - senior manager</option>
                         </CreateSelects>
-
-                        <CreateSelects id="directManager" name="Manager name" formik={formik} classAddEmployess={style.field_wrapper}>
-                            <option value="moshe">moshe</option>
-                            <option value="david">david</option>
-                            <option value="ronen">ronen</option>
-                        </CreateSelects>
                     </fieldset>
 
-                    <select multiple id="connectedEmployess" name="connectedEmployess" className={style.field_wrapper}>
-                        <option value="moshe">moshe</option>
-                        <option value="david">david</option>
-                        <option value="ronen">ronen</option>
-                    </select>
-
-                    <div className={style.field_wrapper}>
-                        <label>comments : </label>
-                        <textarea />
+                    <div>
+                        <label>מנהל ישיר</label>
+                        <input
+                            type="text"
+                            id="directManager"
+                            name="manager name"
+                            value={user.directManager}
+                            className={style.field_wrapper}
+                            disabled
+                        />
                     </div>
                 </div>
 
                 <div className={style.btns_add_mission_container} id={style.containerBtnsFormAddMission}>
-                    <button className="add_mission_btn" id={style.btnAddMission} type="submit" />
-                    <button className="reset_btn" id={style.btnReset} type="reset">reset</button>
                     <button
-                        className="close_popUp_btn"
-                        id={style.btnclosePopUp}
-                        type="button"
-                        onClick={() => oncloseUpdating(false)}>close
+                        className={style.add_task_btn}
+                        id={style.btnAddMission}
+                        type="submit">update
                     </button>
                 </div>
             </form>

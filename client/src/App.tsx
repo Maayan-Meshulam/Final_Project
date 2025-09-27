@@ -26,8 +26,8 @@ function App() {
           <Route path='/tasks/myTasks' element={<><Navbar /><ManageAllMissions /><Footer/></>} />
           <Route path='/tasks/:id' element={<><Navbar /><SingleMission /><Footer/></>} />
           <Route path='users/managerDash' element={<><Navbar /><ManagerDash /><Footer/></>} />
-          <Route path='/users/manageEmployess' element={<><ManageEmployee /></>} />
-          <Route path='/tasks/manageEmployessTasks' element={<><ManageAllEmployesTasks /></>} />
+          <Route path='/users/manageEmployess' element={<><Navbar /><ManageEmployee /><Footer/></>} />
+          <Route path='/tasks/manageEmployessTasks' element={<><Navbar /><ManageAllEmployesTasks /><Footer/></>} />
           <Route path='/users/:id' element={<><SingleUser /></>} />
         </Routes>
         {/* </Suspense> */}

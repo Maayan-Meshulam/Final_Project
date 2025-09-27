@@ -13,10 +13,12 @@ router.post('/addUser', auth, userValidation, async (req, res, next) => {
     console.log("in post user");
     try {
         let user = req.userValid;
+        console.log(req.userInfo);
+
         //נצטרך לקחת פרטים ישירות מהמסד - למקרה שיווצרו כמה עובדים אחד אחרי השני ולא יהיה בניהם חיבור מחדש למערכת
         //אם אין חיבור הפיילואד לא מתעדכן
         let manageronnect = await getUserById(req.userInfo.id);
-        
+
         console.log(manageronnect);
 
 
@@ -25,11 +27,14 @@ router.post('/addUser', auth, userValidation, async (req, res, next) => {
             return next(buildError("Authentication Error", "user not allow, access block", 403))
         }
 
+        if (! await getUserById(user.directManager)) return next(buildError("details Error", "direct manager not exist", 400));
+
+
         //טיפול בשמירת הנתונים
         user = await createUser(user);
-        
-        user = await connectEmployeToManager(manageronnect.managerLevel, manageronnect._id, user._id, manageronnect.connectedEmployess);
-        
+
+        await connectEmployeToManager(manageronnect.managerLevel, manageronnect._id, user._id, manageronnect.connectedEmployess);
+
         res.status(201).send(user);
 
     } catch (error) {
@@ -46,12 +51,12 @@ router.post('/login', async (req, res, next) => {
         console.log(JSON.stringify(user));
 
         console.log(user.email, user.password + " verify");
-        
+
 
         //בדיקת זהות המשתמש - האם קיים ופרטיו נכונים
         if (!await verifyLogin(user.email, user.password)) {
             console.log("innnnnnnnnnnnnnnnnnnnn");
-            
+
             return next(buildError("Authentication Error", "user not register / details not right", 403))
         }
 
@@ -66,14 +71,21 @@ router.post('/login', async (req, res, next) => {
 
 // get all users
 router.get('/', auth, async (req, res, next) => {
-    console.log("in get all users");
-    const user = req.userInfo;
-    let { ArrEmployess } = (req.query)
-    console.log(JSON.stringify(ArrEmployess) + "11111111111111111111111111111");
-    ArrEmployess = ArrEmployess.split(',')
-    console.log(JSON.stringify(ArrEmployess) + "11111111111111111111111111111");
 
     try {
+        console.log("in get all users");
+        const user = req.userInfo;
+
+        if (!(req.query.ArrEmployess)) {
+            return next(buildError("mongoose Error", `need to pass manager employess array in quary`, 500));
+        }
+
+        let { ArrEmployess } = (req.query);
+
+        console.log(JSON.stringify(ArrEmployess) + "11111111111111111111111111111");
+        ArrEmployess = ArrEmployess.split(',')
+        console.log(JSON.stringify(ArrEmployess) + "11111111111111111111111111111");
+
         //נבדוק הרשאות
         console.log("manager level" + user.managerLevel);
 
@@ -90,7 +102,7 @@ router.get('/', auth, async (req, res, next) => {
         res.status(200).send(allUsers);
 
     } catch (error) {
-        return next(buildError("General Error", error, 403));
+        return next(buildError("General Error", error.message, 403));
     }
 });
 
@@ -144,11 +156,15 @@ router.put('/:id', auth, userValidation, async (req, res, next) => {
 
 // delete user
 router.delete('/:id', auth, async (req, res, next) => {
-    console.log("in delte user roiuter");
+    console.log("in delte user roiuter **************************************************************************");
     try {
         let { id } = req.params;
         console.log(id);
         let user = req.userInfo;
+
+        let managerId = req.body.manager_id;
+        console.log(managerId + "55555555555");
+
 
         //בדיקת הרשאות משתמש - המשתמש עצמו / המנהל
         if (user.id != id && !(user.connectedEmployess).includes(id)) {
@@ -156,7 +172,7 @@ router.delete('/:id', auth, async (req, res, next) => {
         }
 
         //שמירת נתונים במסד
-        user = await deleteUser(id);
+        user = await deleteUser(id, managerId);
         res.status(200).send(user);
 
     } catch (error) {
@@ -169,8 +185,8 @@ router.patch('/:id', async (req, res, next) => {
     try {
         console.log("in patch axios");
         const { id } = req.params;
-        console.log("id + " +id);
-        
+        console.log("id + " + id);
+
 
         console.log(JSON.stringify(req.body) + "bodyyyyyy");
 

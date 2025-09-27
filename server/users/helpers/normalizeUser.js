@@ -1,4 +1,5 @@
 const { hash } = require("bcrypt");
+const { default: mongoose } = require("mongoose");
 
 const normaliztionUser = (user, bycrptPassword) => {
 
@@ -7,8 +8,6 @@ const normaliztionUser = (user, bycrptPassword) => {
         , department, team, managerLevel, connectedEmployess
     } = { ...user }
 
-
-    console.log(url + " img url");
 
     return {
         name: {
@@ -33,7 +32,7 @@ const normaliztionUser = (user, bycrptPassword) => {
         role: role,
         jobType: jobType,
         fromWhereWorking: fromWhereWorking,
-        directManager: directManager,
+        directManager: new mongoose.Types.ObjectId(directManager),
         department: department,
         team: team,
         managerLevel: managerLevel,

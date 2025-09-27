@@ -54,7 +54,7 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
             role: "",
             jobType: "",
             fromWhereWorking: "",
-            directManager: manager,
+            directManager: managerId,
             department: "",
             team: "",
             managerLevel: "0",

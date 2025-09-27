@@ -3,19 +3,31 @@ import { getTokenInStorage } from "../../services/tokenService";
 import { deleteUser } from "../../services/userService";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import style from '../../style/addMission/addMission.module.css';
+
 
 interface DeleteUserProps {
     onCloseDeleting: any,
     user: any,
+    onToggleCloseDeleting:any
 }
 
-const DeleteUser: FunctionComponent<DeleteUserProps> = ({ onCloseDeleting, user }) => {
+const DeleteUser: FunctionComponent<DeleteUserProps> = ({ onCloseDeleting, user, onToggleCloseDeleting }) => {
 
     const nav = useNavigate();
 
     return (<>
-        <div style={{ backgroundColor: "gray", position: "absolute", left:"50%" }}>
-            <h3>Are you sure you want to delete this user ?</h3>
+        <div className={style.warpper_form}>
+            <button
+                className="close_popUp_btn"
+                id={style.btnclosePopUp}
+                type="button"
+                onClick={() => onCloseDeleting(false)}
+            >&#10060;</button>
+
+            <h3 style={{ color: "red" }}>אתה בטוחה שברצונך למחוק משימה זו ?</h3>
+            <br /><br />
+
             <div>
                 <h1>{user.name.first} {user.name.last}</h1>
                 <h3>{user.role}</h3>
@@ -31,22 +43,20 @@ const DeleteUser: FunctionComponent<DeleteUserProps> = ({ onCloseDeleting, user 
 
             </div>
 
-            <button type="button" onClick={() => {
-                const token = getTokenInStorage() as string;
-                deleteUser(user._id, token)
-                    .then(res => {
-                        onCloseDeleting(false);
-                        nav('/users/manageEmployess');
-                    })
-                    .catch(err => console.log(err));
-            }}>
+            <button type="submit" id={style.btnAddMission} className={style.add_task_btn}
+                onClick={() => {
+                    const token = getTokenInStorage() as string
+                    deleteUser(user._id as string, user.directManager, token)
+                        .then(res => {
+                            onCloseDeleting(false);
+                            onToggleCloseDeleting((prev:any)=>!prev);
+                            // window.location.reload()
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                }}>
                 delete
-            </button>
-
-            <button type="button" onClick={() => {
-                onCloseDeleting(false);
-            }}>
-                close
             </button>
         </div>
     </>);

@@ -9,14 +9,14 @@ const createUser = async (newUser) => {
     console.log("in create user DB");
 
     try {
-        if (DB == "MongoDB") {
-            let user = new User(newUser);
-            user = await user.save();
+        if (DB == "MongoDB") {           
+            let user = new User(newUser);            
+            user = await user.save();          
             return user;
         }
 
     } catch (error) {
-        return buildError("mongoose Error", error, 500);
+        throw buildError("mongoose Error", error.message, 500);
     }
 };
 
@@ -31,7 +31,7 @@ const getUserById = async (userId) => {
         return user;
 
     } catch (error) {
-        return buildError("mongoose Error", error, 500);
+        throw buildError("mongoose Error", error, 500);
     }
 };
 
@@ -49,7 +49,7 @@ const getUserByEmail = async (email) => {
         return user;
 
     } catch (error) {
-        return buildError("mongoose Error", error, 500);
+        throw buildError("mongoose Error", error, 500);
     }
 };
 
@@ -57,8 +57,7 @@ const getUserByEmail = async (email) => {
 //get all users
 const getAllUsers = async (managerEmployeesArray) => {
     console.log("in get all users DB");
-    console.log(managerEmployeesArray + "***************************");
-
+    console.log(managerEmployeesArray )
 
     try {
         const allUsers = await User.find({ _id: { $in: managerEmployeesArray } });
@@ -67,7 +66,7 @@ const getAllUsers = async (managerEmployeesArray) => {
         return allUsers;
 
     } catch (error) {
-        return buildError("mongoose Error", error, 500);
+        throw buildError("mongoose Error", error, 500);
     }
 };
 
@@ -80,23 +79,44 @@ const updateUser = async (userId, newUser) => {
         return user;
 
     } catch (error) {
-        return buildError("mongoose Error", error, 500);
+        throw buildError("mongoose Error", error, 500);
     }
 };
 
 //delete user
-const deleteUser = async (userId) => {
+const deleteUser = async (userId, managerId) => {
+    console.log("innnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn ---------------------");
+
     console.log(userId);
 
     console.log("delete user DB");
     try {
         const user = await User.findByIdAndDelete(userId);
+        await deleteUserFromManager(userId, managerId);
         return user;
 
     } catch (error) {
-        return buildError("mongoose Error", error, 500);
+        throw buildError("mongoose Error", error, 500);
     }
 };
+
+const deleteUserFromManager = async (userId, managerId) => {
+    try {
+        console.log(managerId + "00000000000000000000000000000000000000000000000000000000");
+
+        const user = await User.findByIdAndUpdate(managerId, { $pull: { connectedEmployess: userId } }, { new: true });
+        console.log(user.connectedEmployess);
+        console.log("8989898989989889");
+
+        const root = await getUserByEmail("root@gmail.com");
+        await User.findByIdAndUpdate(root._id, { $pull: { connectedEmployess: userId } }, { new: true });
+        console.log(root.connectedEmployess);
+    } catch (error) {
+        throw buildError("mongoose Error", error.message, 500);
+
+    }
+
+}
 
 const verifyLogin = async (email, password) => {
     console.log("in verify login");
@@ -118,7 +138,7 @@ const verifyLogin = async (email, password) => {
 
         return isVaid;
     } catch (error) {
-        return buildError("mongoose Error", error.message, 500);
+        throw buildError("mongoose Error", error.message, 500);
     }
 }
 
@@ -128,6 +148,7 @@ const connectEmployeToManager = async (managerLevel, managerId, userToAddId, new
         console.log("form db patch");
 
         let directManagerEmployeesArray = newArrayEmployees;
+
         //במידה ומגיע מהדפדפן
         if (newArrayEmployees.connectedEmployess) {
             directManagerEmployeesArray = (newArrayEmployees.connectedEmployess).map(employeId => new mongoose.Types.ObjectId(employeId));
@@ -151,16 +172,15 @@ const connectEmployeToManager = async (managerLevel, managerId, userToAddId, new
         }
 
 
-        const user = await User.findOneAndUpdate({ _id: managerId },
+        await User.findOneAndUpdate({ _id: managerId },
             { $set: { connectedEmployess: directManagerEmployeesArray } },
             { new: true });
 
-        return user;
 
     } catch (error) {
         console.log("erorr", error.message, 500);
 
-        return buildError("mongoose Error", error, 500)
+        throw buildError("mongoose Error", error, 500)
     }
 }
 
