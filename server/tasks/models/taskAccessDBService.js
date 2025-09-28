@@ -20,11 +20,11 @@ const createTask = async (newTask) => {
 }
 
 //get all tasks
-const getAllTasks = async (connectedEmployess) => {
+const getAllTasks = async (connectedEmployess, managerId) => {
     try {
         if (DB == "MongoDB") {
 
-            const allTasks = await Task.find({ userIdCreatorTask: { $in: connectedEmployess } });
+            const allTasks = await Task.find({ userIdCreatorTask: { $in: [...connectedEmployess, managerId] } });
             console.log(JSON.stringify(allTasks) + "////////////////");
             return allTasks;
         }

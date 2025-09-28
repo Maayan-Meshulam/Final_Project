@@ -8,9 +8,10 @@ interface CreateInputsProps {
     formik: any,
     placeholder?: string,
     classAddEmployess?: any
+    disabled?:boolean
 }
 
-const CreateInputs: FunctionComponent<CreateInputsProps> = ({ formik, type, name, id, classAddEmployess}) => {
+const CreateInputs: FunctionComponent<CreateInputsProps> = ({ formik, type, name, id, classAddEmployess, disabled}) => {
     return (<>
         <div>
             <div className={`form-floating ${classAddEmployess}`}>
@@ -23,6 +24,7 @@ const CreateInputs: FunctionComponent<CreateInputsProps> = ({ formik, type, name
                     onBlur={formik.handleBlur}
                     value={formik.values[id]}
                     className={`form-control ${style.formInputs}`}
+                    // disabled = {disabled}
                 />
             </div>
 

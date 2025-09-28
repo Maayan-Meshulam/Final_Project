@@ -46,7 +46,7 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user 
             phone: user.phone,
             email: user.email,
             password: user.password,
-            // birthDay: user.birthDay,
+            birthDay: user.birthDay,
             // url: user.image.url,
             // alt: user.image.alt,
             city: user.address.city,
@@ -54,10 +54,10 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user 
             houseNumber: user.address.houseNumber,
             zip: user.address.zip,
             startDate: user.startDate,
-            // role: user.role,
-            // jobType: user.jobType,
-            // fromWhereWorking: user.fromWhereWorking,
-            // directManager: user.directManager,
+            role: user.role,
+            jobType: user.jobType,
+            fromWhereWorking: user.fromWhereWorking,
+            directManager: user.directManager,
             department: user.department,
             team: user.team,
             managerLevel: user.managerLevel,
@@ -67,12 +67,11 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user 
         validationSchema: Yup.object(userRegisterValidation),
         onSubmit: (values) => {
             const token = getTokenInStorage() as string;
-            const normalizeUser = normaliztionUser(values);
-            updatingUser(user._id, token, normalizeUser)
+            updatingUser(user._id, token, values)
                 .then(res => {
                     formik.resetForm();
                     oncloseUpdating(false);
-                    window.location.reload()
+                    // window.location.reload()
                 })
                 .catch(error => console.log(error));
         }
@@ -93,8 +92,8 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user 
                         id={style.btnclosePopUp}
                         type="button"
                         onClick={() => {
-                            oncloseUpdating(false);
-                            // window.location.reload()
+                            // oncloseUpdating(false);
+                            window.location.reload()
                         }}
                     >&#10060;</button>
 
@@ -138,7 +137,7 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user 
                         <legend>פרטי התחברות</legend>
 
                         <CreateInputs type="text" id="email" name="email" formik={formik} classAddEmployess={style.field_wrapper} />
-                        <CreateInputs type="password" id="password" name="password" formik={formik} classAddEmployess={style.field_wrapper} />
+                        {/* <CreateInputs type="password" id="password" name="password" formik={formik} classAddEmployess={style.field_wrapper} /> */}
 
                     </fieldset>
 

@@ -57,7 +57,7 @@ const getUserByEmail = async (email) => {
 //get all users
 const getAllUsers = async (managerEmployeesArray) => {
     console.log("in get all users DB");
-    console.log(managerEmployeesArray )
+    console.log(managerEmployeesArray)
 
     try {
         const allUsers = await User.find({ _id: { $in: managerEmployeesArray } });

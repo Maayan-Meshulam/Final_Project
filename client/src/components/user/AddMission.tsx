@@ -81,7 +81,8 @@ const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission, onT
                 .then(res => {
                     console.log(res.data);
                     if (onToggleAllMyTasks) onToggleAllMyTasks((prev: boolean) => !prev);
-                    oncloseAddMission(false);
+                    // oncloseAddMission(false);
+                    window.location.reload();
                     formik.resetForm();
                 })
                 .catch(error => console.log(error));

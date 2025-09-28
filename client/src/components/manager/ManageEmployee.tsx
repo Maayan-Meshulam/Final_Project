@@ -33,7 +33,7 @@ const ManageEmployee: FunctionComponent<ManageEmployeeProps> = () => {
                 setAllUsers(res.data);
             })
             .catch((err) => {
-                console.log(err)
+                console.log(err);
             })
     }, [toggleCloseDeleting]);
 
