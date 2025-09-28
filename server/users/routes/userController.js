@@ -138,14 +138,15 @@ router.put('/:id', auth, userValidation, async (req, res, next) => {
     try {
         let { id } = req.params;
         let user = req.userInfo;
-
+        let bodyValid = req.userValid;        
+        
         //בדיקת הרשאות משתמש - המשתמש עצמו / המנהל
         if (user.id != id && !(user.connectedEmployess.includes(id))) {
             return next(buildError("Authentication Error", "user not allow, access block", 403));
         }
 
         //שמירת נתונים במסד
-        user = await updateUser(id, req.body);
+        user = await updateUser(id, bodyValid);
         res.status(200).send(user);
 
     } catch (error) {

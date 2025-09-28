@@ -71,7 +71,7 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user 
                 .then(res => {
                     formik.resetForm();
                     oncloseUpdating(false);
-                    // window.location.reload()
+                    window.location.reload()
                 })
                 .catch(error => console.log(error));
         }
