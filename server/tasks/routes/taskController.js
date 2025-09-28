@@ -80,8 +80,8 @@ router.get('/', auth, async (req, res, next) => {
         console.log(req.query);
         
 
-    if (!(req.query.arrEmployes) || !(req.query.manager_id)) {
-        return next(buildError("mongoose Error", `need to pass manager employess array in quary and managerId`, 500));
+    if (!(req.query.arrEmployes)) {
+        return next(buildError("mongoose Error", `need to pass manager employess array in quary`, 500));
     }
     
 

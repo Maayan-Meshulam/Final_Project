@@ -49,9 +49,9 @@ const getTaskById = (id: string, token: string) => {
     })
 }
 
-const getAllTasks = (connectedEmployees: any, token: string, managerId: string) => {
+const getAllTasks = (connectedEmployees: any, token: string) => {
     console.log("get all tasks from axios");
-    return axios.get(`${API_TASK}/?arrEmployes=${connectedEmployees}&manager_id=${managerId}`, {
+    return axios.get(`${API_TASK}/?arrEmployes=${connectedEmployees}`, {
         headers: { 'x-auth-token': token },
     });
 }

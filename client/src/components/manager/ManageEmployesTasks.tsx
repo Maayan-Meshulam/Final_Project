@@ -8,6 +8,7 @@ import DeleteTask from "../user/DeleteTask";
 import UpdateTask from "../user/UpdaeTask";
 import style from '../../style/previewMission/preivewDiaplayMission.module.css';
 import AddMission from "../user/AddMission";
+import { getUserById } from "../../services/userService";
 
 
 interface ManageAllEmployesTasksProps {
@@ -19,6 +20,8 @@ const ManageAllEmployesTasks: FunctionComponent<ManageAllEmployesTasksProps> = (
     const token = getTokenInStorage() as string;
     const userInfo = useSelector((state: any) => state.userBaseInfo);
     console.log(JSON.stringify(userInfo) + "user info 77887878");
+
+    const nav = useNavigate();
 
     const [closeDeleting, setCloseDeleting] = useState<boolean>(false);
     const [closeUpdating, setCloseUpdating] = useState<boolean>(false);
@@ -55,7 +58,7 @@ const ManageAllEmployesTasks: FunctionComponent<ManageAllEmployesTasksProps> = (
     useEffect(() => {
         console.log("hiiiii");
 
-        getAllTasks(userInfo.connectedEmployess, token, userInfo.id)
+        getAllTasks(userInfo.connectedEmployess, token)
             .then((res: any) => {
                 console.log(res.data);
                 setAllMyTasks(res.data);
@@ -161,6 +164,15 @@ const ManageAllEmployesTasks: FunctionComponent<ManageAllEmployesTasksProps> = (
                                             <td>{statusConvert[task.status]}</td>
                                             <td>{typeConvert[task.type]}</td>
                                             <td>{task.userIdCreatorTask}</td>
+
+                                            <td onClick={() => {
+                                                console.log('click on', task._id);
+                                                getTaskById(task._id, token)
+                                                    .then(res => nav(`/tasks/${task._id}`))
+                                                    .catch(err => console.log(err))
+                                            }}>                                                    
+                                            <i className="fa-solid fa-eye"></i>
+                                            </td>
 
                                             <td onClick={() => {
                                                 setCloseUpdating(true);

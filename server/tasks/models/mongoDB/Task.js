@@ -6,7 +6,7 @@ const taskSchema = Schema({
     title: GENERAL_VALIDATION,
     subTitle: GENERAL_VALIDATION,
     description: { ...GENERAL_VALIDATION, maxLngth: 1024 },
-    workerTaskId: WORKER,
+    workerTaskId: {}, //ברגע ששיניתי זה לא עבד טוב
     receiptDate: { type: Date }, //לשנות ל date ??
     deadLine: { type: Date },
     status: MINI_GENERAL_VALIDATION,

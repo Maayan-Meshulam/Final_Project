@@ -69,9 +69,6 @@ const CONNECTEDEMPLOYESS = {
     default: []
 };
 
-const WORKER = {
-};
-
 const MINI_GENERAL_DATES = {
     type: Date,
     required: true
@@ -89,6 +86,5 @@ module.exports = {
     ADDRESS,
     MANAGER_LEVEL,
     CONNECTEDEMPLOYESS,
-    WORKER,
     MINI_GENERAL_DATES
 }
