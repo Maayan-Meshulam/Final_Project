@@ -17,6 +17,7 @@ interface SingleMissionProps {
 const SingleMission: FunctionComponent<SingleMissionProps> = () => {
 
     const user = useSelector((state: any) => state.userBaseInfo);
+    const nav = useNavigate()
 
     const { id } = useParams();
     const token = getTokenInStorage() as string;
@@ -25,6 +26,8 @@ const SingleMission: FunctionComponent<SingleMissionProps> = () => {
     const [closeDeleting, setCloseDeleting] = useState<string | null>(null);
     const [closeUpdating, setCloseUpdating] = useState<string | null>(null);
     const [workerTaskName, setWorkerTaskName] = useState<string>("");
+    const [workerTaskCreator, setWorkerTaskCreator] = useState<string>("");
+
 
     useEffect(() => {
         getTaskById(id as string, token)
@@ -34,8 +37,18 @@ const SingleMission: FunctionComponent<SingleMissionProps> = () => {
                 getUserById(res.data.workerTaskId, token)
                     .then(res => {
                         setWorkerTaskName(`${res.data.name.first} ${res.data.name.last}`);
+                        setWorkerTaskCreator(`${res.data.name.first} ${res.data.name.last}`);
                     })
-                    .catch(err => console.log(err))
+                    .catch(err => console.log(err));
+
+                if (res.data.workerTaskId != res.data.userIdCreatorTask) {
+                    getUserById(res.data.userIdCreatorTask, token)
+                        .then(res => {
+                            setWorkerTaskCreator(`${res.data.name.first} ${res.data.name.last}`);
+                        })
+                        .catch(err => console.log(err))
+                }
+
             })
             .catch(err => console.log(err))
 
@@ -62,7 +75,10 @@ const SingleMission: FunctionComponent<SingleMissionProps> = () => {
                         <p><span>תאריך התחלה : </span>{task.receiptDate}</p>
                         <p><span>תאריך סיום :</span>{task.deadLine}</p>
                     </div>
-                    {user.managerLevel > 0 && <p>{workerTaskName}</p>}
+                    {user.managerLevel > 0 && <>
+                        <p><span>עובד משויך :</span>{workerTaskName}</p>
+                        <p><span> יוצר המשימה :</span>{workerTaskCreator}</p>
+                    </>}
 
                     {
                         (task.type == "1" || user.managerLevel > 1) &&

@@ -81,7 +81,9 @@ const ManageEmployee: FunctionComponent<ManageEmployeeProps> = () => {
                                     getUserById(user._id, token)
                                         .then(res => nav(`/users/${user._id}`))
                                         .catch(err => console.log(err))
-                                }}>פרטים נוספים</td>
+                                }}>
+                                    <i className="fa-solid fa-eye"></i>
+                                </td>
 
                                 <td onClick={() => {
                                     setCloseUpdating(true);

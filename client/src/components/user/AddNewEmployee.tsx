@@ -85,7 +85,23 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
 
     return (<>
 
-        <div className="container_popUp">
+        <div className={style.container_popUp}>
+            <div className={style.top_btns_form}>
+                <button
+                    id={style.btnclosePopUp}
+                    type="button"
+                    onClick={() => {
+                        // oncloseUpdating(false);
+                        window.location.reload()
+                    }}
+                >&#10060;</button>
+
+                <button
+                    className={style.reset_btn}
+                    type="button"
+                    onClick={() => { formik.resetForm() }}
+                >&#8635;</button>
+            </div>
 
             <h4>Add Employee</h4>
 
@@ -161,14 +177,14 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
                             <option value="בית">בית</option>
                         </CreateSelects>
 
-                       <div>
-                         <CreateSelects id="managerLevel" name="managerLevel" formik={formik} classAddEmployess={style.field_wrapper}>
-                            <option value="0">0 - regular worker</option>
-                            <option value="1">1 - entry manager</option>
-                            <option value="1">2 - senior manager</option>
-                        </CreateSelects>
-                        <p>על מנת לשייך עובדים למנהל יש ליצור קשר עם אדמין</p>
-                       </div>
+                        <div>
+                            <CreateSelects id="managerLevel" name="managerLevel" formik={formik} classAddEmployess={style.field_wrapper}>
+                                <option value="0">0 - regular worker</option>
+                                <option value="1">1 - entry manager</option>
+                                <option value="1">2 - senior manager</option>
+                            </CreateSelects>
+                            <p>על מנת לשייך עובדים למנהל יש ליצור קשר עם אדמין</p>
+                        </div>
 
 
                         <div>
@@ -199,16 +215,12 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
                     </div> */}
                 </div>
 
-                <div className={style.btns_add_mission_container} id={style.containerBtnsFormAddMission}>
-                    <button className="add_mission_btn" id={style.btnAddMission} type="submit">Add</button>
-                    <button className="reset_btn" id={style.btnReset} type="reset">reset</button>
-                    <button
-                        className="close_popUp_btn"
-                        id={style.btnclosePopUp}
-                        type="button"
-                        onClick={() => oncloseAddNewEmployee(false)}>close
-                    </button>
-                </div>
+                <button
+                    className={style.add_user_btn}
+                    id={style.btnAddMission}
+                    type="submit">Add
+                </button>
+
             </form>
         </div>    </>);
 }

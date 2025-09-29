@@ -1,7 +1,10 @@
 .warpper_form {
     width: 100%;
     max-width: 450px;
-    position: absolute;
+    position: fixed;
+    top: calc(50% + 45px); //כולל התפריט עליון
+    left: 50%;
+    transform: translate(-50%, -50%);
     background-color: #fdfcfc;
     border-radius: 30px;
     box-shadow: 0 0 10px 0.5px #505050df;

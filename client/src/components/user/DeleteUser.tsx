@@ -2,19 +2,20 @@ import { useState, type FunctionComponent } from "react";
 import { getTokenInStorage } from "../../services/tokenService";
 import { deleteUser } from "../../services/userService";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import style from '../../style/addMission/addMission.module.css';
 
 
 interface DeleteUserProps {
     onCloseDeleting: any,
     user: any,
-    onToggleCloseDeleting:any
+    onToggleCloseDeleting?:any
 }
 
 const DeleteUser: FunctionComponent<DeleteUserProps> = ({ onCloseDeleting, user, onToggleCloseDeleting }) => {
 
     const nav = useNavigate();
+    const {id} = useParams()
 
     return (<>
         <div className={style.warpper_form}>
@@ -49,8 +50,9 @@ const DeleteUser: FunctionComponent<DeleteUserProps> = ({ onCloseDeleting, user,
                     deleteUser(user._id as string, user.directManager, token)
                         .then(res => {
                             onCloseDeleting(false);
-                            onToggleCloseDeleting((prev:any)=>!prev);
-                            // window.location.reload()
+                            // onToggleCloseDeleting((prev:any)=>!prev);
+                            window.location.reload()
+                            if(id) nav(-1);
                         })
                         .catch(error => {
                             console.log(error);

@@ -10,6 +10,8 @@ import { getUserById } from "../../services/userService";
 import { useSelector } from "react-redux";
 import DeleteUser from "./DeleteUser";
 import UpdateUser from "./UpdateUser";
+import imageTaskSrc from "../../images/task.png";
+
 
 interface SingleUserProps {
 
@@ -42,7 +44,7 @@ const SingleUser: FunctionComponent<SingleUserProps> = () => {
 
     return (<>
         {user ? (<div className="container">
-            <div className={style.mission_container}>
+            <div className={style.containerWithImg}>
 
                 <div className={style.task_characterization}>
                     <h1>{user.name.first} {user.name.last}</h1>
@@ -66,7 +68,7 @@ const SingleUser: FunctionComponent<SingleUserProps> = () => {
                             }}
                         >Edit</button>
 
-                        {closeUpdating && <UpdateUser oncloseUpdating={setCloseUpdating} user={user} onToggleUpdateUser={settoggleUpdaedUser} />}
+                        {closeUpdating && <UpdateUser oncloseUpdating={setCloseUpdating} user={user} />}
 
                         <button
                             type="button"
@@ -78,15 +80,10 @@ const SingleUser: FunctionComponent<SingleUserProps> = () => {
 
                     </div>
                 </div>
+                <img className={style.imgTask} src={imageTaskSrc} alt="task" />
 
-                {/* <div className={style.Marginal_information_task}>
-                    <p>image</p>
-                    <div className={style.comments_container}>
-                        <h6>{user.image.alt}</h6>
-                        <img src={user.image.url} />
-                    </div>
-                </div> */}
             </div>
+
         </div >) : (<p>אין הרשאה לפעולה</p>)
         }
 

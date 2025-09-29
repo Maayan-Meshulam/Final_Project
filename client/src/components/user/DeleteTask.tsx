@@ -2,17 +2,18 @@ import type { FunctionComponent } from "react";
 import { priorityConvert, statusConvert, typeConvert, workerTaskIdConvert } from "../../helpers/Convert_valueSelectsToString";
 import { deleteTask } from "../../services/tasksService";
 import { getTokenInStorage } from "../../services/tokenService";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import style from '../../style/addMission/addMission.module.css';
 
 interface DeleteTaskProps {
     task: any,
-    onCloseDeleting: (cloose: boolean) => void
+    onCloseDeleting: any
 }
 
 const DeleteTask: FunctionComponent<DeleteTaskProps> = ({ task, onCloseDeleting }) => {
 
     const nav = useNavigate();
+    const {id} = useParams();
 
     return (<>
         <div className={style.warpper_form}>
@@ -23,7 +24,7 @@ const DeleteTask: FunctionComponent<DeleteTaskProps> = ({ task, onCloseDeleting 
                 onClick={() => onCloseDeleting(false)}
             >&#10060;</button>
 
-            <h3 style={{color:"red"}}>אתה בטוחה שברצונך למחוק משימה זו ?</h3>
+            <h3 style={{ color: "red" }}>אתה בטוחה שברצונך למחוק משימה זו ?</h3>
             <br /><br />
             <div>
                 <h1>{task.title}</h1>
@@ -47,7 +48,8 @@ const DeleteTask: FunctionComponent<DeleteTaskProps> = ({ task, onCloseDeleting 
                     deleteTask(task._id as string, token)
                         .then(res => {
                             onCloseDeleting(false);
-                            window.location.reload()
+                            window.location.reload();
+                            if(id) nav(-1);
                         })
                         .catch(error => {
                             console.log(error);

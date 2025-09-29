@@ -136,15 +136,12 @@ const ManageAllEmployesTasks: FunctionComponent<ManageAllEmployesTasksProps> = (
                             <thead>
                                 <tr>
                                     <th>כותרת</th>
-                                    <th>סטטוס</th>
-                                    {/* <th>תיאור</th> */}
+                                    <th>תת כותרת</th>
                                     <th>דחיפות</th>
-                                    <th>עובד משויך</th>
                                     <th>תאריך התחלה</th>
                                     <th>תאריך סיום</th>
                                     <th>סטטוס</th>
                                     <th>סוג</th>
-                                    <th>יוצר המשימה</th>
                                     <th>פרטים נוספים</th>
                                     <th>עריכה</th>
                                     <th>מחיקה</th>
@@ -158,20 +155,18 @@ const ManageAllEmployesTasks: FunctionComponent<ManageAllEmployesTasksProps> = (
                                             <td>{task.subTitle}</td>
                                             {/* <td>{task.description}</td> */}
                                             <td className={style[`priority${task.priority}`]}>{priorityConvert[task.priority]}</td>
-                                            <td>{task.workerTaskId}</td>
                                             <td>{task.receiptDate}</td>
                                             <td>{task.deadLine}</td>
                                             <td>{statusConvert[task.status]}</td>
                                             <td>{typeConvert[task.type]}</td>
-                                            <td>{task.userIdCreatorTask}</td>
 
                                             <td onClick={() => {
                                                 console.log('click on', task._id);
                                                 getTaskById(task._id, token)
                                                     .then(res => nav(`/tasks/${task._id}`))
                                                     .catch(err => console.log(err))
-                                            }}>                                                    
-                                            <i className="fa-solid fa-eye"></i>
+                                            }}>
+                                                <i className="fa-solid fa-eye"></i>
                                             </td>
 
                                             <td onClick={() => {

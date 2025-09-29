@@ -20,6 +20,15 @@
   gap: 15px;
 }
 
+.btnQuick {
+  border: none;
+  background-color: #cee3ea;
+  border-radius: 10px;
+  text-align: center;
+  text-decoration: none;
+  color: black;
+}
+
 #statistics {
   grid-area: statistics;
 }
@@ -43,7 +52,8 @@
 #managmentSide,
 #deficiencies {
   padding: 15px;
-  background-color: #f0f0f0;
+  background-color: rgba(240, 240, 240, 0.3960784314);
+  box-shadow: 1px 1px 7px gray;
 }
 
 #argentTasks li,

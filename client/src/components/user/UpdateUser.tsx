@@ -3,7 +3,7 @@ import { useEffect, useState, type FunctionComponent } from "react";
 import { taskSchema } from "../../validation/task/taskValidator";
 import * as Yup from 'yup';
 import { updatedTask } from "../../services/tasksService";
-import style from '../../style/addMission/addMission.module.css';
+import style from '../../style/addEmployee/addEmployee.module.css';
 import CreateInputs from "./CreateInputs";
 import CreateSelects from "./CreateSelects";
 import { useSelector } from "react-redux";
@@ -80,31 +80,28 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user 
     console.log(formik);
 
     return (<>
+        <div className={style.container_popUp}>
+            <div className={style.top_btns_form}>
+                <button
+                    id={style.btnclosePopUp}
+                    type="button"
+                    onClick={() => {
+                        // oncloseUpdating(false);
+                        window.location.reload()
+                    }}
+                >&#10060;</button>
 
-        <div className={style.warpper_form}>
+                <button
+                    className={style.reset_btn}
+                    type="button"
+                    onClick={() => { formik.resetForm() }}
+                >&#8635;</button>
+            </div>
 
-            <div className={style.add_task_title}>update Mission</div>
+            <h4>Add Employee</h4>
 
-            <form onSubmit={formik.handleSubmit} className={style.add_mission_form}>
-
-                <div className={style.top_btns_form}>
-                    <button
-                        id={style.btnclosePopUp}
-                        type="button"
-                        onClick={() => {
-                            // oncloseUpdating(false);
-                            window.location.reload()
-                        }}
-                    >&#10060;</button>
-
-                    <button
-                        className={style.reset_btn}
-                        type="button"
-                        onClick={() => { formik.resetForm() }}
-                    >&#8635;</button>
-                </div>
-
-                <div className={style.add_mission_form}>
+            <form className={style.warpper_form} onSubmit={formik.handleSubmit}>
+                <div className={style.inline_form_wrapper}>
 
                     <fieldset id={style.PersonalDetails}>
                         <legend>פרטים איישים</legend>
@@ -137,7 +134,7 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user 
                         <legend>פרטי התחברות</legend>
 
                         <CreateInputs type="text" id="email" name="email" formik={formik} classAddEmployess={style.field_wrapper} />
-                        {/* <CreateInputs type="password" id="password" name="password" formik={formik} classAddEmployess={style.field_wrapper} /> */}
+                        <CreateInputs type="password" id="password" name="password" formik={formik} classAddEmployess={style.field_wrapper} />
 
                     </fieldset>
 
@@ -175,35 +172,40 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user 
                             <option value="בית">בית</option>
                         </CreateSelects>
 
-                        <CreateSelects id="managerLevel" name="managerLevel" formik={formik} classAddEmployess={style.field_wrapper}>
-                            <option value="0">0 - regular worker</option>
-                            <option value="1">1 - entry manager</option>
-                            <option value="1">2 - senior manager</option>
-                        </CreateSelects>
+                        <div>
+                            <CreateSelects id="managerLevel" name="managerLevel" formik={formik} classAddEmployess={style.field_wrapper}>
+                                <option value="0">0 - regular worker</option>
+                                <option value="1">1 - entry manager</option>
+                                <option value="1">2 - senior manager</option>
+                            </CreateSelects>
+                            <p>על מנת לשייך עובדים למנהל יש ליצור קשר עם אדמין</p>
+                        </div>
+
+
+                        <div>
+                            <label>מנהל ישיר</label>
+                            <input
+                                type="text"
+                                id="directManager"
+                                name="manager name"
+                                value={user.directManager}
+                                className={style.field_wrapper}
+                                disabled
+                            />
+                        </div>
+
                     </fieldset>
 
-                    <div>
-                        <label>מנהל ישיר</label>
-                        <input
-                            type="text"
-                            id="directManager"
-                            name="manager name"
-                            value={user.directManager}
-                            className={style.field_wrapper}
-                            disabled
-                        />
-                    </div>
                 </div>
 
-                <div className={style.btns_add_mission_container} id={style.containerBtnsFormAddMission}>
-                    <button
-                        className={style.add_task_btn}
-                        id={style.btnAddMission}
-                        type="submit">update
-                    </button>
-                </div>
-            </form>
-        </div>
+                <button
+                    className={style.add_user_btn}
+                    id={style.btnAddMission}
+                    type="submit">update
+                </button>
+            </form >
+        </div >
+
     </>);
 }
 

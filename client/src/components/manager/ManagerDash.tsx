@@ -47,16 +47,16 @@ const ManagerDash: FunctionComponent<ManagerDashProps> = () => {
                     <div id={style.argentTasks}>
                         <h6> Argent tasks</h6>
                         <ul>
-                            <li>משימה עיצוב</li>
-                            <li>משימה פיתוח ומחקר</li>
-                            <li>משימה פיתוח ועיצוב</li>
+                            <li>משימה 1</li>
+                            <li>משימת פיתוח </li>
+                            <li>משימה 2 </li>
                         </ul>
                     </div>
 
                     <div id={style.messageBoard}>
                         <h6> Message Board </h6>
                         <ul>
-                            <li>למשימת עיצוב נשארו עוד 7 ימים </li>
+                            <li>למשימת 1 נשאר 2 ימים </li>
                             <li>יומולדת לדנה</li>
                             <li>רותם ביקשה חופש בתאריך 8.8</li>
                         </ul>
@@ -69,15 +69,20 @@ const ManagerDash: FunctionComponent<ManagerDashProps> = () => {
                     <div id={style.quickButtons}>
                         <h6>Quick Buttons</h6>
 
-                        <button onClick={() => setDisplayAddMission(true)} >add new task</button>
+                        <button onClick={() => setDisplayAddMission(true)} className={style.btnQuick}>add new task</button>
                         {displayAddMission && <AddMission oncloseAddMission={setDisplayAddMission} />}
 
-                        <button onClick={() => setDisplayAddNewEmployee(true)} >add new Employee</button>
+                        <button onClick={() => setDisplayAddNewEmployee(true)} className={style.btnQuick}>add new Employee</button>
                         {displayAddNewEmployee && <AddNewEmployee oncloseAddNewEmployee={setDisplayAddNewEmployee} />}
-
-                        <Link to='/tasks/myTasks'>my tasks</Link>
-                        <Link to='/tasks/manageEmployessTasks'>All my employess tasks</Link>
-
+                        <div className={style.btnQuick}>
+                            <Link to='/tasks/myTasks' >my tasks</Link>
+                        </div>
+                        <div className={style.btnQuick}>
+                        <Link to='/tasks/manageEmployessTasks' className={style.btnQuick}>My employess tasks</Link>
+                        </div>
+                        <div className={style.btnQuick}>
+                        <Link to='/users/manageEmployess' className={style.btnQuick}>My employess</Link>
+                        </div>
                     </div>
 
                     <div id={style.managmentSide}>
@@ -88,8 +93,8 @@ const ManagerDash: FunctionComponent<ManagerDashProps> = () => {
                             <p>10 פעילים כרגע</p>
                         </div>
                         <div>
-                            <h6>Manage Projects & Taks</h6>
-                            <p>6 פרויקטים פתוחים</p>
+                            <h6>Manage Taks</h6>
+                            <p>5 משימות דחופות</p>
                             <p>2 משימות פתוחות</p>
                         </div>
                     </div>
@@ -97,8 +102,7 @@ const ManagerDash: FunctionComponent<ManagerDashProps> = () => {
                     <div id={style.deficiencies}>
                         <h6> lacks </h6>
                         <ul>
-                            <li>למשימת עיצוב חסר מעצב גרפי </li>
-                            <li> למשימת פיתוח חסר מפתח צד שרת</li>
+
                         </ul>
                     </div>
                 </div>
