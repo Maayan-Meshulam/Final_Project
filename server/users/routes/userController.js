@@ -1,6 +1,6 @@
 const express = require("express");
 const auth = require("../../auth/authService");
-const { createUser, getAllUsers, getUserById, updateUser, deleteUser, verifyLogin, connectEmployeToManager } = require("../models/userAccessDBService");
+const { createUser, getAllUsers, getUserById, updateUser, deleteUser, verifyLogin, connectEmployeToManager, changePassword } = require("../models/userAccessDBService");
 const { userValidation, userLoginValidation } = require("../validation/userValidatorService");
 const { generateToken, verifyToken } = require("../../auth/providers/jwt");
 const buildError = require("../../helpers/erorrs/errorsHandeling");
@@ -138,8 +138,8 @@ router.put('/:id', auth, userValidation, async (req, res, next) => {
     try {
         let { id } = req.params;
         let user = req.userInfo;
-        let bodyValid = req.userValid;        
-        
+        let bodyValid = req.userValid;
+
         //בדיקת הרשאות משתמש - המשתמש עצמו / המנהל
         if (user.id != id && !(user.connectedEmployess.includes(id))) {
             return next(buildError("Authentication Error", "user not allow, access block", 403));
@@ -181,6 +181,34 @@ router.delete('/:id', auth, async (req, res, next) => {
     }
 });
 
+
+router.patch('/change-password/:id', auth, async (req, res, next) => {
+    try {
+
+        console.log("in patch password");
+        console.log(req.body);
+        const {id} = req.params;
+        const { password, verPassword } = req.body
+
+        if (password != verPassword)
+            return next(buildError("validation Error", "passwords not match", 400));
+
+        if (!((/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=<>?{}[\]~`|\\/]).{8,}$/).test(password)))
+            return next(buildError("validation Error", "password not match the pattern", 400));
+
+        const bycrptPassword = await hash(password, 10);
+        console.log(bycrptPassword);
+
+        //שמירה בDB
+        const user = changePassword(bycrptPassword, id)
+        res.status(200).send(user)
+
+    } catch (error) {
+        return next(buildError("General Error", error.message, 400));
+
+    }
+})
+
 //שינוי עובדים משויכים של מנהל
 router.patch('/:id', async (req, res, next) => {
     try {
@@ -197,6 +225,8 @@ router.patch('/:id', async (req, res, next) => {
     } catch (error) {
         return next(buildError("General Error", error, 403));
     }
-})
+});
+
+
 
 module.exports = router;

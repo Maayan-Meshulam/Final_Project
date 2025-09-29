@@ -9,9 +9,9 @@ const createUser = async (newUser) => {
     console.log("in create user DB");
 
     try {
-        if (DB == "MongoDB") {           
-            let user = new User(newUser);            
-            user = await user.save();          
+        if (DB == "MongoDB") {
+            let user = new User(newUser);
+            user = await user.save();
             return user;
         }
 
@@ -184,6 +184,20 @@ const connectEmployeToManager = async (managerLevel, managerId, userToAddId, new
     }
 }
 
+const changePassword = async (newPassword, userId) => {
+    try {
+        console.log("form db  password");
+
+
+        const user = await User.findOneAndUpdate({ _id: userId }, { $set: { password: newPassword } }, { new: true });
+
+        return user;
+
+    } catch (error) {
+        throw buildError("mongoose Error", error, 500)
+    }
+}
+
 module.exports = {
     createUser,
     getAllUsers,
@@ -192,5 +206,6 @@ module.exports = {
     deleteUser,
     getUserByEmail,
     verifyLogin,
-    connectEmployeToManager
+    connectEmployeToManager,
+    changePassword
 };

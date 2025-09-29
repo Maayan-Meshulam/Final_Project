@@ -34,12 +34,12 @@ const getUserById = (userId: string, token: string) => {
 
 }
 
-const deleteUser = (userId: string, managerId:string , token: string) => {
+const deleteUser = (userId: string, managerId: string, token: string) => {
 
     console.log("in delete user");
     return axios.delete(`${API_USERS}/${userId}`, {
         headers: { 'x-auth-token': token },
-        data:{manager_id : managerId}
+        data: { manager_id: managerId }
     })
 }
 
@@ -64,6 +64,12 @@ const patchConnectedEmployees = (managerId: string, userId: string, prevConnecti
     )
 }
 
+const patchPass = (token: string, values: any) => {
+    return axios.patch(`${API_USERS}/change-password`, { password: values.password },
+        { headers: { 'x-auth-token': token } }
+    )
+}
+
 export {
     loginUser,
     addUser,
@@ -71,5 +77,6 @@ export {
     getUserById,
     deleteUser,
     updatingUser,
-    patchConnectedEmployees
+    patchConnectedEmployees,
+    patchPass
 }

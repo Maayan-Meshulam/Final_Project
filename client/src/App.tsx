@@ -8,6 +8,7 @@ import Navbar from './components/layot/Navbar';
 import ManageAllEmployesTasks from './components/manager/ManageEmployesTasks';
 import SingleUser from './components/user/SingleUser';
 import Footer from './components/layot/Footer';
+import ChangePassword from './components/user/chagePassword';
 
 
 //componemts - lazy loading
@@ -29,6 +30,7 @@ function App() {
           <Route path='/users/manageEmployess' element={<><Navbar /><ManageEmployee /><Footer/></>} />
           <Route path='/tasks/manageEmployessTasks' element={<><Navbar /><ManageAllEmployesTasks /><Footer/></>} />
           <Route path='/users/:id' element={<><SingleUser /></>} />
+          <Route path='/users/change-password/:id' element={<><ChangePassword/></>}></Route>
         </Routes>
         {/* </Suspense> */}
       </BrowserRouter>
