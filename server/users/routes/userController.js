@@ -121,6 +121,7 @@ router.get('/', auth, async (req, res, next) => {
 });
 
 
+//get user by email
 router.get('/email/:email', async (req, res, next) => {
     try {
         console.log("in royer get by email");
@@ -131,6 +132,11 @@ router.get('/email/:email', async (req, res, next) => {
         console.log(email);
 
         const user = await getUserByEmail(email);
+        console.log(user);
+        
+    
+        if (!user)
+            return next(buildError("Authitcation Error:", "user not exist", 403));
 
         res.status(200).send(user);
 
@@ -222,11 +228,11 @@ router.patch('/change-password/:id', async (req, res, next) => {
 
         const { token } = req.query;
         console.log(req);
-        
+
         const { id } = req.params;
 
         console.log(token);
-        
+
         if (!token)
             return next(buildError("authication Error", "user not allow, access block", 403));
 
