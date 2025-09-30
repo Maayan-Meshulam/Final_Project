@@ -75,26 +75,28 @@ router.get('/myTasks', auth, async (req, res, next) => {
 //קבלת כל המשימות של העבודים - עבור מנהלים
 //לנסות לשנותconst ואז לראות את השגיאה - חובה לטפל !!
 router.get('/', auth, async (req, res, next) => {
-    console.log("in all tasks");
-
-        console.log(req.query);
-        
-
-    if (!(req.query.arrEmployes)) {
-        return next(buildError("mongoose Error", `need to pass manager employess array in quary`, 500));
-    }
-    
-
-    let { arrEmployes, manager_id } = req.query;
-
-    arrEmployes = arrEmployes.split(',');
-    // console.log(JSON.stringify(arrEmployes) + ".........................33333");
-
-    console.log(manager_id + "-------");
-
 
     try {
-        const allTasks = await getAllTasks(arrEmployes, manager_id);
+        console.log("in all tasks");
+
+        console.log(req.query);
+
+        let { arrEmployess } = req.query;
+
+        if (arrEmployess == '') {
+            console.log(1);
+            arrEmployess = [];
+        }
+        else if (!arrEmployess) {
+            console.log(3);
+            return next(buildError("mongoose Error", `need to pass manager employess array in quary`, 500));
+        }
+        else {
+            arrEmployess = arrEmployess.split(',');
+            console.log(2);
+        }
+
+        const allTasks = await getAllTasks(arrEmployess);
         console.log(allTasks);
         res.status(200).send(allTasks);
     } catch (error) {

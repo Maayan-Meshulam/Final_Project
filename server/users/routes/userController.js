@@ -76,15 +76,28 @@ router.get('/', auth, async (req, res, next) => {
         console.log("in get all users");
         const user = req.userInfo;
 
-        if (!(req.query.ArrEmployess)) {
-            return next(buildError("mongoose Error", `need to pass manager employess array in quary`, 500));
-        }
+        console.log(req);
 
         let { ArrEmployess } = (req.query);
+        console.log(ArrEmployess);
 
-        console.log(JSON.stringify(ArrEmployess) + "11111111111111111111111111111");
-        ArrEmployess = ArrEmployess.split(',')
-        console.log(JSON.stringify(ArrEmployess) + "11111111111111111111111111111");
+
+        if (ArrEmployess == '') {
+            console.log(1);
+            ArrEmployess = [];
+        }
+        else if (!ArrEmployess) {
+            console.log(3);
+            return next(buildError("mongoose Error", `need to pass manager employess array in quary`, 500));
+        }
+        else{
+            ArrEmployess = ArrEmployess.split(',');
+            console.log(2);
+        }
+
+        // console.log(JSON.stringify(ArrEmployess) + "11111111111111111111111111111");
+        // ArrEmployess = ArrEmployess.split(',')
+        // console.log(JSON.stringify(ArrEmployess) + "11111111111111111111111111111");
 
         //נבדוק הרשאות
         console.log("manager level" + user.managerLevel);
@@ -187,7 +200,7 @@ router.patch('/change-password/:id', auth, async (req, res, next) => {
 
         console.log("in patch password");
         console.log(req.body);
-        const {id} = req.params;
+        const { id } = req.params;
         const { password, verPassword } = req.body
 
         if (password != verPassword)

@@ -18,8 +18,8 @@ const getAllUsers = (managerEmployeesArray: string, token: string) => {
     console.log("in get all users axios");
     console.log(managerEmployeesArray + "manger id");
 
-    return axios.get(`${API_USERS}?ArrEmployess=${managerEmployeesArray}`, {
-        headers: { "x-auth-token": token }
+    return axios.get(`${API_USERS}?ArrEmployess=${managerEmployeesArray.toString()}`, {
+        headers: { "x-auth-token": token },
     });
 
 }

@@ -27,6 +27,10 @@ const ManageEmployee: FunctionComponent<ManageEmployeeProps> = () => {
     const nav = useNavigate();
 
     useEffect(() => {
+        console.log(userInfo.connectedEmployess);
+        console.log(userInfo.connectedEmployess.length);
+        
+        
         getAllUsers(userInfo.connectedEmployess, token)
             .then(res => {
                 console.log(res.data + "123 123 123 123");
@@ -35,7 +39,7 @@ const ManageEmployee: FunctionComponent<ManageEmployeeProps> = () => {
             .catch((err) => {
                 console.log(err);
             })
-    }, [toggleCloseDeleting]);
+    }, [toggleCloseDeleting, userInfo]);
 
 
     return (<>
