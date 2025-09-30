@@ -5,7 +5,7 @@ import * as Yup from 'yup'
 import { loginUser } from "../../services/userService";
 import { userLoginValidation } from "../../validation/user/userValidation";
 import CreateInputs from "./CreateInputs";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setState } from "../../redux/userInfoState";
 import { saveTokenInStorage, tokenDecoding } from "../../services/tokenService";
@@ -53,6 +53,8 @@ const Login: FunctionComponent<LoginProps> = () => {
                 <CreateInputs type="text" id="email" name="אימייל" formik={formik} placeholder="example@example.com" />
 
                 <CreateInputs type="password" id="password" name="סיסמא" formik={formik} />
+
+                <p style={{color:"white"}}>שכחת סיסמא ? לחץ <Link to="/users/send-email">כאן</Link> לשחזור</p>
 
                 <div className={style.Btn_Form_Container}>
                     <button

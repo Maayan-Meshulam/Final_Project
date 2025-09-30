@@ -1,7 +1,7 @@
 import { useEffect, useState, type FunctionComponent } from "react";
 import { patchPass } from "../../services/userService";
 import { getTokenInStorage } from "../../services/tokenService";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 interface ChangePasswordProps {
 
@@ -56,8 +56,10 @@ const ChangePassword: FunctionComponent<ChangePasswordProps> = () => {
     const [errorSamePass, setErrorSamePass] = useState<boolean>(true);
     const [dirtyForm, setDirtyForm] = useState<boolean>(false);
 
-    const token = getTokenInStorage();
+    const [querys] = useSearchParams();
     const nav = useNavigate()
+    const { id } = useParams();
+
 
 
     useEffect(() => {
@@ -65,14 +67,20 @@ const ChangePassword: FunctionComponent<ChangePasswordProps> = () => {
         (password == "" && verPassword == "") ? setDirtyForm(false) : setDirtyForm(true)
     }, [password, verPassword])
 
-    const handleSubmit = (values: any) => {
-        console.log(values);
-        patchPass(token as string, values.password)
-        .then(res=>{
-            console.log(res.data);
-            nav("/users/login");
-        })
-        .catch(err=>console.log(err))
+    const handleSubmit = (e: any) => {
+        console.log(e);
+        e.preventDefault();
+        const password = e.target.password.value;
+        const verpassword = e.target.verpassword.value;
+        const values = { password, verpassword }
+
+        patchPass(values, id as string, querys.get("token") as string)
+            .then(res => {
+                console.log("after changing !!!!!!!!!!!");
+                console.log(res.data);
+                nav("/users/login");
+            })
+            .catch(err => console.log(err))
     }
 
     return (<>

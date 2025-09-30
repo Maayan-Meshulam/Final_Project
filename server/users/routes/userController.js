@@ -1,12 +1,13 @@
 const express = require("express");
 const auth = require("../../auth/authService");
-const { createUser, getAllUsers, getUserById, updateUser, deleteUser, verifyLogin, connectEmployeToManager, changePassword } = require("../models/userAccessDBService");
+const { createUser, getAllUsers, getUserById, updateUser, deleteUser, verifyLogin, connectEmployeToManager, changePassword, getUserByEmail } = require("../models/userAccessDBService");
 const { userValidation, userLoginValidation } = require("../validation/userValidatorService");
 const { generateToken, verifyToken } = require("../../auth/providers/jwt");
 const buildError = require("../../helpers/erorrs/errorsHandeling");
 const { hash } = require("bcrypt");
-const app = express();
+const sendingEmail = require("../../emails/smtpServer");
 const router = express.Router();
+const jwt = require("jsonwebtoken")
 
 //add user - register
 router.post('/addUser', auth, userValidation, async (req, res, next) => {
@@ -90,7 +91,7 @@ router.get('/', auth, async (req, res, next) => {
             console.log(3);
             return next(buildError("mongoose Error", `need to pass manager employess array in quary`, 500));
         }
-        else{
+        else {
             ArrEmployess = ArrEmployess.split(',');
             console.log(2);
         }
@@ -119,6 +120,26 @@ router.get('/', auth, async (req, res, next) => {
     }
 });
 
+
+router.get('/email/:email', async (req, res, next) => {
+    try {
+        console.log("in royer get by email");
+
+        console.log(req.params);
+
+        const { email } = req.params
+        console.log(email);
+
+        const user = await getUserByEmail(email);
+
+        res.status(200).send(user);
+
+    } catch (error) {
+        return next(buildError("General Error", error, 403));
+
+    }
+})
+
 // get user by id
 router.get('/:id', auth, async (req, res, next) => {
     console.log("in get user by id");
@@ -143,7 +164,6 @@ router.get('/:id', auth, async (req, res, next) => {
         return next(buildError("General Error", error, 403));
     }
 });
-
 
 // update user
 router.put('/:id', auth, userValidation, async (req, res, next) => {
@@ -195,15 +215,33 @@ router.delete('/:id', auth, async (req, res, next) => {
 });
 
 
-router.patch('/change-password/:id', auth, async (req, res, next) => {
+router.patch('/change-password/:id', async (req, res, next) => {
     try {
 
         console.log("in patch password");
-        console.log(req.body);
-        const { id } = req.params;
-        const { password, verPassword } = req.body
 
-        if (password != verPassword)
+        const { token } = req.query;
+        console.log(req);
+        
+        const { id } = req.params;
+
+        console.log(token);
+        
+        if (!token)
+            return next(buildError("authication Error", "user not allow, access block", 403));
+
+
+        const temp_payload = jwt.verify(token, "TEMP_SECRET");
+        console.log(temp_payload);
+
+        if (temp_payload.id != id)
+            return next(buildError("authication Error", "user not match", 400));
+
+
+        console.log(req.body);
+        const { password, verpassword } = req.body
+
+        if (password != verpassword)
             return next(buildError("validation Error", "passwords not match", 400));
 
         if (!((/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=<>?{}[\]~`|\\/]).{8,}$/).test(password)))
@@ -240,6 +278,32 @@ router.patch('/:id', async (req, res, next) => {
     }
 });
 
+
+router.post('/send-email', async (req, res, next) => {
+    try {
+        console.log("in send email server");
+        let { email, id } = req.body;
+
+        const token = jwt.sign({ id: id }, "TEMP_SECRET", { expiresIn: "15m" });
+        console.log(token);
+
+        let message = `
+        <p>לחץ 
+        <a href="http://localhost:5173/users/change-password/${id}?token=${token}">כאן</a> 
+        על מנת לשחזר את הסיסמא שלך
+        </p>`
+
+        console.log(email, message);
+
+        message = await sendingEmail(email, message);
+        console.log(message + "77??");
+
+        res.status(200).send(message)
+
+    } catch (error) {
+        return next(buildError("General Error", error.message, 403));
+    }
+})
 
 
 module.exports = router;

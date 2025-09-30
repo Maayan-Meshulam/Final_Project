@@ -8,7 +8,8 @@ import Navbar from './components/layot/Navbar';
 import ManageAllEmployesTasks from './components/manager/ManageEmployesTasks';
 import SingleUser from './components/user/SingleUser';
 import Footer from './components/layot/Footer';
-import ChangePassword from './components/user/chagePassword';
+import EnterEmail from './components/user/EnterEmail';
+import ChangePassword from './components/user/ChagePassword';
 
 
 //componemts - lazy loading
@@ -23,14 +24,16 @@ function App() {
       <BrowserRouter>
         {/* <Suspense fallback={"hii im stil loading..."}> */}
         <Routes>
-          <Route path='/users/login' element={<><Login /><Navbar /><Footer/></>} />
-          <Route path='/tasks/myTasks' element={<><Navbar /><ManageAllMissions /><Footer/></>} />
-          <Route path='/tasks/:id' element={<><Navbar /><SingleMission /><Footer/></>} />
-          <Route path='users/managerDash' element={<><Navbar /><ManagerDash /><Footer/></>} />
-          <Route path='/users/manageEmployess' element={<><Navbar /><ManageEmployee /><Footer/></>} />
-          <Route path='/tasks/manageEmployessTasks' element={<><Navbar /><ManageAllEmployesTasks /><Footer/></>} />
+          <Route path='/users/login' element={<><Login /><Navbar /><Footer /></>} />
+          <Route path='/tasks/myTasks' element={<><Navbar /><ManageAllMissions /><Footer /></>} />
+          <Route path='/tasks/:id' element={<><Navbar /><SingleMission /><Footer /></>} />
+          <Route path='users/managerDash' element={<><Navbar /><ManagerDash /><Footer /></>} />
+          <Route path='/users/manageEmployess' element={<><Navbar /><ManageEmployee /><Footer /></>} />
+          <Route path='/tasks/manageEmployessTasks' element={<><Navbar /><ManageAllEmployesTasks /><Footer /></>} />
           <Route path='/users/:id' element={<><SingleUser /></>} />
-          <Route path='/users/change-password/:id' element={<><ChangePassword/></>}></Route>
+          <Route path='/users/change-password/:id' element={<><ChangePassword /></>}></Route>
+          <Route path='/users/send-email' element={<><EnterEmail /></>}></Route>
+
         </Routes>
         {/* </Suspense> */}
       </BrowserRouter>

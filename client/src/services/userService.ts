@@ -34,6 +34,12 @@ const getUserById = (userId: string, token: string) => {
 
 }
 
+const getUserByEmail = (email: string) => {
+    console.log("in get by email axios");
+    return axios.get(`${API_USERS}/email/${email}`);
+
+}
+
 const deleteUser = (userId: string, managerId: string, token: string) => {
 
     console.log("in delete user");
@@ -64,10 +70,13 @@ const patchConnectedEmployees = (managerId: string, userId: string, prevConnecti
     )
 }
 
-const patchPass = (token: string, values: any) => {
-    return axios.patch(`${API_USERS}/change-password`, { password: values.password },
-        { headers: { 'x-auth-token': token } }
-    )
+const patchPass = (values: any, id:string, token:string) => {
+    return axios.patch(`${API_USERS}/change-password/${id}?token=${token}`, values)
+}
+
+const sendEmail = (email: string, id:string) => {
+    console.log(email);
+    return axios.post(`${API_USERS}/send-email`, { email, id})
 }
 
 export {
@@ -78,5 +87,7 @@ export {
     deleteUser,
     updatingUser,
     patchConnectedEmployees,
-    patchPass
+    patchPass,
+    sendEmail,
+    getUserByEmail
 }
