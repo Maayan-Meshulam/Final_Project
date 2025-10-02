@@ -74,9 +74,9 @@ const patchPass = (values: any, id:string, token:string) => {
     return axios.patch(`${API_USERS}/change-password/${id}?token=${token}`, values)
 }
 
-const sendEmail = (email: string, id:string) => {
+const sendEmail = (email: string, id:string, randomNum: number) => {
     console.log(email);
-    return axios.post(`${API_USERS}/send-email`, { email, id})
+    return axios.post(`${API_USERS}/send-email`, { email, id, randomNum})
 }
 
 export {

@@ -75,7 +75,7 @@ const EnterEmail: FunctionComponent<EnterEmailProps> = () => {
                 console.log(res.data + "1111111");
                 id = res.data._id
                 
-                sendEmail(email, id)
+                sendEmail(email, id, -1)
                     .then(res => {
                         console.log(res.data);
                         console.log("look at your email to reset your password !!");

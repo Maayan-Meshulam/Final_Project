@@ -11,7 +11,7 @@
   top: calc(50% + 60px);
   transform: translate(-50%, -50%);
   padding: 10px 50px 30px 50px;
-  z-index: 500;
+  z-index: 2000;
 }
 
 .warpper_form {

@@ -10,14 +10,14 @@ const transport = nodemailer.createTransport({
     }
 });
 
-const email = async (email, messageHtml) => {
+const email = async (email, messageHtml, title) => {
     console.log("in sending email");
     
     try {
         const message = {
             from: "maayanmeshulam05@gmail.com",
             to: email,
-            subject: "שחזור סיסמא",
+            subject: title,
             html: messageHtml
         }
         await transport.sendMail(message);

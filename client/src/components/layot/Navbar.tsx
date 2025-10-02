@@ -1,9 +1,12 @@
-import type { FunctionComponent } from "react";
+import { useEffect, useState, type FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { clearState } from "../../redux/userInfoState";
-import { removeTokenFromStorage } from "../../services/tokenService";
+import { data, Link } from "react-router-dom";
+import { clearState, setState } from "../../redux/userInfoState";
+import { getTokenInStorage, removeTokenFromStorage } from "../../services/tokenService";
 import style from "../../style/navber_footer/navbar_footer.module.css";
+import UpdateUser from "../user/UpdateUser";
+import { getUserById, sendEmail } from "../../services/userService";
+import EnterCode from "../user/EnterCode";
 
 
 interface NavbarProps {
@@ -14,8 +17,32 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
 
     const userInfo = useSelector((state: any) => state.userBaseInfo);
     console.log(JSON.stringify(userInfo) + "-----------------------------------------------------------------");
-
+    const [closeUpdating, setCloseUpdating] = useState<boolean>(false);
+    const [user, setUser] = useState(null);
+    const [randomNum, setRandomNum] = useState<number | null>(null)
+    const [closeCode, setCloseCode] = useState<boolean>(false)
     const dispatch = useDispatch();
+    // let userFromStore = useSelector((state: any) => state.userBaseInfo);
+    // dispatch(clearState()); //איפוס מידע על המשתמש
+    // dispatch(setState(userInfo)); // נאחסן בחנות את המידע עבור המשתמש שהתחבר
+
+
+    useEffect(() => {
+        const token = getTokenInStorage();
+        console.log(userInfo.id + "iddd");
+
+        getUserById(userInfo.id, token as string)
+            .then(res => {
+                console.log("???????????????????????????????????????");
+                console.log(JSON.stringify(res.data) + "9999");
+                setUser(res.data);
+            })
+            .catch(err => console.log(err))
+    }, [userInfo])
+
+    useEffect(() => {
+        setRandomNum(Math.floor(Math.random() * 1_000_000));
+    }, [])
 
     return (<>
         <nav className="navbar navbar-expand-lg" id={style.navbarContainer}>
@@ -38,8 +65,27 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                             <li className="nav-item">
                                 <Link className="nav-link" to="/tasks/myTasks">My Tasks</Link >
                             </li>
+
+
+                            {user && randomNum &&
+                                <li>
+                                    <span onClick={() => {
+                                        console.log(user.email, userInfo.id, randomNum)
+                                        sendEmail(user.email, userInfo._id, randomNum)
+                                            .then((res) => {
+                                                setCloseCode(true);
+                                                console.log(12312312);
+                                            })
+                                            .catch(err => console.log(err))
+                                    }}>Edit User</span>
+
+                                    {/* <span onClick={() => setCloseUpdating(true)}>Edit User</span>
+                                {closeUpdating && user && <UpdateUser user={user} oncloseUpdating={setCloseUpdating} />} */}
+                                </li>
+                            }
                         </>
                     )}
+
 
                     {/* מנהל מחובר*/}
                     {userInfo.id && userInfo.managerLevel >= 1 && (
@@ -79,7 +125,12 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
 
                 </ul>
             </div>
-        </nav>
+        </nav >
+
+        {closeCode && randomNum !== null && user && <>
+            <EnterCode codeFromEmail={randomNum} user={user} onclosecode={setCloseCode}/>
+        </>
+        }
     </>);
 }
 export default Navbar;

@@ -16,9 +16,10 @@ import normaliztionUser from "../../helpers/normalizeUser";
 interface UpdateUserProps {
     oncloseUpdating: (closeBool: boolean) => void
     user: any,
+    onclosecode?:any
 }
 
-const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user }) => {
+const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user, onclosecode }) => {
 
     const userInfo = useSelector((state: any) => state.userBaseInfo)
     console.log(userInfo.id + " user id" + userInfo.managerLevel);
@@ -71,6 +72,7 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user 
                 .then(res => {
                     formik.resetForm();
                     oncloseUpdating(false);
+                    onclosecode(false);
                     window.location.reload()
                 })
                 .catch(error => console.log(error));
@@ -134,8 +136,9 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user 
                         <legend>פרטי התחברות</legend>
 
                         <CreateInputs type="text" id="email" name="email" formik={formik} classAddEmployess={style.field_wrapper} />
-                        <CreateInputs type="password" id="password" name="password" formik={formik} classAddEmployess={style.field_wrapper} />
-
+                        {user._id == userInfo.id &&
+                            <CreateInputs type="password" id="password" name="password" formik={formik} classAddEmployess={style.field_wrapper} />
+                        }
                     </fieldset>
 
                     <fieldset id={style.workingDetails}>

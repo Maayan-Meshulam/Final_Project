@@ -2,11 +2,11 @@ const email = require("./providers/nodemailer");
 
 const SMTP_SERVER = "nodemailer";
 
-const sendingEmail = (emailToSend, message) => {
+const sendingEmail = (emailToSend, message, title) => {
     console.log("in sending email service");
     
     if(SMTP_SERVER == "nodemailer"){
-        return email(emailToSend, message);
+        return email(emailToSend, message, title);
     }
 }
 

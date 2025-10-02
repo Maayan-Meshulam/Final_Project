@@ -10,6 +10,7 @@ import SingleUser from './components/user/SingleUser';
 import Footer from './components/layot/Footer';
 import EnterEmail from './components/user/EnterEmail';
 import ChangePassword from './components/user/ChagePassword';
+import EnterCode from './components/user/EnterCode';
 
 
 //componemts - lazy loading
@@ -33,7 +34,6 @@ function App() {
           <Route path='/users/:id' element={<><SingleUser /></>} />
           <Route path='/users/change-password/:id' element={<><ChangePassword /></>}></Route>
           <Route path='/users/send-email' element={<><EnterEmail /></>}></Route>
-
         </Routes>
         {/* </Suspense> */}
       </BrowserRouter>

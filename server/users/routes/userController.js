@@ -133,8 +133,8 @@ router.get('/email/:email', async (req, res, next) => {
 
         const user = await getUserByEmail(email);
         console.log(user);
-        
-    
+
+
         if (!user)
             return next(buildError("Authitcation Error:", "user not exist", 403));
 
@@ -144,7 +144,7 @@ router.get('/email/:email', async (req, res, next) => {
         return next(buildError("General Error", error, 403));
 
     }
-})
+});
 
 // get user by id
 router.get('/:id', auth, async (req, res, next) => {
@@ -288,20 +288,36 @@ router.patch('/:id', async (req, res, next) => {
 router.post('/send-email', async (req, res, next) => {
     try {
         console.log("in send email server");
-        let { email, id } = req.body;
+        let { email, id, randomNum } = req.body;
 
         const token = jwt.sign({ id: id }, "TEMP_SECRET", { expiresIn: "15m" });
         console.log(token);
 
-        let message = `
-        <p>לחץ 
-        <a href="http://localhost:5173/users/change-password/${id}?token=${token}">כאן</a> 
-        על מנת לשחזר את הסיסמא שלך
-        </p>`
+        let message = "";
+        let title = "";
+
+        //במקרה של שחזור סיסמא או עריכת משתמש
+        if (randomNum < 0) {
+            message = `
+                <p>לחץ 
+                    <a href="http://localhost:5173/users/change-password/${id}?token=${token}">כאן</a> 
+                    על מנת לשחזר את הסיסמא שלך
+                </p>`
+                title = "שחזור סיסמא"
+        }
+        else {
+            message = `
+                <p>הסיסמא הינה  : 
+                    ${randomNum}
+                </p>
+            `
+            title = "קוד לעריכת פרטי משתמש"
+        }
+
 
         console.log(email, message);
 
-        message = await sendingEmail(email, message);
+        message = await sendingEmail(email, message, title);
         console.log(message + "77??");
 
         res.status(200).send(message)
