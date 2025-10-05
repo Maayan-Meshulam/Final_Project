@@ -2,7 +2,9 @@ const buildError = require("../../helpers/erorrs/errorsHandeling");
 const User = require("./mongoDB/User");
 const DB = "MongoDB"
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
+const { getMyTasks, getAllTasks, getTaskById } = require("../../tasks/models/taskAccessDBService");
+const Task = require("../../tasks/models/mongoDB/Task");
 
 //create user - register
 const createUser = async (newUser) => {
@@ -91,6 +93,7 @@ const deleteUser = async (userId, managerId) => {
 
     console.log("delete user DB");
     try {
+        await transformTasks_employees(userId, managerId);
         const user = await User.findByIdAndDelete(userId);
         await deleteUserFromManager(userId, managerId);
         return user;
@@ -99,6 +102,71 @@ const deleteUser = async (userId, managerId) => {
         throw buildError("mongoose Error", error, 500);
     }
 };
+
+const transformTasks_employees = async (idToDelete, manager_id) => {
+    try {
+        console.log("in tranfrom");
+
+        console.log(idToDelete);
+
+        const user = await getUserById(idToDelete);
+
+        const managerId = user.directManager;
+        console.log(managerId + " ...");
+
+        const manager = await getUserById(managerId);
+        console.log(manager + " ***");
+
+        const employees = user.connectedEmployess;
+        console.log(employees + " ////");
+
+        const myTasks = await getMyTasks(idToDelete);
+        console.log(myTasks + " 7777");
+
+        const myEmployeesTaks = await getAllTasks(employees);
+        console.log(myEmployeesTaks + " ###");
+
+        //נעביר את כל העובדים של המשמתש למנהל שלו
+        const updatedManagerEmployees = [...manager.connectedEmployess, ...employees];
+        console.log(updatedManagerEmployees);
+
+        const newUser = await User.findByIdAndUpdate(managerId, {
+            connectedEmployess: updatedManagerEmployees
+        }, { new: true });
+
+        console.log(newUser);
+
+        //משימות אישיות של המשתמש / שקיבל מהמנהל הישיר יעברו למנהל
+
+        for (const task of myTasks) {
+            console.log(2);
+
+            await Task.findByIdAndUpdate(task._id, {
+                workerTaskId: managerId,
+                userIdCreatorTask: managerId,
+                type: "1"
+            });
+
+            console.log(22);
+
+        }
+
+        for (const task of myEmployeesTaks) {
+            console.log(1);
+
+            await Task.findByIdAndUpdate(task._id, {
+                userIdCreatorTask: managerId,
+                type: "1"
+            });
+
+            console.log(11);
+        }
+    } catch (error) {
+        throw buildError("mongoose Error", error.message, 500);
+
+    }
+
+}
 
 const deleteUserFromManager = async (userId, managerId) => {
     try {

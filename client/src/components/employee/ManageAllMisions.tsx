@@ -165,7 +165,7 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
                                                         })
                                                         .catch(err => console.log(err))
                                                 }}>
-                                                    {task.star ? <span>&#9733;</span> :
+                                                    {task.star && task.star ? <span>&#9733;</span> :
                                                         <span>&#9734;</span>}
                                                 </td>
                                                 <td>{task.title}</td>

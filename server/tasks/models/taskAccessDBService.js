@@ -107,9 +107,14 @@ const likeUnlikeTask = async (taskId) => {
     console.log("in mongo like task");
     try {
         if (DB == "MongoDB") {
+            const temp =await Task.findById(taskId, { star: 1 });
+            console.log(temp);
+            
             const task = await Task.findByIdAndUpdate(taskId,
                 { $bit: { star: { xor: 1 } } }, { new: true });
+            console.log(task.star);
             console.log(task);
+
             return task;
         }
     } catch (error) {

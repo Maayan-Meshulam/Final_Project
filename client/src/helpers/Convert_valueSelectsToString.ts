@@ -6,7 +6,7 @@ const typeConvert : any= {
 
 const statusConvert :any= {
     "1": "בטיפול",
-    "2": "בוצע"
+    "2": "בוצע",
 };
 
 const workerTaskIdConvert:any = {

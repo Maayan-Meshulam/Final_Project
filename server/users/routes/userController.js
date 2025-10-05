@@ -77,7 +77,7 @@ router.get('/', auth, async (req, res, next) => {
         console.log("in get all users");
         const user = req.userInfo;
 
-        console.log(req);
+        // console.log(req);
 
         let { ArrEmployess } = (req.query);
         console.log(ArrEmployess);
@@ -155,6 +155,10 @@ router.get('/:id', auth, async (req, res, next) => {
         let { id } = req.params;
         let user = req.userInfo;
 
+        console.log(id);
+        console.log(user.connectedEmployess);
+        
+        
 
         //בדיקת הרשאות משתמש - המשתמש עצמו / המנהל
         if (user.id != id && !(user.connectedEmployess).includes(id)) {
@@ -196,7 +200,7 @@ router.put('/:id', auth, userValidation, async (req, res, next) => {
 
 // delete user
 router.delete('/:id', auth, async (req, res, next) => {
-    console.log("in delte user roiuter **************************************************************************");
+    console.log("in delte user router **************************************************************************");
     try {
         let { id } = req.params;
         console.log(id);
@@ -206,8 +210,8 @@ router.delete('/:id', auth, async (req, res, next) => {
         console.log(managerId + "55555555555");
 
 
-        //בדיקת הרשאות משתמש - המשתמש עצמו / המנהל
-        if (user.id != id && !(user.connectedEmployess).includes(id)) {
+        //בדיקת הרשאות משתמש - המנהל
+        if (!(user.connectedEmployess).includes(id)) {
             return next(("Authentication Error", "user not allow, access block", 403))
         }
 
