@@ -49,15 +49,16 @@ const SingleUser: FunctionComponent<SingleUserProps> = () => {
                 <div className={style.task_characterization}>
                     <h1>{user.name.first} {user.name.last}</h1>
                     <h3>{user.role}</h3>
-                    <p>{user.phone} {user.email}</p>
-                    <p>{user.birthDay}</p>
+                    <p>מזהה : <span>{user._id}</span></p>
+                    <p>{user.phone} | {user.email}</p>
+                    <p>יומולדת : <span>{user.birthDay}</span></p>
                     <p>{user.address.city}, {user.address.street}, {user.address.houseNumber}, {user.address.zip}</p>
-                    <p>{user.startDate}</p>
+                    <p>תאריך התחלה : <span>{user.startDate}</span></p>
                     <p>{user.jobType}, {user.fromWhereWorking}</p>
-                    <p>{user.directManager}</p>
-                    <p>{user.department}, {user.team}</p>
-                    <p>{user.managerLevel}</p>
-                    <p>{user.connectedEmployess}</p>
+                    <p>מנהל ישיר : <span>{user.directManager}</span></p>
+                    <p>מחלקה וצוות : <span>{user.department}, {user.team}</span></p>
+                    <p>רמת ניהול : <span>{user.managerLevel}</span></p>
+                    <p><span>עובדים משויכים :</span>{user.connectedEmployess}</p>
 
                     <div className={style.buttons_container}>
 

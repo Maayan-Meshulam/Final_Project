@@ -1,5 +1,5 @@
 const express = require("express");
-const { createTask, getAllTasks, getTaskById, updateTask, deleteTask, getMyTasks } = require("../models/taskAccessDBService");
+const { createTask, getAllTasks, getTaskById, updateTask, deleteTask, getMyTasks, likeUnlikeTask } = require("../models/taskAccessDBService");
 const taskValidation = require("../validation/taskValidationService");
 const buildError = require("../../helpers/erorrs/errorsHandeling");
 const auth = require("../../auth/authService");
@@ -176,5 +176,22 @@ router.delete('/:id', auth, async (req, res, next) => {
         next();
     }
 });
+
+router.patch('/like-unlike', auth, async (req, res, next) => {
+    try {
+        console.log("at router like task");
+        console.log(req);
+        
+        const {task_id} = req.body;
+        console.log(task_id + "---10000");
+
+        const task = await likeUnlikeTask(task_id);
+        res.status(200).send(task);
+        
+        
+    } catch (error) {
+        return next(buildError("General Error", error.message, 500))
+    }
+})
 
 module.exports = router;

@@ -1,7 +1,7 @@
 import { useEffect, useState, type FunctionComponent } from "react";
 import style from '../../style/previewMission/preivewDiaplayMission.module.css';
 import AddMission from "../user/AddMission";
-import { getMyTasks } from "../../services/tasksService";
+import { getMyTasks, like_unlike_task } from "../../services/tasksService";
 import { getTokenInStorage } from "../../services/tokenService";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -142,6 +142,7 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
                             <table className={style.dashBoardTasks}>
                                 <thead>
                                     <tr>
+                                        <th></th>
                                         <th>כותרת</th>
                                         <th>סטטוס</th>
                                         <th>סוג</th>
@@ -157,6 +158,16 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
                                     {
                                         arrDeepSearch && arrDeepSearch.map((task: any) => (
                                             <tr key={task._id}>
+                                                <td onClick={() => {
+                                                    like_unlike_task(token as string, task._id)
+                                                        .then(res => {
+                                                            console.log(res.data);
+                                                        })
+                                                        .catch(err => console.log(err))
+                                                }}>
+                                                    {task.star ? <span>&#9733;</span> :
+                                                        <span>&#9734;</span>}
+                                                </td>
                                                 <td>{task.title}</td>
                                                 <td>{statusConvert[task.status]}</td>
                                                 <td>{typeConvert[task.type]}</td>

@@ -56,11 +56,19 @@ const getAllTasks = (connectedEmployees: any, token: string) => {
     });
 }
 
+const like_unlike_task = (token: string, taskId: number) => {
+    console.log(taskId, "in patch like unlike task");
+    return axios.patch(`${API_TASK}/like-unlike`, {task_id: taskId}, {
+        headers: { 'x-auth-token': token }
+    })
+}
+
 export {
     addTask,
     updatedTask,
     deleteTask,
     getMyTasks,
     getTaskById,
-    getAllTasks
+    getAllTasks,
+    like_unlike_task
 }

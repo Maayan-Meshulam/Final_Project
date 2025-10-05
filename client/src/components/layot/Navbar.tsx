@@ -78,9 +78,6 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                                             })
                                             .catch(err => console.log(err))
                                     }}>Edit User</span>
-
-                                    {/* <span onClick={() => setCloseUpdating(true)}>Edit User</span>
-                                {closeUpdating && user && <UpdateUser user={user} oncloseUpdating={setCloseUpdating} />} */}
                                 </li>
                             }
                         </>
@@ -111,6 +108,20 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                                     <Link className="dropdown-item" to="/tasks/manageEmployessTasks">Manage Employees Tasks</Link >
                                 </div>
                             </li>
+
+                            {user && randomNum &&
+                                <li>
+                                    <span onClick={() => {
+                                        console.log(user.email, userInfo.id, randomNum)
+                                        sendEmail(user.email, userInfo._id, randomNum)
+                                            .then((res) => {
+                                                setCloseCode(true);
+                                                console.log(12312312);
+                                            })
+                                            .catch(err => console.log(err))
+                                    }}>Edit User</span>
+                                </li>
+                            }
                         </>
                     )}
 
@@ -128,7 +139,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
         </nav >
 
         {closeCode && randomNum !== null && user && <>
-            <EnterCode codeFromEmail={randomNum} user={user} onclosecode={setCloseCode}/>
+            <EnterCode codeFromEmail={randomNum} user={user} onclosecode={setCloseCode} />
         </>
         }
     </>);

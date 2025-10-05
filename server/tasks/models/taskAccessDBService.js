@@ -61,7 +61,7 @@ const getTaskById = async (taskId) => {
 
     try {
         if (DB == "MongoDB") {
-            const task = await Task.findById(taskId);            
+            const task = await Task.findById(taskId);
             return task;
         }
         return (buildError("Mongoose Error:", "DB type is not exist", 500))
@@ -102,6 +102,21 @@ const deleteTask = async (taskId) => {
     }
 }
 
+//like-unlike task
+const likeUnlikeTask = async (taskId) => {
+    console.log("in mongo like task");
+    try {
+        if (DB == "MongoDB") {
+            const task = await Task.findByIdAndUpdate(taskId,
+                { $bit: { star: { xor: 1 } } }, { new: true });
+            console.log(task);
+            return task;
+        }
+    } catch (error) {
+        return (buildError("Mongoose Error:", error.message, 500))
+    }
+}
+
 
 module.exports = {
     createTask,
@@ -109,5 +124,6 @@ module.exports = {
     getMyTasks,
     getTaskById,
     updateTask,
-    deleteTask
+    deleteTask,
+    likeUnlikeTask
 }
