@@ -7,10 +7,12 @@ const router = require("./router/router");
 const connctToDB = require("./DB/DBService");
 const cors = require("cors");
 const buildError = require("./helpers/erorrs/errorsHandeling");
+const loggerMiddleWare = require("./logger/loggerService");
 
 app.use(express.json());
 
 app.use(cors());
+app.use(loggerMiddleWare());
 
 app.use(router);
 
@@ -18,7 +20,7 @@ app.use(router);
 app.use((err, req, res, next) => {
     console.log("error function");
     //ערכים ברירת מחדל - למקרה שלא נשלחו     ??
-   res.status(err.status).send(err.message)
+    res.status(err.status).send(err.message)
 });
 
 //חיבור לשרת
