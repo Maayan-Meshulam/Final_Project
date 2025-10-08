@@ -7,6 +7,8 @@ import { Link, useNavigate } from "react-router-dom";
 import DeleteUser from "../user/DeleteUser";
 import UpdateUser from "../user/UpdateUser";
 import FilterBar from "../layot/FilterBar";
+import AddNewEmployee from "../user/AddNewEmployee";
+import ErrorPremission from "../layot/ErrorPremission";
 
 interface ManageEmployeeProps {
 
@@ -25,6 +27,8 @@ const ManageEmployee: FunctionComponent<ManageEmployeeProps> = () => {
     const [arrTemp, setArrTemp] = useState<any>([]);
     const [arrFilter, setArrFilter] = useState<any>([]);
     const [allUsers, setAllUsers] = useState<any>([]);
+    const [displayAddUser, setDisplayAddUser] = useState<boolean>(false);
+
 
     const nav = useNavigate();
 
@@ -103,10 +107,43 @@ const ManageEmployee: FunctionComponent<ManageEmployeeProps> = () => {
         filterTable();
     }, [filters]);
 
+    if (!userInfo.id || userInfo.managerLevel < 1) {
+        return <ErrorPremission />
+    }
 
     return (<>
         <div className="container">
-            <FilterBar allEmployees={allUsers} setfilters={setFilters} />
+
+            <div className="btn_back" onClick={() => nav(-1)}>
+                <i className="fa-solid fa-arrow-left"></i>
+            </div>
+
+            <div style={{
+                display: "flex",
+                justifyContent: "right",
+                gap: "15px",
+                marginTop: "25px"
+            }}>
+
+                <button
+                    style={{
+                        border: "1px solid blue",
+                        backgroundColor: "#010179",
+                        color: "white",
+                        borderRadius: "10px",
+                        padding: "5px 7px",
+                    }}
+                    onClick={() => setDisplayAddUser(true)}
+                >
+                    Add Employee <i className="fa-solid fa-plus"></i>
+                </button>
+
+                <FilterBar allEmployees={allUsers} setfilters={setFilters} />
+
+            </div>
+
+            {displayAddUser && <AddNewEmployee oncloseAddNewEmployee={setDisplayAddUser} />}
+
             <div className={style.scroller_container}>
                 <table className={style.dashBoardTasks}>
                     <thead>
@@ -137,7 +174,7 @@ const ManageEmployee: FunctionComponent<ManageEmployeeProps> = () => {
                                 <td>{user.name.last}</td>
                                 <td>{user.phone}</td>
                                 <td>{user.email}</td>
-                                <td>{user.birthDay}</td>
+                                <td>{(user.birthDay).split('T')[0]}</td>
                                 <td>{user.address.city}</td>
                                 <td>{user.address.street}</td>
                                 <td>{user.address.houseNumber}</td>
@@ -173,7 +210,7 @@ const ManageEmployee: FunctionComponent<ManageEmployeeProps> = () => {
             </div>
             {closeDeleting && selectedUser && <DeleteUser onToggleCloseDeleting={toggleSetCloseDeleting} onCloseDeleting={setCloseDeleting} user={selectedUser} />}
             {closeUpdating && selectedUser && <UpdateUser oncloseUpdating={setCloseUpdating} user={selectedUser} />}
-        </div>
+        </div >
     </>);
 }
 

@@ -1,8 +1,16 @@
 import * as Yup from 'yup'
 
 const userLoginValidation = {
-    email: Yup.string().email('אימייל לא תואם לתבנית').required('שדה זה הינו חובה'),
-    password: Yup.string().required('שדה זה הינו חובה')
+    email: Yup.string()
+        .required('שדה זה הינו חובה')
+        .matches(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/,
+            'אימייל לא תואם לתבנית'
+        ),
+    password: Yup.string().
+        required('שדה זה הינו חובה').
+        matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=<>?{}[\]~`|\\/]).{8,}$/, 
+            'הסיסמא חייבת להכיל לפחות אות אחת גדולה, אחת קטנה, מספר, תו מיוחד ומינימום 8 ספרות'
+        )
 }
 
 const BASIC_VAL_STRING = Yup.string().required();
@@ -12,7 +20,7 @@ const BASIC_VAL_NUMBER = Yup.number().required();
 const userRegisterValidation = {
     firstName: BASIC_VAL_STRING,
     lastName: BASIC_VAL_STRING,
-    phone: BASIC_VAL_STRING,
+    phone: BASIC_VAL_STRING.matches(/^(?:972|0)([23489]\d{7}|5\d{8})$/, 'טלפון לא תואם לתבנית'),
     email: BASIC_VAL_STRING,
     password: BASIC_VAL_STRING,
     birthDay: Yup.date().required(),

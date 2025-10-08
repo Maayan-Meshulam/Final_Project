@@ -85,6 +85,11 @@ const ChangePassword: FunctionComponent<ChangePasswordProps> = () => {
 
     return (<>
         <div className="container">
+
+            <div className="btn_back" onClick={() => nav(-1)}>
+                <i className="fa-solid fa-arrow-left"></i>
+            </div>
+
             <form style={style.form} id="form" onSubmit={handleSubmit}>
                 <div style={style.inline_form}>
                     <label>סיסמא חדשה</label>

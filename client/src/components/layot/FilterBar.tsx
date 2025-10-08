@@ -175,12 +175,12 @@ const FilterBar: FunctionComponent<FilterBarProps> = ({ allEmployees, setfilters
     }
 
     return (<>
-        <div style={{ direction: "rtl", position: "relative", marginTop: "100px" }}>
+        <div style={{ direction: "rtl", position: "relative" }}>
             <div style={
                 {
                     width: "fit-content", display: "flex",
                     backgroundColor: "#d4e4ecdf", boxShadow: "4px 4px #011f2ddf", justifyContent: "space-around",
-                    padding: "5px 15px", borderRadius: "10px", position: "absolute", bottom: "5px"
+                    padding: "5px 15px", borderRadius: "10px"
                 }}
                 onClick={() => {
                     isShow ? setIsShow(false) : setIsShow(true)
@@ -283,7 +283,7 @@ const FilterBar: FunctionComponent<FilterBarProps> = ({ allEmployees, setfilters
 
             
             <div>
-                <h6>סוג עבודה</h6>
+                <h6> מחלקה</h6>
                 {department && department.map((department: string) => (
                     <div style={{ display: "flex" }}>
                         <label htmlFor={`department_${department.replaceAll(" ", "_")}`}>{department}</label>

@@ -112,19 +112,19 @@ const transformTasks_employees = async (idToDelete, manager_id) => {
         const user = await getUserById(idToDelete);
 
         const managerId = user.directManager;
-        console.log(managerId + " ...");
+        console.log(managerId , " ...");
 
         const manager = await getUserById(managerId);
-        console.log(manager + " ***");
+        console.log(manager , " ***");
 
         const employees = user.connectedEmployess;
-        console.log(employees + " ////");
+        console.log(employees , " ////");
 
         const myTasks = await getMyTasks(idToDelete);
-        console.log(myTasks + " 7777");
+        console.log(myTasks , " 7777");
 
         const myEmployeesTaks = await getAllTasks(employees);
-        console.log(myEmployeesTaks + " ###");
+        console.log(myEmployeesTaks , " ###");
 
         //נעביר את כל העובדים של המשמתש למנהל שלו
         const updatedManagerEmployees = [...manager.connectedEmployess, ...employees];

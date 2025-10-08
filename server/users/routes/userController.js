@@ -9,6 +9,34 @@ const sendingEmail = require("../../emails/smtpServer");
 const router = express.Router();
 const jwt = require("jsonwebtoken")
 
+
+//login user
+router.post('/login', async (req, res, next) => {
+    console.log("in login user router");
+
+    try {
+        let user = req.body;
+        console.log(JSON.stringify(user));
+
+        console.log(user.email, user.password + " verify");
+
+
+        //בדיקת זהות המשתמש - האם קיים ופרטיו נכונים
+        if (!await verifyLogin(user.email, user.password)) {
+            console.log("innnnnnnnnnnnnnnnnnnnn");
+
+            return next(buildError("Authentication Error", "user not register / details not right", 403))
+        }
+
+        //יצירת טוקן - המשתמש קיים
+        const token = await generateToken(user);
+        res.status(200).send(token);
+
+    } catch (error) {
+        return next(buildError("General Error", error, 403));
+    }
+});
+
 //add user - register
 router.post('/addUser', auth, userValidation, async (req, res, next) => {
     console.log("in post user");
@@ -43,32 +71,6 @@ router.post('/addUser', auth, userValidation, async (req, res, next) => {
     }
 });
 
-//login user
-router.post('/login', async (req, res, next) => {
-    console.log("in login user router");
-
-    try {
-        let user = req.body;
-        console.log(JSON.stringify(user));
-
-        console.log(user.email, user.password + " verify");
-
-
-        //בדיקת זהות המשתמש - האם קיים ופרטיו נכונים
-        if (!await verifyLogin(user.email, user.password)) {
-            console.log("innnnnnnnnnnnnnnnnnnnn");
-
-            return next(buildError("Authentication Error", "user not register / details not right", 403))
-        }
-
-        //יצירת טוקן - המשתמש קיים
-        const token = await generateToken(user);
-        res.status(200).send(token);
-
-    } catch (error) {
-        return next(buildError("General Error", error, 403));
-    }
-});
 
 // get all users
 router.get('/', auth, async (req, res, next) => {
@@ -157,8 +159,8 @@ router.get('/:id', auth, async (req, res, next) => {
 
         console.log(id);
         console.log(user.connectedEmployess);
-        
-        
+
+
 
         //בדיקת הרשאות משתמש - המשתמש עצמו / המנהל
         if (user.id != id && !(user.connectedEmployess).includes(id)) {
@@ -307,7 +309,7 @@ router.post('/send-email', async (req, res, next) => {
                     <a href="http://localhost:5173/users/change-password/${id}?token=${token}">כאן</a> 
                     על מנת לשחזר את הסיסמא שלך
                 </p>`
-                title = "שחזור סיסמא"
+            title = "שחזור סיסמא"
         }
         else {
             message = `

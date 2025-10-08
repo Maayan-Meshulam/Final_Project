@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import DeleteUser from "./DeleteUser";
 import UpdateUser from "./UpdateUser";
 import imageTaskSrc from "../../images/task.png";
+import ErrorPremission from "../layot/ErrorPremission";
 
 
 interface SingleUserProps {
@@ -28,6 +29,8 @@ const SingleUser: FunctionComponent<SingleUserProps> = () => {
     const [closeUpdating, setCloseUpdating] = useState<boolean>(false);
     const [toggleUpdaedUser, settoggleUpdaedUser] = useState<boolean>(false);
 
+    const nav = useNavigate()
+
 
     const { id } = useParams() as any
 
@@ -42,8 +45,17 @@ const SingleUser: FunctionComponent<SingleUserProps> = () => {
             })
     }, [toggleUpdaedUser]);
 
+    if (!userInfo.id) {
+        return <ErrorPremission />
+    }
+
     return (<>
         {user ? (<div className="container">
+
+            <div className="btn_back" onClick={() => nav(-1)}>
+                <i className="fa-solid fa-arrow-left"></i>
+            </div>
+
             <div className={style.containerWithImg}>
 
                 <div className={style.task_characterization}>
@@ -51,9 +63,9 @@ const SingleUser: FunctionComponent<SingleUserProps> = () => {
                     <h3>{user.role}</h3>
                     <p>מזהה : <span>{user._id}</span></p>
                     <p>{user.phone} | {user.email}</p>
-                    <p>יומולדת : <span>{user.birthDay}</span></p>
+                    <p>יומולדת : <span>{(user.birthDay).split('T')[0]}</span></p>
                     <p>{user.address.city}, {user.address.street}, {user.address.houseNumber}, {user.address.zip}</p>
-                    <p>תאריך התחלה : <span>{user.startDate}</span></p>
+                    <p>תאריך התחלה : <span>{(user.startDate).split('T')[0]}</span></p>
                     <p>{user.jobType}, {user.fromWhereWorking}</p>
                     <p>מנהל ישיר : <span>{user.directManager}</span></p>
                     <p>מחלקה וצוות : <span>{user.department}, {user.team}</span></p>

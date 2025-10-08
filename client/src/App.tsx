@@ -11,6 +11,7 @@ import Footer from './components/layot/Footer';
 import EnterEmail from './components/user/EnterEmail';
 import ChangePassword from './components/user/ChagePassword';
 import EnterCode from './components/user/EnterCode';
+import Error404 from './components/layot/Error404';
 
 
 //componemts - lazy loading
@@ -31,9 +32,10 @@ function App() {
           <Route path='users/managerDash' element={<><Navbar /><ManagerDash /><Footer /></>} />
           <Route path='/users/manageEmployess' element={<><Navbar /><ManageEmployee /><Footer /></>} />
           <Route path='/tasks/manageEmployessTasks' element={<><Navbar /><ManageAllEmployesTasks /><Footer /></>} />
-          <Route path='/users/:id' element={<><SingleUser /></>} />
+          <Route path='/users/:id' element={<><Navbar /><SingleUser /><Footer /></>} />
           <Route path='/users/change-password/:id' element={<><ChangePassword /></>}></Route>
           <Route path='/users/send-email' element={<><EnterEmail /></>}></Route>
+          <Route path='*' element={<><Navbar /><Error404 /><Footer /></>}></Route>
         </Routes>
         {/* </Suspense> */}
       </BrowserRouter>

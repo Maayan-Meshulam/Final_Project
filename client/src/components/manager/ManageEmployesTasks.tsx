@@ -77,6 +77,10 @@ const ManageAllEmployesTasks: FunctionComponent<ManageAllEmployesTasksProps> = (
     return (<>
         <div className="container">
 
+            <div className="btn_back" onClick={() => nav(-1)}>
+                <i className="fa-solid fa-arrow-left"></i>
+            </div>
+
 
             <div className={style.containerAbove}>
                 <button id={style.addTaskBtn} onClick={() => setDisplayAddMission(true)}>
@@ -155,8 +159,8 @@ const ManageAllEmployesTasks: FunctionComponent<ManageAllEmployesTasksProps> = (
                                             <td>{task.subTitle}</td>
                                             {/* <td>{task.description}</td> */}
                                             <td className={style[`priority${task.priority}`]}>{priorityConvert[task.priority]}</td>
-                                            <td>{task.receiptDate}</td>
-                                            <td>{task.deadLine}</td>
+                                            <td>{(task.receiptDate).split('T')[0]}</td>
+                                            <td>{(task.deadLine).split('T')[0]}</td>
                                             <td>{statusConvert[task.status]}</td>
                                             <td>{typeConvert[task.type]}</td>
 

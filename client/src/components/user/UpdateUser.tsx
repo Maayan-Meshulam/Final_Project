@@ -8,7 +8,7 @@ import CreateInputs from "./CreateInputs";
 import CreateSelects from "./CreateSelects";
 import { useSelector } from "react-redux";
 import { getTokenInStorage } from "../../services/tokenService";
-import { getAllUsers, updatingUser } from "../../services/userService";
+import { getAllUsers, getUserById, updatingUser } from "../../services/userService";
 import { userRegisterValidation } from "../../validation/user/userValidation";
 import normaliztionUser from "../../helpers/normalizeUser";
 
@@ -16,7 +16,7 @@ import normaliztionUser from "../../helpers/normalizeUser";
 interface UpdateUserProps {
     oncloseUpdating: (closeBool: boolean) => void
     user: any,
-    onclosecode?:any
+    onclosecode?: any
 }
 
 const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user, onclosecode }) => {
@@ -26,19 +26,33 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
 
     const [arrEmployess, setArrEmployess] = useState<any>([]);
     const token = getTokenInStorage() as string;
+    const [manager, setManager] = useState<any>("");
+    const managerId = userInfo.id;
+
+    // useEffect(() => {
+    //     //רק במידה והוא מנהל נבקש את כל המשתמשים
+    //     if (userInfo.managerLevel > 0) {
+    //         getAllUsers(userInfo.connectedEmployess, token)
+    //             .then(res => {
+    //                 setArrEmployess(res.data);
+    //             })
+    //             .catch(err => {
+    //                 console.log(err);
+    //             })
+    //     }
+    // }, [])
+
 
     useEffect(() => {
-        //רק במידה והוא מנהל נבקש את כל המשתמשים
-        if (userInfo.managerLevel > 0) {
-            getAllUsers(userInfo.connectedEmployess, token)
-                .then(res => {
-                    setArrEmployess(res.data);
-                })
-                .catch(err => {
-                    console.log(err);
-                })
-        }
+        getUserById(managerId, token)
+            .then(res => {
+                console.log(res.data);
+                const name = `${res.data.firstName} ${res.data.lastName}`;
+                console.log(name + " name");
+                setManager(name);
+            });
     }, [])
+
 
     const formik = useFormik({
         initialValues: {
@@ -47,18 +61,18 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
             phone: user.phone,
             email: user.email,
             password: user.password,
-            birthDay: user.birthDay,
+            birthDay: (user.birthDay).split('T')[0],
             // url: user.image.url,
             // alt: user.image.alt,
             city: user.address.city,
             street: user.address.street,
             houseNumber: user.address.houseNumber,
             zip: user.address.zip,
-            startDate: user.startDate,
+            startDate: (user.startDate).split('T')[0],
             role: user.role,
             jobType: user.jobType,
             fromWhereWorking: user.fromWhereWorking,
-            directManager: user.directManager,
+            directManager: managerId,
             department: user.department,
             team: user.team,
             managerLevel: user.managerLevel,
@@ -70,16 +84,22 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
             const token = getTokenInStorage() as string;
             updatingUser(user._id, token, values)
                 .then(res => {
-                    formik.resetForm();
-                    oncloseUpdating(false);
-                    onclosecode(false);
-                    window.location.reload()
+                    try {
+                        formik.resetForm();
+                        oncloseUpdating(false);
+                        onclosecode && onclosecode(false);
+                        window.location.reload();
+                    } catch (error: any) {
+                        throw new Error(error.message);
+                    }
                 })
                 .catch(error => console.log(error));
         }
     });
 
     console.log(formik);
+    console.log("formik.values:", formik.values);
+
 
     return (<>
         <div className={style.container_popUp}>
@@ -147,8 +167,8 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
 
                         <CreateSelects id="role" name="role" formik={formik} classAddEmployess={style.field_wrapper}>
                             <option value="full stack developer">full stack developer</option>
-                            <option value="backEnd developer">backEnd developer</option>
-                            <option value="QA">QA</option>
+                            <option value="backend developer">backend developer</option>
+                            <option value="qa">qa</option>
                         </CreateSelects>
 
                         <CreateSelects id="department" name="department" formik={formik} classAddEmployess={style.field_wrapper}>
@@ -179,11 +199,10 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
                             <CreateSelects id="managerLevel" name="managerLevel" formik={formik} classAddEmployess={style.field_wrapper}>
                                 <option value="0">0 - regular worker</option>
                                 <option value="1">1 - entry manager</option>
-                                <option value="1">2 - senior manager</option>
+                                {/* <option value="1">2 - senior manager</option> */}
                             </CreateSelects>
                             <p>על מנת לשייך עובדים למנהל יש ליצור קשר עם אדמין</p>
                         </div>
-
 
                         <div>
                             <label>מנהל ישיר</label>
@@ -191,12 +210,11 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
                                 type="text"
                                 id="directManager"
                                 name="manager name"
-                                value={user.directManager}
+                                value={manager}
                                 className={style.field_wrapper}
                                 disabled
                             />
                         </div>
-
                     </fieldset>
 
                 </div>
@@ -204,7 +222,8 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
                 <button
                     className={style.add_user_btn}
                     id={style.btnAddMission}
-                    type="submit">update
+                    type="submit"
+                >update
                 </button>
             </form >
         </div >

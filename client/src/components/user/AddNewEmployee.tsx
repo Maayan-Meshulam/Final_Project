@@ -19,19 +19,18 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
     const token = getTokenInStorage() as string;
     const userInfo = useSelector((state: any) => state.userBaseInfo);
     const managerId = userInfo.id;
-    const [manager, setManager] = useState<any>();
+    const [manager, setManager] = useState<any>("");
     const [allEmployees, setAllEmployees] = useState<any>([]);
 
 
     useEffect(() => {
         getUserById(managerId, token)
             .then(res => {
-                const name = `${res.data.name.first} ${res.data.name.last}`;
+                console.log(res.data);
+                const name = `${res.data.firstName} ${res.data.lastName}`;
                 console.log(name + " name");
                 setManager(name);
             });
-
-        // getAllUsers()
     }, [])
 
 
@@ -64,8 +63,6 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
         validationSchema: Yup.object(userRegisterValidation),
         onSubmit: (values: any) => {
             console.log(JSON.stringify(values));
-            // const userNomalize = normaliztionUser(values)
-            // console.log(JSON.stringify(userNomalize) + "****");
 
             addUser(values, token)
                 .then((res) => {
@@ -91,8 +88,8 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
                     id={style.btnclosePopUp}
                     type="button"
                     onClick={() => {
-                        // oncloseUpdating(false);
-                        window.location.reload()
+                        oncloseAddNewEmployee(false);
+                        // window.location.reload()
                     }}
                 >&#10060;</button>
 
@@ -181,7 +178,7 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
                             <CreateSelects id="managerLevel" name="managerLevel" formik={formik} classAddEmployess={style.field_wrapper}>
                                 <option value="0">0 - regular worker</option>
                                 <option value="1">1 - entry manager</option>
-                                <option value="1">2 - senior manager</option>
+                                {/* <option value="1">2 - senior manager</option> */}
                             </CreateSelects>
                             <p>על מנת לשייך עובדים למנהל יש ליצור קשר עם אדמין</p>
                         </div>
@@ -200,24 +197,12 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
                         </div>
 
                     </fieldset>
-
-                    {/* <select multiple id="connectedEmployess" name="connectedEmployess" className={style.field_wrapper}>
-                        {
-                            (userInfo.connectedEmployess).map((employee: any) => (
-                                <option value={employee}>{employee}</option>
-                            ))
-                        }
-                    </select> */}
-
-                    {/* <div className={style.field_wrapper}>
-                        <label>comments : </label>
-                        <textarea />
-                    </div> */}
                 </div>
 
                 <button
                     className={style.add_user_btn}
                     id={style.btnAddMission}
+                    disabled={!formik.dirty || !formik.isValid}
                     type="submit">Add
                 </button>
 

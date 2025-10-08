@@ -9,6 +9,7 @@ import DeleteTask from "./DeleteTask";
 import { getUserById } from "../../services/userService";
 import { useSelector } from "react-redux";
 import imageTaskSrc from "../../images/task.png";
+import ErrorPremission from "../layot/ErrorPremission";
 
 interface SingleMissionProps {
 
@@ -30,33 +31,46 @@ const SingleMission: FunctionComponent<SingleMissionProps> = () => {
 
 
     useEffect(() => {
-        getTaskById(id as string, token)
+        getTaskById(id as string, token) //נביא את המשתמש עצמו שיצר את המשימה
             .then(res => {
                 setTask(res.data);
+                let nameCreator = "";
+                let nameWorker = "";
 
-                getUserById(res.data.workerTaskId, token)
-                    .then(res => {
-                        setWorkerTaskName(`${res.data.name.first} ${res.data.name.last}`);
-                        setWorkerTaskCreator(`${res.data.name.first} ${res.data.name.last}`);
+                getUserById(res.data.userIdCreatorTask, token)//נביא את המשתמש שיצר את המשימה
+                    .then(inline_res => {
+                        nameCreator = `${inline_res.data.firstName} ${inline_res.data.lastName}`
+                        setWorkerTaskCreator(nameCreator);
+
+                        if (res.data.workerTaskId != res.data.userIdCreatorTask) {
+
+                            getUserById(res.data.workerTaskId, token)//נביא את המשתמש שהמשימה נוצרה בשבילו
+                                .then(res1 => {
+                                    nameWorker = `${res1.data.firstName} ${res1.data.lastName}`
+                                    setWorkerTaskName(nameWorker);
+                                })
+                                .catch(err => console.log(err));
+                        }
+                        else {
+                            setWorkerTaskName(nameCreator); // יוצר ועובד אותו אחד
+                        }
                     })
                     .catch(err => console.log(err));
 
-                if (res.data.workerTaskId != res.data.userIdCreatorTask) {
-                    getUserById(res.data.userIdCreatorTask, token)
-                        .then(res => {
-                            setWorkerTaskCreator(`${res.data.name.first} ${res.data.name.last}`);
-                        })
-                        .catch(err => console.log(err))
-                }
-
             })
             .catch(err => console.log(err))
+    }, [toggleupdatedTask, user]);
 
-
-    }, [toggleupdatedTask]);
+    if (!user.id) {
+        return <ErrorPremission />
+    }
 
     return (<>
         {task ? (<div className="container">
+
+            <div className="btn_back" onClick={() => nav(-1)}>
+                <i className="fa-solid fa-arrow-left"></i>
+            </div>
 
             <div className={style.containerWithImg}>
                 <div className={style.task_characterization}>
@@ -72,8 +86,8 @@ const SingleMission: FunctionComponent<SingleMissionProps> = () => {
                         {style.description}
                     </div>
                     <div>
-                        <p><span>תאריך התחלה : </span>{task.receiptDate}</p>
-                        <p><span>תאריך סיום :</span>{task.deadLine}</p>
+                        <p><span>תאריך התחלה : </span>{(task.receiptDate).split('T')[0]}</p>
+                        <p><span>תאריך סיום :</span>{(task.deadLine).split('T')[0]}</p>
                     </div>
                     {user.managerLevel > 0 && <>
                         <p><span>עובד משויך :</span>{workerTaskName}</p>
