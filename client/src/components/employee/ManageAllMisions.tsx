@@ -69,7 +69,7 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
             .catch(error => {
                 console.log(error);
             })
-    }, [toggleAllMyTasks, userInfo]);
+    }, [displayAddMission, userInfo, closeUpdating, closeDeleting]);
 
     useEffect(() => {
         filterdArr();

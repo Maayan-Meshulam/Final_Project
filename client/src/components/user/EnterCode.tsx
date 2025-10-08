@@ -107,7 +107,7 @@ return (<>
 
         </div>
         <div style={style.inline_form}>
-            <label>הזן קוד</label>
+            <label>הזן קוד </label>
             <input
                 type="number"
                 id="code"
@@ -117,6 +117,7 @@ return (<>
                     toggleSetCode((prev: boolean) => !prev)
                 }}
             />
+            {code != -1 && isError && <p>קוד שגוי</p>}
         </div>
     </form>
     {closeUpdating && <UpdateUser user={user} oncloseUpdating={setCloseUpdating} onclosecode={onclosecode}/>}

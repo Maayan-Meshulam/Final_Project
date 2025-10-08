@@ -7,6 +7,7 @@ import style from "../../style/navber_footer/navbar_footer.module.css";
 import UpdateUser from "../user/UpdateUser";
 import { getUserById, sendEmail } from "../../services/userService";
 import EnterCode from "../user/EnterCode";
+import { successMessage } from "../../toastify/toastifyService";
 
 
 interface NavbarProps {
@@ -58,7 +59,8 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                             <li className="nav-item">
                                 <Link className="nav-link" to="/" onClick={() => {
                                     dispatch(clearState()); //איפוס מידע על המשתמש
-                                    removeTokenFromStorage()
+                                    removeTokenFromStorage();
+                                    successMessage("התנתקת בהצלחה ! מצפים לראותך בקרוב")
                                 }}>Exit</Link>
                             </li>
 
@@ -80,6 +82,9 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                                     }}>Edit User</span>
                                 </li>
                             }
+
+                            {user && <img src={user.image.src} alt={user.image.alt} />}
+
                         </>
                     )}
 
@@ -90,7 +95,8 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                             <li className="nav-item">
                                 <Link className="nav-link" to="/" onClick={() => {
                                     dispatch(clearState()); //איפוס מידע על המשתמש
-                                    removeTokenFromStorage()
+                                    removeTokenFromStorage();
+                                    successMessage("התנתקת בהצלחה ! מצפים לראותך בקרוב")
                                 }}>Exit</Link>
                             </li>
 
@@ -122,6 +128,9 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                                     }}>Edit User</span>
                                 </li>
                             }
+
+                            {user && <img className={style.profile} src={`http://localhost:3131/${user.image.url}`} alt={user.image.alt} />}
+
                         </>
                     )}
 

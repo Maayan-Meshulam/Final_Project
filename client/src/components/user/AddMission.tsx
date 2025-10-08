@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { getTokenInStorage } from "../../services/tokenService.js";
 import { getAllUsers } from "../../services/userService.js";
 import ErrorPremission from "../layot/ErrorPremission.js";
+import { errorMessage, successMessage } from "../../toastify/toastifyService.js";
 
 
 
@@ -81,12 +82,13 @@ const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission, onT
             addTask(values, token)
                 .then(res => {
                     console.log(res.data);
-                    if (onToggleAllMyTasks) onToggleAllMyTasks((prev: boolean) => !prev);
-                    // oncloseAddMission(false);
-                    window.location.reload();
+                    // if (onToggleAllMyTasks) onToggleAllMyTasks((prev: boolean) => !prev);
+                    oncloseAddMission(false);
+                    // window.location.reload();
                     formik.resetForm();
+                    successMessage("משימה נוספה בהצלחה !")
                 })
-                .catch(error => console.log(error));
+                .catch(error => errorMessage(error.response.data));
         }
     });
 

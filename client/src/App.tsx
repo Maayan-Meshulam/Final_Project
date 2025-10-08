@@ -12,6 +12,7 @@ import EnterEmail from './components/user/EnterEmail';
 import ChangePassword from './components/user/ChagePassword';
 import EnterCode from './components/user/EnterCode';
 import Error404 from './components/layot/Error404';
+import { ToastContainer  } from 'react-toastify';
 
 
 //componemts - lazy loading
@@ -23,6 +24,7 @@ function App() {
 
   return (
     <>
+      <ToastContainer  />
       <BrowserRouter>
         {/* <Suspense fallback={"hii im stil loading..."}> */}
         <Routes>

@@ -4,6 +4,7 @@ import { deleteTask } from "../../services/tasksService";
 import { getTokenInStorage } from "../../services/tokenService";
 import { useNavigate, useParams } from "react-router-dom";
 import style from '../../style/addMission/addMission.module.css';
+import { errorMessage, successMessage } from "../../toastify/toastifyService";
 
 interface DeleteTaskProps {
     task: any,
@@ -13,7 +14,7 @@ interface DeleteTaskProps {
 const DeleteTask: FunctionComponent<DeleteTaskProps> = ({ task, onCloseDeleting }) => {
 
     const nav = useNavigate();
-    const {id} = useParams();
+    const { id } = useParams();
 
     return (<>
         <div className={style.warpper_form}>
@@ -48,11 +49,12 @@ const DeleteTask: FunctionComponent<DeleteTaskProps> = ({ task, onCloseDeleting 
                     deleteTask(task._id as string, token)
                         .then(res => {
                             onCloseDeleting(false);
-                            window.location.reload();
-                            if(id) nav(-1);
+                            // window.location.reload();
+                            if (id) nav(-1);
+                            successMessage("משימה נמחקה בהצלחה !")
                         })
                         .catch(error => {
-                            console.log(error);
+                            errorMessage(error.response.data);
                         })
                 }}>
                 delete

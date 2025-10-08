@@ -9,6 +9,7 @@ import { userRegisterValidation } from "../../validation/user/userValidation";
 import * as Yup from 'yup'
 import { getTokenInStorage } from "../../services/tokenService";
 import { useSelector } from "react-redux";
+import { errorMessage, successMessage } from "../../toastify/toastifyService";
 
 interface AddNewEmployeeProps {
     oncloseAddNewEmployee: (NewEmployeesCloseBoll: boolean) => void
@@ -27,7 +28,7 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
         getUserById(managerId, token)
             .then(res => {
                 console.log(res.data);
-                const name = `${res.data.firstName} ${res.data.lastName}`;
+                const name = `${res.data.name.first} ${res.data.name.last}`;
                 console.log(name + " name");
                 setManager(name);
             });
@@ -69,9 +70,10 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
                     console.log(res.data);
                     oncloseAddNewEmployee(false);
                     formik.resetForm();
+                    successMessage("מזל טוב ! משתמש חדש נוסף בהצלחה ")
                 })
-                .catch(err => {
-                    console.log(err)
+                .catch(error => {
+                    errorMessage(error.response.data);
                 })
 
         }
@@ -111,7 +113,7 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
                         <CreateInputs type="text" id="lastName" name="last name" formik={formik} classAddEmployess={style.field_wrapper} />
                         <CreateInputs type="date" id="birthDay" name="birthDay" formik={formik} classAddEmployess={style.field_wrapper} />
                         <CreateInputs type="tel" id="phone" name="phone number" formik={formik} classAddEmployess={style.field_wrapper} />
-                        <CreateInputs type="file" id="url" name="personal image" formik={formik} classAddEmployess={style.field_wrapper} />
+                        <CreateInputs type="text" id="url" name="personal image" formik={formik} classAddEmployess={style.field_wrapper} />
                         <CreateInputs type="text" id="alt" name="alt" formik={formik} classAddEmployess={style.field_wrapper} />
                     </fieldset>
 

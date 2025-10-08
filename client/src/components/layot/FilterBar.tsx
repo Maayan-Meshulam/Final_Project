@@ -1,6 +1,7 @@
 import { useFormik } from "formik";
 import React, { useEffect, useState, type FunctionComponent } from "react";
 import * as Yup from "yup";
+import { infoMessage } from "../../toastify/toastifyService";
 
 interface FilterBarProps {
     allEmployees: [any],
@@ -116,6 +117,7 @@ const FilterBar: FunctionComponent<FilterBarProps> = ({ allEmployees, setfilters
             console.log(values);
             setIsShow(false)
             setfilters(values);
+            infoMessage("סינונים חלו בהצלחה");
         }
     });
 

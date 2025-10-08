@@ -9,6 +9,7 @@ import CreateSelects from "./CreateSelects";
 import { useSelector } from "react-redux";
 import { getTokenInStorage } from "../../services/tokenService";
 import { getAllUsers } from "../../services/userService";
+import { errorMessage, successMessage } from "../../toastify/toastifyService";
 
 
 interface UpdateTaskProps {
@@ -59,9 +60,10 @@ const UpdateTask: FunctionComponent<UpdateTaskProps> = ({ oncloseUpdating, task 
                     formik.resetForm();
                     oncloseUpdating(false);
                     // onToggleUetUpdaedTask((prev: boolean) => !prev);
-                    window.location.reload();
+                    // window.location.reload();
+                    successMessage("משימה עודכנה בהצלחה !")
                 })
-                .catch(error => console.log(error));
+                .catch(error => errorMessage(error.response.data));
         }
     });
 

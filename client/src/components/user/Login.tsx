@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { setState } from "../../redux/userInfoState";
 import { saveTokenInStorage, tokenDecoding } from "../../services/tokenService";
 import type { JwtPayload } from "jwt-decode";
+import { errorMessage, successMessage } from "../../toastify/toastifyService";
 
 
 interface LoginProps {
@@ -39,8 +40,9 @@ const Login: FunctionComponent<LoginProps> = () => {
                     dispatch(setState(userInfo)); // נאחסן בחנות את המידע עבור המשתמש שהתחבר
                     formik.resetForm();
                     userInfo.managerLevel < 1 ? nav('/tasks/myTasks') : nav('/users/managerDash');
+                    successMessage(" התחברת בהצלחה ! ברוך הבא");
                 })
-                .catch(error => console.log(error))
+                .catch(error => errorMessage(error.response.data));
         })
     });
 

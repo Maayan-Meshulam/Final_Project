@@ -4,18 +4,19 @@ import { deleteUser } from "../../services/userService";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import style from '../../style/addMission/addMission.module.css';
+import { errorMessage, infoMessage, successMessage } from "../../toastify/toastifyService";
 
 
 interface DeleteUserProps {
     onCloseDeleting: any,
     user: any,
-    onToggleCloseDeleting?:any
+    onToggleCloseDeleting?: any
 }
 
 const DeleteUser: FunctionComponent<DeleteUserProps> = ({ onCloseDeleting, user, onToggleCloseDeleting }) => {
 
     const nav = useNavigate();
-    const {id} = useParams()
+    const { id } = useParams()
 
     return (<>
         <div className={style.warpper_form}>
@@ -51,11 +52,13 @@ const DeleteUser: FunctionComponent<DeleteUserProps> = ({ onCloseDeleting, user,
                         .then(res => {
                             onCloseDeleting(false);
                             // onToggleCloseDeleting((prev:any)=>!prev);
-                            window.location.reload()
-                            if(id) nav(-1);
+                            // window.location.reload()
+                            if (id) nav(-1);
+                            successMessage("משתמש נחמק בהצלחה !");
+                            infoMessage("משימות ועובדים משוכים למנהל הישיר");
                         })
                         .catch(error => {
-                            console.log(error);
+                            errorMessage(error.response.data);
                         })
                 }}>
                 delete

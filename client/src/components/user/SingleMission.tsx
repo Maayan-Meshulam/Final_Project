@@ -39,14 +39,14 @@ const SingleMission: FunctionComponent<SingleMissionProps> = () => {
 
                 getUserById(res.data.userIdCreatorTask, token)//נביא את המשתמש שיצר את המשימה
                     .then(inline_res => {
-                        nameCreator = `${inline_res.data.firstName} ${inline_res.data.lastName}`
+                        nameCreator = `${inline_res.data.name.first} ${inline_res.data.name.last}`
                         setWorkerTaskCreator(nameCreator);
 
                         if (res.data.workerTaskId != res.data.userIdCreatorTask) {
 
                             getUserById(res.data.workerTaskId, token)//נביא את המשתמש שהמשימה נוצרה בשבילו
                                 .then(res1 => {
-                                    nameWorker = `${res1.data.firstName} ${res1.data.lastName}`
+                                    nameWorker = `${res1.data.name.first} ${res1.data.name.last}`
                                     setWorkerTaskName(nameWorker);
                                 })
                                 .catch(err => console.log(err));

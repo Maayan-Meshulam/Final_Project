@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { useEffect, useState, type FunctionComponent } from "react";
+import { useEffect, useRef, useState, type FunctionComponent } from "react";
 import { taskSchema } from "../../validation/task/taskValidator";
 import * as Yup from 'yup';
 import { updatedTask } from "../../services/tasksService";
@@ -11,6 +11,7 @@ import { getTokenInStorage } from "../../services/tokenService";
 import { getAllUsers, getUserById, updatingUser } from "../../services/userService";
 import { userRegisterValidation } from "../../validation/user/userValidation";
 import normaliztionUser from "../../helpers/normalizeUser";
+import { errorMessage, successMessage } from "../../toastify/toastifyService";
 
 
 interface UpdateUserProps {
@@ -28,6 +29,8 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
     const token = getTokenInStorage() as string;
     const [manager, setManager] = useState<any>("");
     const managerId = userInfo.id;
+
+    let imageUrl = useRef<string>("");
 
     // useEffect(() => {
     //     //רק במידה והוא מנהל נבקש את כל המשתמשים
@@ -47,9 +50,10 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
         getUserById(managerId, token)
             .then(res => {
                 console.log(res.data);
-                const name = `${res.data.firstName} ${res.data.lastName}`;
+                const name = `${res.data.name.first} ${res.data.name.last}`;
                 console.log(name + " name");
                 setManager(name);
+                imageUrl.current = user.image.url;
             });
     }, [])
 
@@ -62,8 +66,8 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
             email: user.email,
             password: user.password,
             birthDay: (user.birthDay).split('T')[0],
-            // url: user.image.url,
-            // alt: user.image.alt,
+            url: "",
+            alt: user.image.alt,
             city: user.address.city,
             street: user.address.street,
             houseNumber: user.address.houseNumber,
@@ -81,6 +85,8 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
         enableReinitialize: true,
         validationSchema: Yup.object(userRegisterValidation),
         onSubmit: (values) => {
+            values.url = imageUrl.current as any
+
             const token = getTokenInStorage() as string;
             updatingUser(user._id, token, values)
                 .then(res => {
@@ -88,12 +94,13 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
                         formik.resetForm();
                         oncloseUpdating(false);
                         onclosecode && onclosecode(false);
-                        window.location.reload();
+                        // window.location.reload();
+                        successMessage("משתמש עודכן בהצלחה !")
                     } catch (error: any) {
                         throw new Error(error.message);
                     }
                 })
-                .catch(error => console.log(error));
+                .catch(error => errorMessage(error.response.data));
         }
     });
 
@@ -131,7 +138,16 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
                         <CreateInputs type="text" id="lastName" name="last name" formik={formik} classAddEmployess={style.field_wrapper} />
                         <CreateInputs type="date" id="birthDay" name="birthDay" formik={formik} classAddEmployess={style.field_wrapper} />
                         <CreateInputs type="tel" id="phone" name="phone number" formik={formik} classAddEmployess={style.field_wrapper} />
-                        <CreateInputs type="file" id="url" name="personal image" formik={formik} classAddEmployess={style.field_wrapper} />
+                        <div>
+                            <CreateInputs type="text" id="url" name="personal image" formik={formik} classAddEmployess={style.field_wrapper} />
+                            <div style={{ display: "flex" }}>
+                                <img
+                                    src={`http://localhost:3131/${user.image.url}`}
+                                    alt={user.image.alt}
+                                    className={style.profile} />
+                                <p>ניתן להעלות תמונה חדשה</p>
+                            </div>
+                        </div>
                         <CreateInputs type="text" id="alt" name="alt" formik={formik} classAddEmployess={style.field_wrapper} />
                     </fieldset>
 

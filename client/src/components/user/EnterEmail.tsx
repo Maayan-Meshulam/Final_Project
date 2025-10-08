@@ -1,6 +1,7 @@
 import { useEffect, useState, type FunctionComponent } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUserByEmail, patchPass, sendEmail } from "../../services/userService";
+import { errorMessage } from "../../toastify/toastifyService";
 
 
 interface EnterEmailProps {
@@ -80,14 +81,11 @@ const EnterEmail: FunctionComponent<EnterEmailProps> = () => {
                         console.log(res.data);
                         console.log("look at your email to reset your password !!");
                     })
-                    .catch(err => console.log(err))
+                    .catch(err => errorMessage(err.response.data));
             })
-            .catch(err => {
-                console.log(err);
+            .catch(() => {
+                errorMessage("אימייל שגוי / משתמש לא רשום")
             })
-
-
-
     }
 
     return (<>

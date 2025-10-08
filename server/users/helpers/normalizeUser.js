@@ -19,7 +19,7 @@ const normaliztionUser = (user, bycrptPassword) => {
         password: bycrptPassword ,
         birthDay: new Date(birthDay),
         image: {
-            url: url == "" ? "client/src/images/profile.png" : url,
+            url: url == "" ? "/images/profile.png" : url,
             alt: alt == "" ? "defult profile" : alt,
         },
         address: {

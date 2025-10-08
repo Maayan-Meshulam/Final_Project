@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const taskRouter = require("../tasks/routes/taskController");
 const userRouter = require("../users/routes/userController");
+const { verifyLogin } = require("../users/models/userAccessDBService");
+const buildError = require("../helpers/erorrs/errorsHandeling");
+const { generateToken } = require("../auth/providers/jwt");
 
 router.use('/tasks', taskRouter);
 router.use('/users', userRouter);
@@ -21,7 +24,6 @@ router.post('/', async (req, res, next) => {
         //בדיקת זהות המשתמש - האם קיים ופרטיו נכונים
         if (!await verifyLogin(user.email, user.password)) {
             console.log("innnnnnnnnnnnnnnnnnnnn");
-
             return next(buildError("Authentication Error", "user not register / details not right", 403))
         }
 
