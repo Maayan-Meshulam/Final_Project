@@ -78,7 +78,7 @@ const ChangePassword: FunctionComponent<ChangePasswordProps> = () => {
             .then(res => {
                 console.log("after changing !!!!!!!!!!!");
                 console.log(res.data);
-                nav("/users/login");
+                nav("/");
             })
             .catch(err => console.log(err))
     }

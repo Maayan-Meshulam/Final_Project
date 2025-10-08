@@ -24,7 +24,7 @@ const Footer: FunctionComponent<FooterProps> = () => {
                 {userInfo.id && userInfo.managerLevel < 1 && (
                     <>
                         <div className="footer-item">
-                            <Link className="footer-link" to="/users/login" onClick={() => {
+                            <Link className="footer-link" to="/" onClick={() => {
                                 dispatch(clearState()); //איפוס מידע על המשתמש
                                 removeTokenFromStorage()
                             }}>Exit</Link>
@@ -40,7 +40,7 @@ const Footer: FunctionComponent<FooterProps> = () => {
                 {userInfo.id && userInfo.managerLevel >= 1 && (
                     <>
                         <div className="footer-item">
-                            <Link className="footer-link" to="/users/login" onClick={() => {
+                            <Link className="footer-link" to="/" onClick={() => {
                                 dispatch(clearState()); //איפוס מידע על המשתמש
                                 removeTokenFromStorage()
                             }}>Exit</Link>
@@ -68,7 +68,7 @@ const Footer: FunctionComponent<FooterProps> = () => {
                 {!userInfo.id && (
                     <>
                         <div className="footer-item">
-                            <Link className="footer-link" to="/users/login">Login</Link>
+                            <Link className="footer-link" to="/">Login</Link>
                         </div>
                     </>
                 )}

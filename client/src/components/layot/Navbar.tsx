@@ -56,7 +56,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                     {userInfo.id && userInfo.managerLevel < 1 && (
                         <>
                             <li className="nav-item">
-                                <Link className="nav-link" to="/users/login" onClick={() => {
+                                <Link className="nav-link" to="/" onClick={() => {
                                     dispatch(clearState()); //איפוס מידע על המשתמש
                                     removeTokenFromStorage()
                                 }}>Exit</Link>
@@ -88,7 +88,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                     {userInfo.id && userInfo.managerLevel >= 1 && (
                         <>
                             <li className="nav-item">
-                                <Link className="nav-link" to="/users/login" onClick={() => {
+                                <Link className="nav-link" to="/" onClick={() => {
                                     dispatch(clearState()); //איפוס מידע על המשתמש
                                     removeTokenFromStorage()
                                 }}>Exit</Link>
@@ -129,7 +129,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                     {!userInfo.id && (
                         <>
                             <li className="nav-item active">
-                                <Link className="nav-link" to="/users/login">Login</Link>
+                                <Link className="nav-link" to="/">Login</Link>
                             </li>
                         </>
                     )}
