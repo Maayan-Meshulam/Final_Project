@@ -28,7 +28,7 @@ function App() {
       <BrowserRouter>
         {/* <Suspense fallback={"hii im stil loading..."}> */}
         <Routes>
-          <Route path='/' element={<><Login /><Navbar /><Footer /></>} />
+          <Route path='/' element={<><Login /></>} />
           <Route path='/tasks/myTasks' element={<><Navbar /><ManageAllMissions /><Footer /></>} />
           <Route path='/tasks/:id' element={<><Navbar /><SingleMission /><Footer /></>} />
           <Route path='users/managerDash' element={<><Navbar /><ManagerDash /><Footer /></>} />

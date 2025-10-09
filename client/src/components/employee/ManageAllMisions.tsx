@@ -42,6 +42,9 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
             case "Process":
                 setArrDeepSearch(allMyTasks.filter((task: any) => task.status == "1"));
                 break;
+            case "Star":
+                setArrDeepSearch(allMyTasks.filter((task: any) => task.star == 1))
+                break;
         }
 
         setArrDeepSearch((prev: any) => prev.filter((task: any) => task.title.toLowerCase().includes(termSearch.toLowerCase())));
@@ -86,6 +89,8 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
                 <i className="fa-solid fa-arrow-left"></i>
             </div>
 
+            <h1 className="main_title">המשימות שלי</h1>
+
             <div className={style.containerAbove}>
                 <button id={style.addTaskBtn} onClick={() => setDisplayAddMission(true)}>
                     Add Task <i className="fa-solid fa-plus"></i>
@@ -129,6 +134,14 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
                         <span>בתהליך</span>
                     </div>
 
+                    <div className={`${style.btnDiv} col`} id={style.inStarTasks} onClick={() => {
+                        setTypeSearch("Star");
+
+                    }}>
+                        <i className="fa-solid fa-hourglass-half"></i>
+                        <span>מועדפים</span>
+                    </div>
+
                     <div className={`${style.searchContainer} col`}>
                         <input type="text" className={style.search_input_filter_bar} onInput={(e: any) => {
                             setSearchTerm(e.target.value);
@@ -164,10 +177,18 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
                                                 like_unlike_task(token as string, task._id)
                                                     .then(res => {
                                                         console.log(res.data);
+                                                        setArrDeepSearch((prev: any) => prev.map((Originaltask: any) => {
+                                                            return Originaltask._id == task._id ?
+                                                                { ...task, star: res.data.star == 1 ? 1 : 0 } : Originaltask
+                                                        }));
+                                                        setAllMyTasks((prev: any) => prev.map((Originaltask: any) => {
+                                                            return Originaltask._id == task._id ?
+                                                                { ...task, star: res.data.star == 1 ? 1 : 0 } : Originaltask
+                                                        }));
                                                     })
                                                     .catch(err => console.log(err))
                                             }}>
-                                                {task.star && task.star ? <span>&#9733;</span> :
+                                                {task.star == 1 ? <span>&#9733;</span> :
                                                     <span>&#9734;</span>}
                                             </td>
                                             <td>{task.title}</td>

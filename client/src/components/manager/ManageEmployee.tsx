@@ -118,6 +118,8 @@ const ManageEmployee: FunctionComponent<ManageEmployeeProps> = () => {
                 <i className="fa-solid fa-arrow-left"></i>
             </div>
 
+            <h1 className="main_title"> העובדים שלי</h1>
+
             <div style={{
                 display: "flex",
                 justifyContent: "right",

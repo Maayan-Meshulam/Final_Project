@@ -7,7 +7,7 @@ import style from "../../style/navber_footer/navbar_footer.module.css";
 import UpdateUser from "../user/UpdateUser";
 import { getUserById, sendEmail } from "../../services/userService";
 import EnterCode from "../user/EnterCode";
-import { successMessage } from "../../toastify/toastifyService";
+import { errorMessage, successMessage } from "../../toastify/toastifyService";
 
 
 interface NavbarProps {
@@ -77,8 +77,9 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                                             .then((res) => {
                                                 setCloseCode(true);
                                                 console.log(12312312);
+                                                successMessage("איימייל נשלח בהצלחה !")
                                             })
-                                            .catch(err => console.log(err))
+                                            .catch(err => errorMessage(err.response.data))
                                     }}>Edit User</span>
                                 </li>
                             }
@@ -123,8 +124,9 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                                             .then((res) => {
                                                 setCloseCode(true);
                                                 console.log(12312312);
+                                                successMessage("איימייל נשלח בהצלחה !")
                                             })
-                                            .catch(err => console.log(err))
+                                            .catch(err => errorMessage(err.response.data))
                                     }}>Edit User</span>
                                 </li>
                             }

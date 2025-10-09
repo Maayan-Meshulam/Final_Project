@@ -49,3 +49,12 @@ html {
   width: fit-content;
   margin-top: 20px;
 }
+
+.main_title{
+  text-align: center;
+  font-weight: 300;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  margin-top: 50px;
+}

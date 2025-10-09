@@ -16,6 +16,8 @@ const taskNormalization = (task, user) => {
         workerTaskId:  task.workerTaskId == "0" ? user.id :  (task.workerTaskId ?? user.id)
     });
 
+
+
 };
 
 module.exports = { taskNormalization }

@@ -7,9 +7,10 @@ import { addUser, getAllUsers, getUserById, patchConnectedEmployees } from "../.
 // import normaliztionUser from "../../helpers/normalizeUser";
 import { userRegisterValidation } from "../../validation/user/userValidation";
 import * as Yup from 'yup'
-import { getTokenInStorage } from "../../services/tokenService";
-import { useSelector } from "react-redux";
+import { getTokenInStorage, saveTokenInStorage, tokenDecoding } from "../../services/tokenService";
+import { useDispatch, useSelector } from "react-redux";
 import { errorMessage, successMessage } from "../../toastify/toastifyService";
+import { setState } from "../../redux/userInfoState";
 
 interface AddNewEmployeeProps {
     oncloseAddNewEmployee: (NewEmployeesCloseBoll: boolean) => void
@@ -22,6 +23,7 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
     const managerId = userInfo.id;
     const [manager, setManager] = useState<any>("");
     const [allEmployees, setAllEmployees] = useState<any>([]);
+    const dispatch = useDispatch();
 
 
     useEffect(() => {
@@ -70,7 +72,12 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
                     console.log(res.data);
                     oncloseAddNewEmployee(false);
                     formik.resetForm();
-                    successMessage("מזל טוב ! משתמש חדש נוסף בהצלחה ")
+                    successMessage("מזל טוב ! משתמש חדש נוסף בהצלחה ");
+                    
+                    //שמירת הטוקן החדש ועדכון הפרטים של המשתמש המחובר 
+                    saveTokenInStorage(res.data.new_token);
+                    let newUserInfo = tokenDecoding(res.data.new_token) as any //  פענוח הטוקן החדש
+                    dispatch(setState(newUserInfo))
                 })
                 .catch(error => {
                     errorMessage(error.response.data);

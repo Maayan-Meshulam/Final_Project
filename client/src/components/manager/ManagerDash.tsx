@@ -51,6 +51,8 @@ const ManagerDash: FunctionComponent<ManagerDashProps> = () => {
                 <i className="fa-solid fa-arrow-left"></i>
             </div>
 
+            <h1 className="main_title">לוח מנהל</h1>
+
             <div className={style.managerDash_conatainer}>
                 <div id={style.argentTasks}>
                     <h6> Argent tasks</h6>

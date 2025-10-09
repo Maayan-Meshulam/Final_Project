@@ -3,7 +3,7 @@ const { GENERAL_VALIDATION, MINI_GENERAL_VALIDATION } = require("../../../helper
 
 const taskValidator = (task) => {
     console.log("in task validator");
-    
+
     const schema = Joi.object({
         title: GENERAL_VALIDATION,
         subTitle: GENERAL_VALIDATION,
@@ -14,10 +14,11 @@ const taskValidator = (task) => {
         status: MINI_GENERAL_VALIDATION,
         type: MINI_GENERAL_VALIDATION,
         userIdCreatorTask: Joi.required(),
-        priority: Joi.string().required()
+        priority: Joi.string().required(),
+        star: Joi.number().valid(0, 1).required()
     });
-            
-    return schema.validate(task, {abortEarly:false});
+
+    return schema.validate(task, { abortEarly: false });
 };
 
 module.exports = taskValidator;

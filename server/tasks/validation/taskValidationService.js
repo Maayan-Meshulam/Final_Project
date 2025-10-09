@@ -21,6 +21,8 @@ const taskValidation = (req, res, next) => {
 
         task = taskNormalization(task, req.userInfo);
         console.log(task);
+        console.log("\n normalize up 1!!");
+        
 
         if (validator == 'Joi') {
 

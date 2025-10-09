@@ -90,6 +90,8 @@ const ChangePassword: FunctionComponent<ChangePasswordProps> = () => {
                 <i className="fa-solid fa-arrow-left"></i>
             </div>
 
+            <h1 className="main_title">שינוי סיסמא</h1>
+
             <form style={style.form} id="form" onSubmit={handleSubmit}>
                 <div style={style.inline_form}>
                     <label>סיסמא חדשה</label>

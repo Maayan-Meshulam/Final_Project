@@ -6,6 +6,13 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2745098039);
 }
 
+#navbarContainer {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
 .footerContainer {
   display: flex;
   align-items: center;

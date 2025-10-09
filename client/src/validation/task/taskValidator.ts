@@ -12,7 +12,8 @@ export const taskSchema :any = {
     type: Yup.string().required(),
     status: Yup.string().required(),
     workerTaskId: Yup.string().required(),
-    priority: Yup.string().required()
+    priority: Yup.string().required(),
+    star: Yup.number().oneOf([0, 1], "הערכים המותרים ה 0 /1 ").required()
 };
 
 console.log("after validaion acheama");

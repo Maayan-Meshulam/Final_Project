@@ -56,6 +56,7 @@ const EnterEmail: FunctionComponent<EnterEmailProps> = () => {
     const [errorSamePass, setError] = useState<boolean>(true);
     const [dirtyForm, setDirtyForm] = useState<boolean>(false);
     const rgxEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+    const nav = useNavigate();
 
     let id = "";
 
@@ -75,7 +76,7 @@ const EnterEmail: FunctionComponent<EnterEmailProps> = () => {
             .then(res => {
                 console.log(res.data + "1111111");
                 id = res.data._id
-                
+
                 sendEmail(email, id, -1)
                     .then(res => {
                         console.log(res.data);
@@ -89,21 +90,30 @@ const EnterEmail: FunctionComponent<EnterEmailProps> = () => {
     }
 
     return (<>
-        <form style={style.form} id="form" onSubmit={handleSubmit}>
-            <div style={style.inline_form}>
-                <label>אימייל</label>
-                <input
-                    type="email"
-                    id="email"
-                    style={style.inputs}
-                    onInput={(e: any) => setEmail(e.target.value)}
-                />
+        <div className="container">
+            <div className="btn_back" onClick={() => nav(-1)}>
+                <i className="fa-solid fa-arrow-left"></i>
             </div>
-            <button
-                style={style.button}
-                disabled={!errorSamePass || !dirtyForm}
-            >שלח</button>
-        </form>
+
+            <h1 className="main_title">שליחת אימייל</h1>
+
+            <form style={style.form} id="form" onSubmit={handleSubmit}>
+                <div style={style.inline_form}>
+                    <label>אימייל</label>
+                    <input
+                        type="email"
+                        id="email"
+                        style={style.inputs}
+                        onInput={(e: any) => setEmail(e.target.value)}
+                    />
+                </div>
+                <button
+                    style={style.button}
+                    disabled={!errorSamePass || !dirtyForm}
+                >שלח</button>
+            </form>
+        </div>
+
     </>);
 }
 

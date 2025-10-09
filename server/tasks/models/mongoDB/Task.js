@@ -1,6 +1,6 @@
 const { Schema, model, default: mongoose } = require('mongoose');
 const { GENERAL_VALIDATION, MINI_GENERAL_VALIDATION, WORKER } = require('../../../helpers/mongoDB/generalValidation');
-const { required } = require('joi');
+const { required, valid } = require('joi');
 
 const taskSchema = Schema({
     title: GENERAL_VALIDATION,
@@ -12,7 +12,8 @@ const taskSchema = Schema({
     status: MINI_GENERAL_VALIDATION,
     type: MINI_GENERAL_VALIDATION,
     userIdCreatorTask: { type: mongoose.Types.ObjectId, required: true },
-    priority: { type: String, required: true }
+    priority: { type: String, required: true },
+    star: { type: Number, required: true, enum: [0, 1] }
 });
 
 

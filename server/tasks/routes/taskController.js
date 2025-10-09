@@ -26,6 +26,10 @@ router.post('/', auth, taskValidation, async (req, res, next) => {
             return next(buildError("Authorization", "access blocked, user not allow", 403));
         }
 
+        console.log(JSON.stringify(task));
+        console.log("tasl before seving");
+        
+        
         //טיפול בשמירת הנתונים
         task = await createTask(task);
         res.status(201).send(task);

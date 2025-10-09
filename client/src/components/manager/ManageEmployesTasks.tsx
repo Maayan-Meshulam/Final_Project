@@ -1,7 +1,7 @@
 import { useEffect, useState, type FunctionComponent } from "react";
 import { getTokenInStorage } from "../../services/tokenService";
 import { useSelector } from "react-redux";
-import { getAllTasks, getTaskById } from "../../services/tasksService";
+import { getAllTasks, getTaskById, like_unlike_task } from "../../services/tasksService";
 import { priorityConvert, statusConvert, typeConvert } from "../../helpers/Convert_valueSelectsToString";
 import { useNavigate } from "react-router-dom";
 import DeleteTask from "../user/DeleteTask";
@@ -50,6 +50,9 @@ const ManageAllEmployesTasks: FunctionComponent<ManageAllEmployesTasksProps> = (
             case "Process":
                 setArrDeepSearch(allMyTasks.filter((task: any) => task.status == "1"));
                 break;
+            case "Star":
+                setArrDeepSearch(allMyTasks.filter((task: any) => task.star == 1))
+                break;
         }
 
         setArrDeepSearch((prev: any) => prev.filter((task: any) => task.title.toLowerCase().includes(termSearch.toLowerCase())));
@@ -82,6 +85,7 @@ const ManageAllEmployesTasks: FunctionComponent<ManageAllEmployesTasksProps> = (
                 <i className="fa-solid fa-arrow-left"></i>
             </div>
 
+            <h1 className="main_title"> משימות העובדים שלי</h1>
 
             <div className={style.containerAbove}>
                 <button id={style.addTaskBtn} onClick={() => setDisplayAddMission(true)}>
@@ -126,6 +130,14 @@ const ManageAllEmployesTasks: FunctionComponent<ManageAllEmployesTasksProps> = (
                         <span>בתהליך</span>
                     </div>
 
+                    <div className={`${style.btnDiv} col`} id={style.inStarTasks} onClick={() => {
+                        setTypeSearch("Star");
+
+                    }}>
+                        <i className="fa-solid fa-hourglass-half"></i>
+                        <span>מועדפים</span>
+                    </div>
+
                     <div className={`${style.searchContainer} col`}>
                         <input type="text" className={style.search_input_filter_bar} onInput={(e: any) => {
                             setSearchTerm(e.target.value);
@@ -140,6 +152,7 @@ const ManageAllEmployesTasks: FunctionComponent<ManageAllEmployesTasksProps> = (
                         <table className={style.dashBoardTasks}>
                             <thead>
                                 <tr>
+                                    <th></th>
                                     <th>כותרת</th>
                                     <th>תת כותרת</th>
                                     <th>דחיפות</th>
@@ -156,6 +169,24 @@ const ManageAllEmployesTasks: FunctionComponent<ManageAllEmployesTasksProps> = (
                                 {
                                     arrDeepSearch.length > 0 && arrDeepSearch.map((task: any) => (
                                         <tr>
+                                            <td onClick={() => {
+                                                like_unlike_task(token as string, task._id)
+                                                    .then(res => {
+                                                        console.log(res.data);
+                                                        setArrDeepSearch((prev: any) => prev.map((Originaltask: any) => {
+                                                            return Originaltask._id == task._id ?
+                                                                { ...task, star: res.data.star == 1 ? 1 : 0 } : Originaltask
+                                                        }));
+                                                        setAllMyTasks((prev: any) => prev.map((Originaltask: any) => {
+                                                            return Originaltask._id == task._id ?
+                                                                { ...task, star: res.data.star == 1 ? 1 : 0 } : Originaltask
+                                                        }));
+                                                    })
+                                                    .catch(err => console.log(err))
+                                            }}>
+                                                {task.star == 1 ? <span>&#9733;</span> :
+                                                    <span>&#9734;</span>}
+                                            </td>
                                             <td>{task.title}</td>
                                             <td>{task.subTitle}</td>
                                             {/* <td>{task.description}</td> */}

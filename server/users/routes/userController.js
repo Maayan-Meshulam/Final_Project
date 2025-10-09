@@ -7,7 +7,7 @@ const buildError = require("../../helpers/erorrs/errorsHandeling");
 const { hash } = require("bcrypt");
 const sendingEmail = require("../../emails/smtpServer");
 const router = express.Router();
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
 
 
 //login user
@@ -44,15 +44,13 @@ router.post('/addUser', auth, userValidation, async (req, res, next) => {
         let user = req.userValid;
         console.log(req.userInfo);
 
-        //נצטרך לקחת פרטים ישירות מהמסד - למקרה שיווצרו כמה עובדים אחד אחרי השני ולא יהיה בניהם חיבור מחדש למערכת
-        //אם אין חיבור הפיילואד לא מתעדכן
-        let manageronnect = await getUserById(req.userInfo.id);
+        let managerConnect = await getUserById(req.userInfo.id);
 
-        console.log(manageronnect);
+        console.log(managerConnect);
 
 
         //נבדוק הרשאות
-        if (manageronnect.managerLevel < 1) {
+        if (managerConnect.managerLevel < 1) {
             return next(buildError("Authentication Error", "user not allow, access block", 403))
         }
 
@@ -62,9 +60,21 @@ router.post('/addUser', auth, userValidation, async (req, res, next) => {
         //טיפול בשמירת הנתונים
         user = await createUser(user);
 
-        await connectEmployeToManager(manageronnect.managerLevel, manageronnect._id, user._id, manageronnect.connectedEmployess);
+        await connectEmployeToManager(managerConnect.managerLevel, managerConnect._id, user._id, managerConnect.connectedEmployess);
 
-        res.status(201).send(user);
+        //יצירת טוקן חדש ומעודכם לאחר הוספת משתמש
+        const updatedPayload = {
+            id: managerConnect._id,
+            managerLevel: managerConnect.managerLevel,
+            connectedEmployess: managerConnect.connectedEmployess,
+        }
+
+        const updatedToken = jwt.sign(updatedPayload, "secret");
+
+        res.status(201).json({
+            new_user: user,
+            new_token : updatedToken
+        });
 
     } catch (error) {
         return next(buildError("General Error", error, 403));

@@ -71,7 +71,8 @@ const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission, onT
             type: "",
             status: "",
             workerTaskId: "0",
-            priority: ""
+            priority: "",
+            star: 0
         },
         enableReinitialize: true,
         validationSchema: Yup.object(taskSchema),
@@ -81,6 +82,8 @@ const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission, onT
             console.log("values" + JSON.stringify(values));
             addTask(values, token)
                 .then(res => {
+                    console.log("נוסףףףףף");
+
                     console.log(res.data);
                     // if (onToggleAllMyTasks) onToggleAllMyTasks((prev: boolean) => !prev);
                     oncloseAddMission(false);

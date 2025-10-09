@@ -74,7 +74,13 @@ const SingleMission: FunctionComponent<SingleMissionProps> = () => {
 
             <div className={style.containerWithImg}>
                 <div className={style.task_characterization}>
-                    <h1>{task.title}</h1>
+                    <div style={{display:"flex"}}>
+                        <h1>{task.star == 1 ? <span>&#9733;</span> :
+                            <span>&#9734;</span>}</h1>
+
+                        <h1>{task.title}</h1>
+                    </div>
+
                     <h3>{task.subTitle}</h3>
                     <p>{task.description}</p>
                     <div style={{ display: "flex", gap: "20px" }}>
@@ -120,7 +126,8 @@ const SingleMission: FunctionComponent<SingleMissionProps> = () => {
                 </div>
                 <img className={style.imgTask} src={imageTaskSrc} alt="task" />
             </div>
-        </div>) : (<p>אין הרשאה לפעולה</p>)}
+        </div >) : (<p>אין הרשאה לפעולה</p>)
+        }
 
     </>);
 }
