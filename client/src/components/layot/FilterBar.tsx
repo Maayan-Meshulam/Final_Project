@@ -38,8 +38,9 @@ const FilterBar: FunctionComponent<FilterBarProps> = ({ allEmployees, setfilters
             uniqeDepartment.add(employee.department)
         });
 
-        console.log(uniqeJobs, uniqesCitys, uniqeTypeWork,uniqeFromWhereWork,uniqeDepartment, 123);
+        console.log(uniqeJobs, uniqesCitys, uniqeTypeWork, uniqeFromWhereWork, uniqeDepartment, 123);
 
+        //מערכים עם שמות השדות עם הרווחים
         setCitys(Array.from(uniqesCitys))
         setJobs(Array.from(uniqeJobs))
         setTypeWork(Array.from(uniqeTypeWork))
@@ -91,6 +92,7 @@ const FilterBar: FunctionComponent<FilterBarProps> = ({ allEmployees, setfilters
                 return acc;
             }, {});
 
+            //נחזיר אובייקט עם כל השדות הנבחרים בלי רווחים
             return {
                 ...citysTemp, ...jobsTemp, ...typeWorkTemp,
                 ...fromWhereWorkTemp, ...departmentTemp
@@ -104,10 +106,6 @@ const FilterBar: FunctionComponent<FilterBarProps> = ({ allEmployees, setfilters
         console.log(initialValuesForm);
         setInitialValuesForm(initialValuesFunc());
     }, [citys, jobs, typeWork, fromWhereWork, department]);
-
-    useEffect(() => {
-        console.log(initialValuesForm);
-    }, [initialValuesForm])
 
 
     const formik = useFormik({
@@ -128,7 +126,8 @@ const FilterBar: FunctionComponent<FilterBarProps> = ({ allEmployees, setfilters
         showFilterSide_true: React.CSSProperties,
         showFilterSide_false: React.CSSProperties,
         top_btns_form: React.CSSProperties,
-        btnclosePopUp: React.CSSProperties
+        btnPopUp: React.CSSProperties,
+        add_user_btn: React.CSSProperties
     } = {
         showFilterSide_true: {
             display: "flex",
@@ -138,10 +137,10 @@ const FilterBar: FunctionComponent<FilterBarProps> = ({ allEmployees, setfilters
             position: "fixed",
             top: "150px",
             right: '0',
-            backgroundColor: "#f0f0f0c7",
+            backgroundColor: "#f0f0f0ec",
             boxShadow: "1px 5px 7px gray",
-            maxHeight:"500px",
-            overflowY:"auto",
+            maxHeight: "500px",
+            overflowY: "auto",
             textAlign: "right",
             direction: "rtl",
             // transform: "translate(210px)",
@@ -170,9 +169,18 @@ const FilterBar: FunctionComponent<FilterBarProps> = ({ allEmployees, setfilters
             backgroundColor: "none",
             border: "none"
         },
-        btnclosePopUp: {
+        btnPopUp: {
             border: "none",
-            backgroundColor: "none"
+            backgroundColor: "inherit",
+            cursor: "pointer"
+        },
+        add_user_btn: {
+            padding: "5px 7px",
+            border: "1px solid green",
+            borderRadius: "10px",
+            backgroundColor: "green",
+            color: "white",
+            cursor: "pointer"
         }
     }
 
@@ -182,7 +190,7 @@ const FilterBar: FunctionComponent<FilterBarProps> = ({ allEmployees, setfilters
                 {
                     width: "fit-content", display: "flex",
                     backgroundColor: "#d4e4ecdf", boxShadow: "4px 4px #011f2ddf", justifyContent: "space-around",
-                    padding: "5px 15px", borderRadius: "10px"
+                    padding: "5px 15px", borderRadius: "10px", cursor: "pointer"
                 }}
                 onClick={() => {
                     isShow ? setIsShow(false) : setIsShow(true)
@@ -196,19 +204,17 @@ const FilterBar: FunctionComponent<FilterBarProps> = ({ allEmployees, setfilters
         <form style={style[`showFilterSide_${isShow}`]} onSubmit={formik.handleSubmit}>
             <div style={style.top_btns_form}>
                 <button
-                    className="close_popUp_btn"
-                    // id={style.btnclosePopUp}
+                    style={style.btnPopUp}
                     type="button"
                     onClick={() => {
-                        formik.resetForm(),
-                            setIsShow(false)
+                        setIsShow(false)
                     }}
                 >&#10060;</button>
 
                 <button
-                    style={style.reset_btn}
+                    style={style.btnPopUp}
                     type="button"
-                    onClick={() => { formik.resetForm({ values: initialValuesForm }) }}
+                    onClick={() => { formik.resetForm() }}
                 >&#8635;</button>
             </div>
 
@@ -216,15 +222,17 @@ const FilterBar: FunctionComponent<FilterBarProps> = ({ allEmployees, setfilters
                 <h6>עיר</h6>
                 {citys && citys.map((city: string) => (
                     <div style={{ display: "flex" }}>
-                        <label htmlFor={`city_${city.replaceAll(" ", "_")}`}>{city}</label>
                         <input
                             type="checkbox"
                             id={`city_${city.replaceAll(" ", "_")}`}
                             name={`city_${city.replaceAll(" ", "_")}`}
-                            // checked={formik.values[`city_${city}`]}
+                            checked={formik.values[`city_${city.replaceAll(" ", "_")}`]}
                             onChange={formik.handleChange}
                         >
                         </input>
+
+                        <label htmlFor={`city_${city.replaceAll(" ", "_")}`}
+                            style={{ marginRight: "5px" }}>{city}</label>
                     </div>
 
                 ))}
@@ -234,15 +242,16 @@ const FilterBar: FunctionComponent<FilterBarProps> = ({ allEmployees, setfilters
                 <h6>תפקיד</h6>
                 {jobs && jobs.map((role: string) => (
                     <div style={{ display: "flex" }}>
-                        <label htmlFor={`role_${role.replaceAll(" ", "_")}`}>{role}</label>
                         <input
                             type="checkbox"
                             id={`role_${role.replaceAll(" ", "_")}`}
                             name={`role_${role.replaceAll(" ", "_")}`}
-                            // checked={formik.values[`role_${role}`]}
+                            checked={formik.values[`role_${role.replaceAll(" ", "_")}`]}
                             onChange={formik.handleChange}
                         >
                         </input>
+                        <label htmlFor={`role_${role.replaceAll(" ", "_")}`} style={{ marginRight: "5px" }}>{role}</label>
+
                     </div>
                 ))}
             </div>
@@ -251,59 +260,59 @@ const FilterBar: FunctionComponent<FilterBarProps> = ({ allEmployees, setfilters
                 <h6>סוג עבודה</h6>
                 {typeWork && typeWork.map((jobType: string) => (
                     <div style={{ display: "flex" }}>
-                        <label htmlFor={`typeWork_${jobType.replaceAll(" ", "_")}`}>{jobType}</label>
                         <input
                             type="checkbox"
                             id={`typeWork_${jobType.replaceAll(" ", "_")}`}
                             name={`typeWork_${jobType.replaceAll(" ", "_")}`}
-                            // checked={formik.values[`role_${role}`]}
+                            checked={formik.values[`typeWork_${jobType.replaceAll(" ", "_")}`]}
                             onChange={formik.handleChange}
                         >
                         </input>
+                        <label htmlFor={`typeWork_${jobType.replaceAll(" ", "_")}`} style={{ marginRight: "5px" }}>{jobType}</label>
                     </div>
                 ))}
             </div>
 
-            
+
             <div>
                 <h6>מאיפה עובד</h6>
                 {fromWhereWork && fromWhereWork.map((fromWhereWorking: string) => (
                     <div style={{ display: "flex" }}>
-                        <label htmlFor={`fromWhereWork_${fromWhereWorking.replaceAll(" ", "_")}`}>
-                            {fromWhereWorking}</label>
                         <input
                             type="checkbox"
                             id={`fromWhereWork_${fromWhereWorking.replaceAll(" ", "_")}`}
                             name={`fromWhereWork_${fromWhereWorking.replaceAll(" ", "_")}`}
-                            // checked={formik.values[`role_${role}`]}
+                            checked={formik.values[`fromWhereWork_${fromWhereWorking.replaceAll(" ", "_")}`]}
                             onChange={formik.handleChange}
                         >
                         </input>
+                        <label htmlFor={`fromWhereWork_${fromWhereWorking.replaceAll(" ", "_")}`} style={{ marginRight: "5px" }}>
+                            {fromWhereWorking}</label>
                     </div>
                 ))}
             </div>
 
-            
+
             <div>
                 <h6> מחלקה</h6>
                 {department && department.map((department: string) => (
                     <div style={{ display: "flex" }}>
-                        <label htmlFor={`department_${department.replaceAll(" ", "_")}`}>{department}</label>
                         <input
                             type="checkbox"
                             id={`department_${department.replaceAll(" ", "_")}`}
                             name={`department_${department.replaceAll(" ", "_")}`}
-                            // checked={formik.values[`role_${role}`]}
+                            checked={formik.values[`department_${department.replaceAll(" ", "_")}`]}
                             onChange={formik.handleChange}
                         >
                         </input>
+                        <label htmlFor={`department_${department.replaceAll(" ", "_")}`} style={{ marginRight: "5px" }}>{department}</label>
                     </div>
                 ))}
             </div>
 
             <button
                 type="submit"
-                style={{ justifySelf: "self-end" }}
+                style={style.add_user_btn}
             >הצג סינונים</button>
         </form>
     </>);

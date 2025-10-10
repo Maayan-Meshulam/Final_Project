@@ -23,8 +23,15 @@
 .btnQuick {
   border: none;
   background-color: #cee3ea;
+  box-shadow: 2px 2px #015e7a;
   border-radius: 10px;
   text-align: center;
+  text-decoration: none;
+  color: black;
+  cursor: pointer;
+}
+
+.inlineBtnQuick {
   text-decoration: none;
   color: black;
 }

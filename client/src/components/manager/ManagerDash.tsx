@@ -85,13 +85,13 @@ const ManagerDash: FunctionComponent<ManagerDashProps> = () => {
                     <button onClick={() => setDisplayAddNewEmployee(true)} className={style.btnQuick}>add new Employee</button>
                     {displayAddNewEmployee && <AddNewEmployee oncloseAddNewEmployee={setDisplayAddNewEmployee} />}
                     <div className={style.btnQuick}>
-                        <Link to='/tasks/myTasks' >my tasks</Link>
+                        <Link to='/tasks/myTasks' className={style.inlineBtnQuick}>my tasks</Link>
                     </div>
                     <div className={style.btnQuick}>
-                        <Link to='/tasks/manageEmployessTasks' className={style.btnQuick}>My employess tasks</Link>
+                        <Link to='/tasks/manageEmployessTasks' className={style.inlineBtnQuick}>My employess tasks</Link>
                     </div>
                     <div className={style.btnQuick}>
-                        <Link to='/users/manageEmployess' className={style.btnQuick}>My employess</Link>
+                        <Link to='/users/manageEmployess' className={style.inlineBtnQuick}>My employess</Link>
                     </div>
                 </div>
 

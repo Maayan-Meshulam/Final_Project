@@ -188,8 +188,8 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
                                                     })
                                                     .catch(err => console.log(err))
                                             }}>
-                                                {task.star == 1 ? <span>&#9733;</span> :
-                                                    <span>&#9734;</span>}
+                                                {task.star == 1 ? <span className="starClick">&#9733;</span> :
+                                                    <span className="starClick">&#9734;</span>}
                                             </td>
                                             <td>{task.title}</td>
                                             <td>{statusConvert[task.status]}</td>

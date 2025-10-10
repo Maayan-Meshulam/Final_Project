@@ -46,13 +46,13 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
     }, [])
 
     return (<>
-        <nav className="navbar navbar-expand-lg" id={style.navbarContainer}>
+        <nav className="navbar navbar-expand-lg " id={style.navbarContainer}>
 
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
             </button>
-            <div className="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul className="navbar-nav">
+            <div className="collapse navbar-collapse " id="navbarNavDropdown">
+                <ul className="navbar-nav ">
                     {/* משתמש רגיל מחובר  */}
                     {userInfo.id && userInfo.managerLevel < 1 && (
                         <>
@@ -70,21 +70,28 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
 
 
                             {user && randomNum &&
-                                <li>
-                                    <span onClick={() => {
-                                        console.log(user.email, userInfo.id, randomNum)
-                                        sendEmail(user.email, userInfo._id, randomNum)
-                                            .then((res) => {
-                                                setCloseCode(true);
-                                                console.log(12312312);
-                                                successMessage("איימייל נשלח בהצלחה !")
-                                            })
-                                            .catch(err => errorMessage(err.response.data))
-                                    }}>Edit User</span>
+                                <li style={{
+                                    display: "flex", flexDirection: 'row', position: "absolute",
+                                    top: "10px", right: "20px"
+                                }}>
+                                    <span
+                                        style={{ cursor: "pointer" }}
+                                        className="nav-link"
+                                        onClick={() => {
+                                            console.log(user.email, userInfo.id, randomNum)
+                                            sendEmail(user.email, userInfo._id, randomNum)
+                                                .then((res) => {
+                                                    setCloseCode(true);
+                                                    console.log(12312312);
+                                                    successMessage("איימייל נשלח בהצלחה !")
+                                                })
+                                                .catch(err => errorMessage(err.response.data))
+                                        }}>Edit User</span>
+                                    {user && <img src={user.image.src} alt={user.image.alt} />}
                                 </li>
                             }
 
-                            {user && <img src={user.image.src} alt={user.image.alt} />}
+
 
                         </>
                     )}
@@ -117,22 +124,27 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                             </li>
 
                             {user && randomNum &&
-                                <li>
-                                    <span onClick={() => {
-                                        console.log(user.email, userInfo.id, randomNum)
-                                        sendEmail(user.email, userInfo._id, randomNum)
-                                            .then((res) => {
-                                                setCloseCode(true);
-                                                console.log(12312312);
-                                                successMessage("איימייל נשלח בהצלחה !")
-                                            })
-                                            .catch(err => errorMessage(err.response.data))
-                                    }}>Edit User</span>
+                                <li
+                                    style={{
+                                        display: "flex", flexDirection: 'row', position: "absolute",
+                                        top: "10px", right: "20px"
+                                    }}>
+                                    <span
+                                        style={{ cursor: "pointer" }}
+                                        className="nav-link"
+                                        onClick={() => {
+                                            console.log(user.email, userInfo.id, randomNum)
+                                            sendEmail(user.email, userInfo._id, randomNum)
+                                                .then((res) => {
+                                                    setCloseCode(true);
+                                                    console.log(12312312);
+                                                    successMessage("איימייל נשלח בהצלחה !")
+                                                })
+                                                .catch(err => errorMessage(err.response.data))
+                                        }}>Edit User</span>
+                                    {user && <img className={style.profile} src={`http://localhost:3131/${user.image.url}`} alt={user.image.alt} />}
                                 </li>
                             }
-
-                            {user && <img className={style.profile} src={`http://localhost:3131/${user.image.url}`} alt={user.image.alt} />}
-
                         </>
                     )}
 
