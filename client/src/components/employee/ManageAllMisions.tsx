@@ -9,6 +9,7 @@ import { priorityConvert, statusConvert, typeConvert } from "../../helpers/Conve
 import UpdateTask from "../user/UpdaeTask";
 import DeleteTask from "../user/DeleteTask";
 import ErrorPremission from "../layot/ErrorPremission";
+import { errorMessage } from "../../toastify/toastifyService";
 
 interface ManageAllMissionsProps {
 
@@ -70,7 +71,7 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
                 setArrDeepSearch(res.data);
             })
             .catch(error => {
-                console.log(error);
+                errorMessage(error.message);
             })
     }, [displayAddMission, userInfo, closeUpdating, closeDeleting]);
 
@@ -186,7 +187,7 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
                                                                 { ...task, star: res.data.star == 1 ? 1 : 0 } : Originaltask
                                                         }));
                                                     })
-                                                    .catch(err => console.log(err))
+                                                    .catch(error => errorMessage(error.message))
                                             }}>
                                                 {task.star == 1 ? <span className="starClick">&#9733;</span> :
                                                     <span className="starClick">&#9734;</span>}
@@ -203,36 +204,36 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
 
                                             {
                                                 (task.type == "1" || userInfo.id == task.userIdCreatorTask) ? (<>
-                                                    <td onClick={() => {
-                                                        setCloseUpdating(true);
-                                                        setSelectedTask(task);
-                                                    }}> <i className="fa-solid fa-pen-to-square"></i>
-                                                    </td>
-                                                    <td><i className="fa-solid fa-trash" onClick={() => {
-                                                        setSelectedTask(task);
-                                                        setCloseDeleting(true);
-                                                    }}></i>
-                                                    </td>
-                                                </>
-                                                ) : (
-                                                    <>
-                                                        <td> <i className="fa-solid fa-pen-to-square" style={{ color: "gray" }}></i>
-                                                        </td>
-                                                        <td><i className="fa-solid fa-trash" style={{ color: "gray" }}></i>
-                                                        </td>
-                                                    </>
-                                                )}
-                                        </tr>
-                                    ))
+                                            <td onClick={() => {
+                                                setCloseUpdating(true);
+                                                setSelectedTask(task);
+                                            }}> <i className="fa-solid fa-pen-to-square"></i>
+                                            </td>
+                                            <td><i className="fa-solid fa-trash" onClick={() => {
+                                                setSelectedTask(task);
+                                                setCloseDeleting(true);
+                                            }}></i>
+                                            </td>
+                                        </>
+                                        ) : (
+                                            <>
+                                                <td> <i className="fa-solid fa-pen-to-square" style={{ color: "gray" }}></i>
+                                                </td>
+                                                <td><i className="fa-solid fa-trash" style={{ color: "gray" }}></i>
+                                                </td>
+                                            </>
+                                        )}
+                            </tr>
+                            ))
                                 }
-                            </tbody>
-                        </table>
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
-                {closeDeleting && selectedTask && <DeleteTask onCloseDeleting={setCloseDeleting} task={selectedTask} />}
-                {closeUpdating && selectedTask && <UpdateTask oncloseUpdating={setCloseUpdating} task={selectedTask} />}
             </div>
-        </div >
+            {closeDeleting && selectedTask && <DeleteTask onCloseDeleting={setCloseDeleting} task={selectedTask} />}
+            {closeUpdating && selectedTask && <UpdateTask oncloseUpdating={setCloseUpdating} task={selectedTask} />}
+        </div>
+    </div >
     </>);
 
 }

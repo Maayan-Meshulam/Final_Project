@@ -1,10 +1,11 @@
 const buildError = require("../../helpers/erorrs/errorsHandeling");
 const User = require("./mongoDB/User");
-const DB = "MongoDB"
+const DB = process.env.DB
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const { getMyTasks, getAllTasks, getTaskById } = require("../../tasks/models/taskAccessDBService");
 const Task = require("../../tasks/models/mongoDB/Task");
+
 
 //create user - register
 const createUser = async (newUser) => {
@@ -16,6 +17,8 @@ const createUser = async (newUser) => {
             user = await user.save();
             return user;
         }
+        else
+            throw buildError("Mongoose Error:", "DB type is not exist", 500)
 
     } catch (error) {
         throw buildError("mongoose Error", error.message, 500);
@@ -28,12 +31,16 @@ const getUserById = async (userId) => {
     console.log(userId + "/////");
 
     try {
-        const user = await User.findById({ _id: userId });
-        console.log(JSON.stringify(user));
-        return user;
+        if (DB == "MongoDB") {
+            const user = await User.findById({ _id: userId });
+            console.log(JSON.stringify(user));
+            return user;
+        }
+        else
+            throw buildError("Mongoose Error:", "DB type is not exist", 500)
 
     } catch (error) {
-        throw buildError("mongoose Error", error, 500);
+        throw buildError("mongoose Error", error.message, 500);
     }
 };
 
@@ -43,15 +50,19 @@ const getUserByEmail = async (email) => {
     console.log("in get user by email DB");
 
     try {
-        console.log("inn");
+        if (DB == "MongoDB") {
+            console.log("inn");
 
-        const user = await User.findOne({ email });
-        console.log(user);
+            const user = await User.findOne({ email });
+            console.log(user);
 
-        return user;
+            return user;
+        }
+        else
+            throw buildError("Mongoose Error:", "DB type is not exist", 500)
 
     } catch (error) {
-        throw buildError("mongoose Error", error, 500);
+        throw buildError("mongoose Error", error.message, 500);
     }
 };
 
@@ -62,13 +73,17 @@ const getAllUsers = async (managerEmployeesArray) => {
     console.log(managerEmployeesArray)
 
     try {
-        const allUsers = await User.find({ _id: { $in: managerEmployeesArray } });
-        console.log(allUsers + " all users");
+        if (DB == "MongoDB") {
+            const allUsers = await User.find({ _id: { $in: managerEmployeesArray } });
+            console.log(allUsers + " all users");
 
-        return allUsers;
+            return allUsers;
+        }
+        else
+            throw buildError("Mongoose Error:", "DB type is not exist", 500)
 
     } catch (error) {
-        throw buildError("mongoose Error", error, 500);
+        throw buildError("mongoose Error", error.message, 500);
     }
 };
 
@@ -77,90 +92,116 @@ const updateUser = async (userId, newUser) => {
     console.log("in update user DB");
 
     try {
-        const user = await User.findByIdAndUpdate(userId, newUser, { new: true });
-        return user;
+        if (DB == "MongoDB") {
+            const user = await User.findByIdAndUpdate(userId, newUser, { new: true });
+            return user;
+        }
+        else
+            throw buildError("Mongoose Error:", "DB type is not exist", 500)
 
     } catch (error) {
-        throw buildError("mongoose Error", error, 500);
+        throw buildError("mongoose Error", error.message, 500);
     }
 };
 
 //delete user
 const deleteUser = async (userId, managerId) => {
-    console.log("innnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn ---------------------");
+    console.log("innnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn");
 
-    console.log(userId);
+    console.log(userId + " user id #");
 
     console.log("delete user DB");
     try {
-        await transformTasks_employees(userId, managerId);
-        const user = await User.findByIdAndDelete(userId);
-        await deleteUserFromManager(userId, managerId);
-        return user;
+        if (DB == "MongoDB") {
+            await transformTasks_employees(userId, managerId); // העברת נתונים למנהל
+            const user = await User.findByIdAndDelete(userId);//מחיקת המשתמש
+            await deleteUserFromManager(userId, managerId);//מחיקת המשתמש ממערך העובדים של המנהל
+            return user;
+        }
+        else
+            throw buildError("Mongoose Error:", "DB type is not exist", 500)
 
     } catch (error) {
-        throw buildError("mongoose Error", error, 500);
+        throw buildError("mongoose Error", error.message, 500);
     }
 };
 
 const transformTasks_employees = async (idToDelete, manager_id) => {
     try {
-        console.log("in tranfrom");
+        if (DB == "MongoDB") {
+            console.log("in tranfrom");
 
-        console.log(idToDelete);
+            console.log(idToDelete + " user id to delete %");
 
-        const user = await getUserById(idToDelete);
+            const user = await getUserById(idToDelete);
+            console.log(user + " user to delete %");
 
-        const managerId = user.directManager;
-        console.log(managerId , " ...");
+            const employees = user.connectedEmployess;
+            console.log(employees, " user employees %");
 
-        const manager = await getUserById(managerId);
-        console.log(manager , " ***");
+            const managerId = user.directManager;
+            console.log(managerId, " direct manager %");
 
-        const employees = user.connectedEmployess;
-        console.log(employees , " ////");
+            const manager = await getUserById(managerId);
+            console.log(manager, "  manager %");
 
-        const myTasks = await getMyTasks(idToDelete);
-        console.log(myTasks , " 7777");
+            const myTasks = await getMyTasks(idToDelete);
+            console.log(myTasks, "  users tasks %");
 
-        const myEmployeesTaks = await getAllTasks(employees);
-        console.log(myEmployeesTaks , " ###");
+            const myEmployeesTaks = await getAllTasks(employees);
+            console.log(myEmployeesTaks, " all employess users tasks");
 
-        //נעביר את כל העובדים של המשמתש למנהל שלו
-        const updatedManagerEmployees = [...manager.connectedEmployess, ...employees];
-        console.log(updatedManagerEmployees);
 
-        const newUser = await User.findByIdAndUpdate(managerId, {
-            connectedEmployess: updatedManagerEmployees
-        }, { new: true });
+            //נעביר את כל העובדים של המשמתש למנהל שלו
+            const updatedManagerEmployees = Array.from(new Set([...manager.connectedEmployess, ...employees]));
+            console.log(updatedManagerEmployees);
+            console.log("update here new employess array of the manager");
 
-        console.log(newUser);
+            const newUser = await User.findByIdAndUpdate(managerId, {
+                connectedEmployess: updatedManagerEmployees
+            }, { new: true });
 
-        //משימות אישיות של המשתמש / שקיבל מהמנהל הישיר יעברו למנהל
+            console.log(newUser);
+            console.log("update here new manager details %");
 
-        for (const task of myTasks) {
-            console.log(2);
 
-            await Task.findByIdAndUpdate(task._id, {
-                workerTaskId: managerId,
-                userIdCreatorTask: managerId,
-                type: "1"
-            });
+            //משימות אישיות של המשתמש / שקיבל מהמנהל הישיר יעברו למנהל
 
-            console.log(22);
+            await Promise.all([
+
+                ...(employees.map((employee) => {
+                    return employee.directManager == managerId;
+                })),
+
+                ...(myTasks.map((task) => {
+                    console.log(2);
+
+                    return Task.findByIdAndUpdate(task._id, {
+                        workerTaskId: managerId,
+                        userIdCreatorTask: managerId,
+                        type: "1"
+                    });
+
+                })),
+
+                ...(myEmployeesTaks.map((task) => {
+                    console.log(1);
+
+                    return Task.findByIdAndUpdate(task._id, {
+                        userIdCreatorTask: managerId,
+                        type: "2"
+                    });
+
+                }))]).then(res => {
+                    console.log(res.data);
+                }).catch(error => {
+                    throw buildError("Mongoose Error:", error.message, 400)
+                })
 
         }
+        else
+            throw buildError("Mongoose Error:", "DB type is not exist", 500)
 
-        for (const task of myEmployeesTaks) {
-            console.log(1);
-
-            await Task.findByIdAndUpdate(task._id, {
-                userIdCreatorTask: managerId,
-                type: "1"
-            });
-
-            console.log(11);
-        }
     } catch (error) {
         throw buildError("mongoose Error", error.message, 500);
 
@@ -170,15 +211,23 @@ const transformTasks_employees = async (idToDelete, manager_id) => {
 
 const deleteUserFromManager = async (userId, managerId) => {
     try {
-        console.log(managerId + "00000000000000000000000000000000000000000000000000000000");
+        if (DB == "MongoDB") {
 
-        const user = await User.findByIdAndUpdate(managerId, { $pull: { connectedEmployess: userId } }, { new: true });
-        console.log(user.connectedEmployess);
-        console.log("8989898989989889");
+            console.log(managerId + "00000000000000000000000000000000000000000000000000000000");
 
-        const root = await getUserByEmail("root@gmail.com");
-        await User.findByIdAndUpdate(root._id, { $pull: { connectedEmployess: userId } }, { new: true });
-        console.log(root.connectedEmployess);
+            const user = await User.findByIdAndUpdate(managerId, { $pull: { connectedEmployess: userId } }, { new: true });
+            console.log(user.connectedEmployess);
+            console.log("8989898989989889");
+
+            const root = await getUserByEmail("root@gmail.com");
+            if (user._id != root._id) {
+                await User.findByIdAndUpdate(root._id, { $pull: { connectedEmployess: userId } }, { new: true });
+                console.log(root.connectedEmployess);
+            }
+        }
+        else
+            throw buildError("Mongoose Error:", "DB type is not exist", 500)
+
     } catch (error) {
         throw buildError("mongoose Error", error.message, 500);
 
@@ -191,20 +240,23 @@ const verifyLogin = async (email, password) => {
     console.log(email, password);
 
     try {
+        if (DB == "MongoDB") {
 
-        const user = await User.findOne({ email });
-        console.log(typeof user);
+            const user = await User.findOne({ email });
+            console.log(typeof user);
 
-        console.log(user + "*****");
-        console.log(user.password, password);
+            console.log(user + "*****");
 
+            let isVaid = false;
+            if (user) isVaid = await bcrypt.compare(password, user.password);
 
-        let isVaid = false;
-        if (user) isVaid = await bcrypt.compare(password, user.password);
+            console.log(isVaid + "1212123132");
 
-        console.log(isVaid + "1212123132");
+            return isVaid;
+        }
+        else
+            throw buildError("Mongoose Error:", "DB type is not exist", 500)
 
-        return isVaid;
     } catch (error) {
         throw buildError("mongoose Error", error.message, 500);
     }
@@ -212,57 +264,62 @@ const verifyLogin = async (email, password) => {
 
 const connectEmployeToManager = async (managerLevel, managerId, userToAddId, newArrayEmployees) => {
     try {
+        if (DB == "MongoDB") {
 
-        console.log("form db patch");
+            console.log("form db patch");
 
-        let directManagerEmployeesArray = newArrayEmployees;
+            let directManagerEmployeesArray = newArrayEmployees;
 
-        //במידה ומגיע מהדפדפן
-        if (newArrayEmployees.connectedEmployess) {
-            directManagerEmployeesArray = (newArrayEmployees.connectedEmployess).map(employeId => new mongoose.Types.ObjectId(employeId));
+            //במידה ומגיע מהדפדפן
+            if (newArrayEmployees.connectedEmployess) {
+                directManagerEmployeesArray = (newArrayEmployees.connectedEmployess).map(employeId => new mongoose.Types.ObjectId(employeId));
+            }
+
+            directManagerEmployeesArray.push(userToAddId);
+
+            //לשייך את העובד גם לאדמין הראשי
+            if (managerLevel != 3) {
+                const root = await getUserByEmail("root@gmail.com");
+                let rootConnectedEmployess = root.connectedEmployess;
+                rootConnectedEmployess = [...root.connectedEmployess, userToAddId]
+
+                const rootId = root._id;
+
+                await User.findOneAndUpdate({ _id: rootId },
+                    { $set: { connectedEmployess: rootConnectedEmployess } },
+                    { new: true })
+
+                console.log("finish root");
+            }
+
+
+            await User.findOneAndUpdate({ _id: managerId },
+                { $set: { connectedEmployess: directManagerEmployeesArray } },
+                { new: true });
         }
 
-        directManagerEmployeesArray.push(userToAddId);
-
-        //לשייך את העובד גם לאדמין הראשי
-        if (managerLevel != 3) {
-            const root = await getUserByEmail("root@gmail.com");
-            let rootConnectedEmployess = root.connectedEmployess;
-            rootConnectedEmployess = [...root.connectedEmployess, userToAddId]
-
-            const rootId = root._id;
-
-            await User.findOneAndUpdate({ _id: rootId },
-                { $set: { connectedEmployess: rootConnectedEmployess } },
-                { new: true })
-
-            console.log("finish root");
-        }
-
-
-        await User.findOneAndUpdate({ _id: managerId },
-            { $set: { connectedEmployess: directManagerEmployeesArray } },
-            { new: true });
-
+        else
+            throw buildError("Mongoose Error:", "DB type is not exist", 500)
 
     } catch (error) {
-        console.log("erorr", error.message, 500);
 
-        throw buildError("mongoose Error", error, 500)
+        throw buildError("mongoose Error", error.message, 500);
     }
 }
 
 const changePassword = async (newPassword, userId) => {
     try {
-        console.log("form db  password");
+        if (DB == "MongoDB") {
+            console.log("form db  password");
 
-
-        const user = await User.findOneAndUpdate({ _id: userId }, { $set: { password: newPassword } }, { new: true });
-
-        return user;
+            const user = await User.findOneAndUpdate({ _id: userId }, { $set: { password: newPassword } }, { new: true });
+            return user;
+        }
+        else
+            throw buildError("Mongoose Error:", "DB type is not exist", 500)
 
     } catch (error) {
-        throw buildError("mongoose Error", error, 500)
+        throw buildError("mongoose Error", error.message, 500);
     }
 }
 

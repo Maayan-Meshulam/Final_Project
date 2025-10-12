@@ -42,7 +42,8 @@ const Login: FunctionComponent<LoginProps> = () => {
                     userInfo.managerLevel < 1 ? nav('/tasks/myTasks') : nav('/users/managerDash');
                     successMessage(" התחברת בהצלחה ! ברוך הבא");
                 })
-                .catch(error => errorMessage(error.response.data));
+                .catch(error => error.response ? errorMessage(error.response.data)
+                    : errorMessage("שגיאה כללית -לא נשלחה בקשה"));
         })
     });
 
@@ -56,14 +57,14 @@ const Login: FunctionComponent<LoginProps> = () => {
 
                 <CreateInputs type="password" id="password" name="סיסמא" formik={formik} />
 
-                <p style={{color:"white"}}>שכחת סיסמא ? לחץ <Link to="/users/send-email">כאן</Link> לשחזור</p>
+                <p style={{ color: "white" }}>שכחת סיסמא ? לחץ <Link to="/users/send-email">כאן</Link> לשחזור</p>
 
                 <div className={style.Btn_Form_Container}>
                     <button
                         className={style.login_btn}
                         type="submit"
                         disabled={!formik.dirty || !formik.isValid}
-                        >login
+                    >login
                     </button>
 
                     <button

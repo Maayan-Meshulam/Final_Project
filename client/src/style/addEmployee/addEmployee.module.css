@@ -6,6 +6,7 @@
   flex-direction: column;
   align-items: center;
   background-color: lightblue;
+  background-color: rgba(122, 203, 244, 0.8745098039);
   position: fixed;
   left: 50%;
   top: calc(50% + 60px);

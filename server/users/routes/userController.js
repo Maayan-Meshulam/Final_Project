@@ -73,7 +73,7 @@ router.post('/addUser', auth, userValidation, async (req, res, next) => {
 
         res.status(201).json({
             new_user: user,
-            new_token : updatedToken
+            new_token: updatedToken
         });
 
     } catch (error) {
@@ -215,21 +215,25 @@ router.delete('/:id', auth, async (req, res, next) => {
     console.log("in delte user router **************************************************************************");
     try {
         let { id } = req.params;
-        console.log(id);
+        console.log(id + " user id !");
         let user = req.userInfo;
+        console.log(user + " user info !");
 
         let managerId = req.body.manager_id;
-        console.log(managerId + "55555555555");
+        console.log(managerId + " manager id !");
 
+        if (!user) {
+            return next(buildError(("Error", "user not exsist", 400)));
+        }
 
         //בדיקת הרשאות משתמש - המנהל
         if (!(user.connectedEmployess).includes(id)) {
-            return next(("Authentication Error", "user not allow, access block", 403))
+            return next(buildError(("Authentication Error", "user not allow, access block", 403)))
         }
 
         //שמירת נתונים במסד
         user = await deleteUser(id, managerId);
-        res.status(200).send(user);
+        res.status(200).send("משתמש נמחק בהצלחה וכל הנתונים שלו הועברו למנהל הישיר");
 
     } catch (error) {
         return next(buildError("General Error", error, 403));

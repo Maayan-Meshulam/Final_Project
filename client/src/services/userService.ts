@@ -1,5 +1,5 @@
 import axios from "axios";
-const API_USERS = 'http://localhost:3131/users';
+const API_USERS = import.meta.env.VITE_API_USERS
 
 //התחברות
 const loginUser = (user: any) => {

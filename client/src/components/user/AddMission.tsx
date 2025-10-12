@@ -56,7 +56,7 @@ const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission, onT
                     setArrEmployess(res.data);
                     return res.data;
                 })
-                .catch(err => { console.log(err) })
+                .catch(error => errorMessage(error.message))
         }
     }, []);
 
@@ -91,7 +91,8 @@ const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission, onT
                     formik.resetForm();
                     successMessage("משימה נוספה בהצלחה !")
                 })
-                .catch(error => errorMessage(error.response.data));
+                .catch(error => error.response ? errorMessage(error.response.data)
+                    : errorMessage("שגיאה כללית -לא נשלחה בקשה"));
         }
     });
 

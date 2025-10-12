@@ -2,6 +2,7 @@ import { useEffect, useState, type FunctionComponent } from "react";
 import { patchPass } from "../../services/userService";
 import { getTokenInStorage } from "../../services/tokenService";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { errorMessage } from "../../toastify/toastifyService";
 
 interface ChangePasswordProps {
 
@@ -80,7 +81,7 @@ const ChangePassword: FunctionComponent<ChangePasswordProps> = () => {
                 console.log(res.data);
                 nav("/");
             })
-            .catch(err => console.log(err))
+            .catch(error => errorMessage(error.message))
     }
 
     return (<>

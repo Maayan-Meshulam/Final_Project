@@ -3,7 +3,7 @@ const buildError = require("../../helpers/erorrs/errorsHandeling");
 const User = require("../models/mongoDB/User");
 const normaliztionUser = require("../helpers/normalizeUser");
 const { hash } = require("bcrypt");
-const VALIDATOR = "joi";
+const VALIDATOR = process.env.VALIDATOR;
 
 const userValidation = async (req, res, next) => {
 
@@ -38,7 +38,7 @@ const userValidation = async (req, res, next) => {
         return next(buildError("validation Type Error", "validation type not exist", 400));
 
     } catch (error) {
-        next(buildError("Genral Error:", error, 500));
+        return next(buildError("Genral Error:", error.message, 500));
     }
 };
 

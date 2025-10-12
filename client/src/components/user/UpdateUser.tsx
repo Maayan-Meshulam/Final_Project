@@ -100,7 +100,8 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
                         throw new Error(error.message);
                     }
                 })
-                .catch(error => errorMessage(error.response.data));
+                .catch(error => error.response ? errorMessage(error.response.data)
+                    : errorMessage("שגיאה כללית -לא נשלחה בקשה"));
         }
     });
 

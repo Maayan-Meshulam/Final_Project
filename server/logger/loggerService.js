@@ -1,6 +1,6 @@
 const morganLogger = require("./morgan/morganLogger");
 
-const LOGGER = "morgan";
+const LOGGER = process.env.LOGGER;
 
 const loggerMiddleWare = () => {
     if (LOGGER == "morgan")

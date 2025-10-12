@@ -1,7 +1,7 @@
 const Jwt = require("jsonwebtoken");
 const { getUserById, getUserByEmail } = require("../../users/models/userAccessDBService");
 const buildError = require("../../helpers/erorrs/errorsHandeling");
-const SECRET_KEY = "secret"
+const SECRET_KEY = process.env.SECRET_KEY;
 
 //יצירת טוקן
 const generateToken = async (user) => {
@@ -17,23 +17,26 @@ const generateToken = async (user) => {
             console.log("noooooo");
             throw new Error("Mongoode Error, user's datails not rigth / need registeration");
         }
+        else {
 
-        console.log("importent!! "+ userFromDB.connectedEmployess);
-        
 
-        const payload = {
-            id: userFromDB._id,
-            managerLevel: userFromDB.managerLevel,
-            connectedEmployess: userFromDB.connectedEmployess,
+
+            console.log("importent!! " + userFromDB.connectedEmployess);
+
+
+            const payload = {
+                id: userFromDB._id,
+                managerLevel: userFromDB.managerLevel,
+                connectedEmployess: userFromDB.connectedEmployess,
+            }
+
+            console.log(userFromDB._id);
+
+            console.log(payload);
+
+            const token = Jwt.sign(payload, SECRET_KEY);
+            return token;
         }
-
-        console.log(userFromDB._id);
-
-        console.log(payload);
-
-        const token = Jwt.sign(payload, SECRET_KEY);
-        return token;
-
     } catch (error) {
         throw new Error(error);
     }

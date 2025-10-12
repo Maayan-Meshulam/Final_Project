@@ -27,7 +27,7 @@ const DeleteUser: FunctionComponent<DeleteUserProps> = ({ onCloseDeleting, user,
                 onClick={() => onCloseDeleting(false)}
             >&#10060;</button>
 
-            <h3 style={{ color: "red" }}>אתה בטוחה שברצונך למחוק משימה זו ?</h3>
+            <h3 style={{ color: "red" }}>אתה בטוחה שברצונך למחוק משתמש זה ?</h3>
             <br /><br />
 
             <div>
@@ -57,9 +57,8 @@ const DeleteUser: FunctionComponent<DeleteUserProps> = ({ onCloseDeleting, user,
                             successMessage("משתמש נחמק בהצלחה !");
                             infoMessage("משימות ועובדים משוכים למנהל הישיר");
                         })
-                        .catch(error => {
-                            errorMessage(error.response.data);
-                        })
+                        .catch(error => error.response ? errorMessage(error.response.data)
+                            : errorMessage("שגיאה כללית -לא נשלחה בקשה"));
                 }}>
                 delete
             </button>

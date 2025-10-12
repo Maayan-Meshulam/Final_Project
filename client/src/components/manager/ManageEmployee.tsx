@@ -9,6 +9,7 @@ import UpdateUser from "../user/UpdateUser";
 import FilterBar from "../layot/FilterBar";
 import AddNewEmployee from "../user/AddNewEmployee";
 import ErrorPremission from "../layot/ErrorPremission";
+import { errorMessage } from "../../toastify/toastifyService";
 
 interface ManageEmployeeProps {
 
@@ -96,10 +97,9 @@ const ManageEmployee: FunctionComponent<ManageEmployeeProps> = () => {
                 setArrFilter(res.data);
                 setArrTemp(res.data);
             })
-            .catch((err) => {
-                console.log(err);
-            })
-    }, [toggleCloseDeleting, userInfo]);
+            .catch(error => errorMessage(error.message))
+
+    }, [closeDeleting, userInfo]);
 
 
     useEffect(() => {
@@ -190,7 +190,7 @@ const ManageEmployee: FunctionComponent<ManageEmployeeProps> = () => {
                                     console.log('click on', user._id);
                                     getUserById(user._id, token)
                                         .then(res => nav(`/users/${user._id}`))
-                                        .catch(err => console.log(err))
+                                        .catch(error => errorMessage(error.message))
                                 }}>
                                     <i className="fa-solid fa-eye"></i>
                                 </td>

@@ -1,5 +1,6 @@
 import axios from "axios";
-const API_TASK = 'http://localhost:3131/tasks'
+const API_TASK = import.meta.env.VITE_API_TASK
+
 
 //הוספת משימה
 const addTask = (task: any, token: string) => {

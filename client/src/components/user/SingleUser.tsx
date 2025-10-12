@@ -12,6 +12,7 @@ import DeleteUser from "./DeleteUser";
 import UpdateUser from "./UpdateUser";
 import imageTaskSrc from "../../images/task.png";
 import ErrorPremission from "../layot/ErrorPremission";
+import { errorMessage } from "../../toastify/toastifyService";
 
 
 interface SingleUserProps {
@@ -40,9 +41,8 @@ const SingleUser: FunctionComponent<SingleUserProps> = () => {
                 console.log(res.data);
                 setUser(res.data);
             })
-            .catch(err => {
-                console.log(err)
-            })
+            .catch(error => errorMessage(error.message))
+
     }, [toggleUpdaedUser]);
 
     if (!userInfo.id) {

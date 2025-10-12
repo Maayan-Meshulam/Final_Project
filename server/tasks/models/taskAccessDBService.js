@@ -1,7 +1,7 @@
 //Task modle
 const buildError = require("../../helpers/erorrs/errorsHandeling");
 const Task = require("./mongoDB/Task");
-const DB = "MongoDB" // ----> אינטגרציה ??
+const DB = process.env.DB // ----> אינטגרציה ??
 
 //add task
 const createTask = async (newTask) => {
@@ -12,10 +12,11 @@ const createTask = async (newTask) => {
             task = await task.save();
             return task;
         }
-        return (buildError("Mongoose Error:", "DB type is not exist", 500))
+        else
+            throw buildError("Mongoose Error:", "DB type is not exist", 500)
 
     } catch (error) {
-        return (buildError("Mongoose Error:", error, 500))
+        throw (buildError("Mongoose Error:", error.message, 500))
     }
 }
 
@@ -28,10 +29,11 @@ const getAllTasks = async (connectedEmployess) => {
             console.log(JSON.stringify(allTasks) + "////////////////");
             return allTasks;
         }
-        return (buildError("Mongoose Error:", "DB type is not exist", 500))
+        else
+            throw buildError("Mongoose Error:", "DB type is not exist", 500)
 
     } catch (error) {
-        return (buildError("Mongoose Error:", error, 500))
+        throw (buildError("Mongoose Error:", error.message, 500))
     }
 
 
@@ -47,10 +49,11 @@ const getMyTasks = async (userId) => {
             const myTasks = await Task.find({ workerTaskId: userId });
             return myTasks;
         }
-        return (buildError("Mongoose Error:", "DB type is not exist", 500))
+        else
+            throw buildError("Mongoose Error:", "DB type is not exist", 500)
 
     } catch (error) {
-        return (buildError("Mongoose Error:", error, 500))
+        throw (buildError("Mongoose Error:", error.message, 500))
     }
 
 }
@@ -64,10 +67,11 @@ const getTaskById = async (taskId) => {
             const task = await Task.findById(taskId);
             return task;
         }
-        return (buildError("Mongoose Error:", "DB type is not exist", 500))
+        else
+            throw buildError("Mongoose Error:", "DB type is not exist", 500)
 
     } catch (error) {
-        return (buildError("Mongoose Error:", error, 500))
+        throw (buildError("Mongoose Error:", error.message, 500))
     }
 }
 
@@ -79,10 +83,11 @@ const updateTask = async (taskId, newTask) => {
             const taskUpdated = await Task.findByIdAndUpdate(taskId, newTask, { new: true });
             return taskUpdated;
         }
-        return (buildError("Mongoose Error:", "DB type is not exist", 500))
+        else
+            throw buildError("Mongoose Error:", "DB type is not exist", 500)
 
     } catch (error) {
-        return (buildError("Mongoose Error:", error, 500))
+        throw (buildError("Mongoose Error:", error.message, 500))
     }
 }
 
@@ -95,10 +100,11 @@ const deleteTask = async (taskId) => {
             const taskRemove = await Task.findByIdAndDelete(taskId);
             return taskRemove;
         }
-        return (buildError("Mongoose Error:", "DB type is not exist", 500))
+        else
+            throw buildError("Mongoose Error:", "DB type is not exist", 500)
 
     } catch (error) {
-        return (buildError("Mongoose Error:", error, 500))
+        throw (buildError("Mongoose Error:", error.message, 500))
     }
 }
 
@@ -117,8 +123,11 @@ const likeUnlikeTask = async (taskId) => {
 
             return task;
         }
+        else
+            throw buildError("Mongoose Error:", "DB type is not exist", 500)
+
     } catch (error) {
-        return (buildError("Mongoose Error:", error.message, 500))
+        throw (buildError("Mongoose Error:", error.message, 500))
     }
 }
 

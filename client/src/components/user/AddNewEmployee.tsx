@@ -73,15 +73,14 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
                     oncloseAddNewEmployee(false);
                     formik.resetForm();
                     successMessage("מזל טוב ! משתמש חדש נוסף בהצלחה ");
-                    
+
                     //שמירת הטוקן החדש ועדכון הפרטים של המשתמש המחובר 
                     saveTokenInStorage(res.data.new_token);
                     let newUserInfo = tokenDecoding(res.data.new_token) as any //  פענוח הטוקן החדש
                     dispatch(setState(newUserInfo))
                 })
-                .catch(error => {
-                    errorMessage(error.response.data);
-                })
+                .catch(error => error.response ? errorMessage(error.response.data)
+                    : errorMessage("שגיאה כללית -לא נשלחה בקשה"));
 
         }
     });

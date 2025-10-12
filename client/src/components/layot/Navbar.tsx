@@ -38,7 +38,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                 console.log(JSON.stringify(res.data) + "9999");
                 setUser(res.data);
             })
-            .catch(err => console.log(err))
+            .catch(error => errorMessage(error.message))
     }, [userInfo])
 
     useEffect(() => {
@@ -85,9 +85,10 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                                                     console.log(12312312);
                                                     successMessage("איימייל נשלח בהצלחה !")
                                                 })
-                                                .catch(err => errorMessage(err.response.data))
+                                                .catch(error => error.response ? errorMessage(error.response.data)
+                                                    : errorMessage("שגיאה כללית -לא נשלחה בקשה"));
                                         }}>Edit User</span>
-                                    {user && <img src={user.image.src} alt={user.image.alt} />}
+                                    {user && <img className={style.profile} src={`http://localhost:3131/${user.image.url}`} alt={user.image.alt} />}
                                 </li>
                             }
 
@@ -140,7 +141,8 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                                                     console.log(12312312);
                                                     successMessage("איימייל נשלח בהצלחה !")
                                                 })
-                                                .catch(err => errorMessage(err.response.data))
+                                                .catch(error => error.response ? errorMessage(error.response.data)
+                                                    : errorMessage("שגיאה כללית -לא נשלחה בקשה"));
                                         }}>Edit User</span>
                                     {user && <img className={style.profile} src={`http://localhost:3131/${user.image.url}`} alt={user.image.alt} />}
                                 </li>

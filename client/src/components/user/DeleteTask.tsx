@@ -53,9 +53,8 @@ const DeleteTask: FunctionComponent<DeleteTaskProps> = ({ task, onCloseDeleting 
                             if (id) nav(-1);
                             successMessage("משימה נמחקה בהצלחה !")
                         })
-                        .catch(error => {
-                            errorMessage(error.response.data);
-                        })
+                        .catch(error => error.response ? errorMessage(error.response.data)
+                            : errorMessage("שגיאה כללית -לא נשלחה בקשה"));
                 }}>
                 delete
             </button>

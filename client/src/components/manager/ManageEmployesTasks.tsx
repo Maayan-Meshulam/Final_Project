@@ -9,7 +9,7 @@ import UpdateTask from "../user/UpdaeTask";
 import style from '../../style/previewMission/preivewDiaplayMission.module.css';
 import AddMission from "../user/AddMission";
 import { getUserById } from "../../services/userService";
-import { infoMessage } from "../../toastify/toastifyService";
+import { errorMessage, infoMessage } from "../../toastify/toastifyService";
 
 
 interface ManageAllEmployesTasksProps {
@@ -68,9 +68,8 @@ const ManageAllEmployesTasks: FunctionComponent<ManageAllEmployesTasksProps> = (
                 setAllMyTasks(res.data);
                 setArrDeepSearch(res.data);
             })
-            .catch((err: any) => {
-                console.log(err);
-            });
+            .catch(error => errorMessage(error.message))
+
     }, [userInfo])
 
 
@@ -182,7 +181,7 @@ const ManageAllEmployesTasks: FunctionComponent<ManageAllEmployesTasksProps> = (
                                                                 { ...task, star: res.data.star == 1 ? 1 : 0 } : Originaltask
                                                         }));
                                                     })
-                                                    .catch(err => console.log(err))
+                                                    .catch(error => errorMessage(error.message))
                                             }}>
                                                 {task.star == 1 ? <span className="starClick">&#9733;</span> :
                                                     <span className="starClick">&#9734;</span>}
@@ -200,7 +199,7 @@ const ManageAllEmployesTasks: FunctionComponent<ManageAllEmployesTasksProps> = (
                                                 console.log('click on', task._id);
                                                 getTaskById(task._id, token)
                                                     .then(res => nav(`/tasks/${task._id}`))
-                                                    .catch(err => console.log(err))
+                                                    .catch(error => errorMessage(error.message))
                                             }}>
                                                 <i className="fa-solid fa-eye"></i>
                                             </td>

@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const buildError = require("../../helpers/erorrs/errorsHandeling");
 
 const transport = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -24,7 +25,7 @@ const email = async (email, messageHtml, title) => {
         return message
 
     } catch (error) {
-        console.log(error);
+        return buildError('Email Error:', error.message, 500)
     }
 };
 

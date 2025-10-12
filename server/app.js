@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
-const PORT = 3131;
+
+require("dotenv").config();
+const PORT = process.env.PORT;
+
 
 //נתיב שמכיל בתוכו את כל הנתיבים
 const router = require("./router/router");

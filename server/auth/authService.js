@@ -2,7 +2,7 @@ const { json } = require("express");
 const buildError = require("../helpers/erorrs/errorsHandeling");
 const { verifyToken } = require("./providers/jwt");
 
-const TOKEN_GENERATOR = "Jwt";
+const TOKEN_GENERATOR = process.env.TOKEN_GENERATOR;
 
 const auth = (req, res, next) => {
 

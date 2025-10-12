@@ -10,6 +10,7 @@ import { getUserById } from "../../services/userService";
 import { useSelector } from "react-redux";
 import imageTaskSrc from "../../images/task.png";
 import ErrorPremission from "../layot/ErrorPremission";
+import { errorMessage } from "../../toastify/toastifyService";
 
 interface SingleMissionProps {
 
@@ -49,16 +50,16 @@ const SingleMission: FunctionComponent<SingleMissionProps> = () => {
                                     nameWorker = `${res1.data.name.first} ${res1.data.name.last}`
                                     setWorkerTaskName(nameWorker);
                                 })
-                                .catch(err => console.log(err));
+                                .catch(error => errorMessage(error.message))
                         }
                         else {
                             setWorkerTaskName(nameCreator); // יוצר ועובד אותו אחד
                         }
                     })
-                    .catch(err => console.log(err));
+                    .catch(error => errorMessage(error.message))
 
             })
-            .catch(err => console.log(err))
+            .catch(error => errorMessage(error.message))
     }, [toggleupdatedTask, user]);
 
     if (!user.id) {
@@ -74,7 +75,7 @@ const SingleMission: FunctionComponent<SingleMissionProps> = () => {
 
             <div className={style.containerWithImg}>
                 <div className={style.task_characterization}>
-                    <div style={{display:"flex"}}>
+                    <div style={{ display: "flex" }}>
                         <h1>{task.star == 1 ? <span>&#9733;</span> :
                             <span>&#9734;</span>}</h1>
 

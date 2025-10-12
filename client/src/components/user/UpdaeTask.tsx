@@ -33,9 +33,8 @@ const UpdateTask: FunctionComponent<UpdateTaskProps> = ({ oncloseUpdating, task 
                 .then(res => {
                     setArrEmployess(res.data);
                 })
-                .catch(err => {
-                    console.log(err);
-                })
+                .catch(error => errorMessage(error.message))
+
         }
     }, [])
 
@@ -63,7 +62,8 @@ const UpdateTask: FunctionComponent<UpdateTaskProps> = ({ oncloseUpdating, task 
                     // window.location.reload();
                     successMessage("משימה עודכנה בהצלחה !")
                 })
-                .catch(error => errorMessage(error.response.data));
+                .catch(error => error.response ? errorMessage(error.response.data)
+                    : errorMessage("שגיאה כללית -לא נשלחה בקשה"));
         }
     });
 

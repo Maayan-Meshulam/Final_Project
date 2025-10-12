@@ -82,7 +82,8 @@ const EnterEmail: FunctionComponent<EnterEmailProps> = () => {
                         console.log(res.data);
                         console.log("look at your email to reset your password !!");
                     })
-                    .catch(err => errorMessage(err.response.data));
+                    .catch(error => error.response ? errorMessage(error.response.data)
+                        : errorMessage("שגיאה כללית -לא נשלחה בקשה"));
             })
             .catch(() => {
                 errorMessage("אימייל שגוי / משתמש לא רשום")
