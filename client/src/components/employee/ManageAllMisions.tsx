@@ -86,8 +86,11 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
     return (<>
         <div className="container">
 
-            <div className="btn_back" onClick={() => nav(-1)}>
+            <div className="btn_back" onClick={() => nav(+1)}>
                 <i className="fa-solid fa-arrow-left"></i>
+            </div>
+            <div className="btn_forword" onClick={() => nav(-1)}>
+                <i className="fa-solid fa-arrow-right"></i>
             </div>
 
             <h1 className="main_title">המשימות שלי</h1>
@@ -204,36 +207,36 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
 
                                             {
                                                 (task.type == "1" || userInfo.id == task.userIdCreatorTask) ? (<>
-                                            <td onClick={() => {
-                                                setCloseUpdating(true);
-                                                setSelectedTask(task);
-                                            }}> <i className="fa-solid fa-pen-to-square"></i>
-                                            </td>
-                                            <td><i className="fa-solid fa-trash" onClick={() => {
-                                                setSelectedTask(task);
-                                                setCloseDeleting(true);
-                                            }}></i>
-                                            </td>
-                                        </>
-                                        ) : (
-                                            <>
-                                                <td> <i className="fa-solid fa-pen-to-square" style={{ color: "gray" }}></i>
-                                                </td>
-                                                <td><i className="fa-solid fa-trash" style={{ color: "gray" }}></i>
-                                                </td>
-                                            </>
-                                        )}
-                            </tr>
-                            ))
+                                                    <td onClick={() => {
+                                                        setCloseUpdating(true);
+                                                        setSelectedTask(task);
+                                                    }}> <i className="fa-solid fa-pen-to-square"></i>
+                                                    </td>
+                                                    <td><i className="fa-solid fa-trash" onClick={() => {
+                                                        setSelectedTask(task);
+                                                        setCloseDeleting(true);
+                                                    }}></i>
+                                                    </td>
+                                                </>
+                                                ) : (
+                                                    <>
+                                                        <td> <i className="fa-solid fa-pen-to-square" style={{ color: "gray" }}></i>
+                                                        </td>
+                                                        <td><i className="fa-solid fa-trash" style={{ color: "gray" }}></i>
+                                                        </td>
+                                                    </>
+                                                )}
+                                        </tr>
+                                    ))
                                 }
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+                {closeDeleting && selectedTask && <DeleteTask onCloseDeleting={setCloseDeleting} task={selectedTask} />}
+                {closeUpdating && selectedTask && <UpdateTask oncloseUpdating={setCloseUpdating} task={selectedTask} />}
             </div>
-            {closeDeleting && selectedTask && <DeleteTask onCloseDeleting={setCloseDeleting} task={selectedTask} />}
-            {closeUpdating && selectedTask && <UpdateTask oncloseUpdating={setCloseUpdating} task={selectedTask} />}
-        </div>
-    </div >
+        </div >
     </>);
 
 }

@@ -69,9 +69,13 @@ const SingleMission: FunctionComponent<SingleMissionProps> = () => {
     return (<>
         {task ? (<div className="container">
 
-            <div className="btn_back" onClick={() => nav(-1)}>
+            <div className="btn_back" onClick={() => nav(+1)}>
                 <i className="fa-solid fa-arrow-left"></i>
             </div>
+            <div className="btn_forword" onClick={() => nav(-1)}>
+                <i className="fa-solid fa-arrow-right"></i>
+            </div>
+
 
             <div className={style.containerWithImg}>
                 <div className={style.task_characterization}>
@@ -127,7 +131,7 @@ const SingleMission: FunctionComponent<SingleMissionProps> = () => {
                 </div>
                 <img className={style.imgTask} src={imageTaskSrc} alt="task" />
             </div>
-        </div >) : (<p>אין הרשאה לפעולה</p>)
+        </div >) : (<ErrorPremission/>)
         }
 
     </>);

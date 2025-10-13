@@ -1,5 +1,5 @@
 .warpper_form {
-    width: 100%;
+    width: 90%;
     max-width: 450px;
     position: fixed;
     top: calc(50% + 45px); //כולל התפריט עליון
@@ -28,6 +28,7 @@
 
 .inlineFormDiv {
     display: flex;
+    width: 100%;
 }
 
 .formInputs {
@@ -55,24 +56,44 @@
     gap: 5px;
 }
 
-#btnclosePopUp, .top_btns_form > button{
+#btnclosePopUp,
+.top_btns_form>button {
     border: none;
-    background-color:inherit;
+    background-color: inherit;
 }
 
-.reset_btn{
+.reset_btn {
     font-size: 20px;
 }
 
 
-.defaultPriority{
+.defaultPriority {
     padding: 7px 15px;
     border: 1px solid #b9b7b7;
     border-radius: 10px;
 }
 
-#nonePriority{background-color: lightgray;}
-#lowPriority{background-color: #f9f961;}
-#middlePriority{background-color: #ffc559;}
-#highPriority{background-color: #fda2a2}
-#veryHighPriority{background-color: red;}
+#nonePriority {
+    background-color: lightgray;
+}
+
+#lowPriority {
+    background-color: #f9f961;
+}
+
+#middlePriority {
+    background-color: #ffc559;
+}
+
+#highPriority {
+    background-color: #fda2a2
+}
+
+#veryHighPriority {
+    background-color: red;
+}
+
+
+@media screen and (max-width:600px) {
+
+}

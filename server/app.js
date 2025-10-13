@@ -21,6 +21,7 @@ app.use(express.static("./public"));
 
 app.use(router);
 
+
 app.use((err, req, res, next) => {
     console.log("error function");
     //ערכים ברירת מחדל - למקרה שלא נשלחו     ??

@@ -32,7 +32,7 @@ router.post('/', async (req, res, next) => {
         res.status(200).send(token);
 
     } catch (error) {
-        return next(buildError("General Error", error, 403));
+        return next(buildError("General Error", error.message, 403));
     }
 });
 

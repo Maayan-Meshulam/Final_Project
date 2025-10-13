@@ -24,7 +24,7 @@
     gap: 15px
 }
 
-.btnQuick{
+.btnQuick {
     border: none;
     background-color: #cee3ea;
     box-shadow: 2px 2px #015e7a;
@@ -35,7 +35,7 @@
     cursor: pointer;
 }
 
-.inlineBtnQuick{
+.inlineBtnQuick {
     text-decoration: none;
     color: black;
 }
@@ -72,4 +72,16 @@
 #messageBoard li,
 #deficiencies li {
     padding: 5px;
+}
+
+@media screen and (max-width:600px) {
+    .managerDash_conatainer {
+        grid-template-areas:
+            'quickButtons quickButtons'
+            'messageBoard messageBoard'
+            'managmentSide argentTasks'
+            'statistics statistics'
+            'statistics statistics'
+            'deficiencies deficiencies'
+   };
 }

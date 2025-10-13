@@ -9,7 +9,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setState } from "../../redux/userInfoState";
 import { saveTokenInStorage, tokenDecoding } from "../../services/tokenService";
-import type { JwtPayload } from "jwt-decode";
 import { errorMessage, successMessage } from "../../toastify/toastifyService";
 
 
@@ -53,9 +52,39 @@ const Login: FunctionComponent<LoginProps> = () => {
         <form onSubmit={formik.handleSubmit} id={style.loginBg}>
             <div className={style.loginForm}>
 
-                <CreateInputs type="text" id="email" name="אימייל" formik={formik} placeholder="example@example.com" />
+                <div>
+                    <div className={`form-floating `}>
 
-                <CreateInputs type="password" id="password" name="סיסמא" formik={formik} />
+                        <label>email :</label>
+                        <input
+                            type="text"
+                            id="email"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values["email"]}
+                            className={`form-control ${style.formInputs}`}
+                        />
+                    </div>
+
+                    <p style={{ color: "white" }}>{formik.touched["email"] && formik.errors["email"]}</p>
+                </div>
+
+                <div>
+                    <div className={`form-floating `}>
+
+                        <label>password :</label>
+                        <input
+                            type="password"
+                            id="password"
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            value={formik.values["password"]}
+                            className={`form-control ${style.formInputs}`}
+                        />
+                    </div>
+
+                    <p style={{ color: "white" }}>{formik.touched["password"] && formik.errors["password"]}</p>
+                </div>
 
                 <p style={{ color: "white" }}>שכחת סיסמא ? לחץ <Link to="/users/send-email">כאן</Link> לשחזור</p>
 

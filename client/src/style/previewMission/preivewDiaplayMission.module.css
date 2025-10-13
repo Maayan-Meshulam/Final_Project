@@ -143,4 +143,10 @@
 .searchIcon {
   position: absolute;
   right: 5px;
+}
+
+@media screen and (max-width: 600px) {
+  .containerAbove {
+    padding: 70px 30px;
+  }
 }/*# sourceMappingURL=preivewDiaplayMission.module.css.map */

@@ -24,14 +24,14 @@ const Footer: FunctionComponent<FooterProps> = () => {
                 {userInfo.id && userInfo.managerLevel < 1 && (
                     <>
                         <div className="footer-item">
-                            <Link className="footer-link" to="/" onClick={() => {
+                            <Link className="footer-link footerLinks ${style.footerLinks}" to="/" onClick={() => {
                                 dispatch(clearState()); //איפוס מידע על המשתמש
                                 removeTokenFromStorage()
                             }}>Exit</Link>
                         </div>
 
                         <div className="footer-item">
-                            <Link className="footer-link" to="/tasks/myTasks">My Tasks</Link >
+                            <Link className={`footer-link ${style.footerLinks}`} to="/tasks/myTasks">My Tasks</Link >
                         </div>
                     </>
                 )}
@@ -40,26 +40,26 @@ const Footer: FunctionComponent<FooterProps> = () => {
                 {userInfo.id && userInfo.managerLevel >= 1 && (
                     <>
                         <div className="footer-item">
-                            <Link className="footer-link" to="/" onClick={() => {
+                            <Link className={`footer-link ${style.footerLinks}`} to="/" onClick={() => {
                                 dispatch(clearState()); //איפוס מידע על המשתמש
                                 removeTokenFromStorage()
                             }}>Exit</Link>
                         </div>
 
                         <div className="footer-item">
-                            <Link className="footer-link" to="/tasks/myTasks">My Tasks</Link >
+                            <Link className={`footer-link ${style.footerLinks}`} to="/tasks/myTasks">My Tasks</Link >
                         </div>
 
                         <div className="footer-item">
-                            <Link className="footer-link" to="/users/managerDash">ManagerDash</Link >
+                            <Link className={`footer-link ${style.footerLinks}`} to="/users/managerDash">ManagerDash</Link >
                         </div>
 
                         <div className="footer-item">
-                            <Link className="footer-link" to="/users/manageEmployess">Manage Employees</Link >
+                            <Link className={`footer-link ${style.footerLinks}`} to="/users/manageEmployess">Manage Employees</Link >
                         </div>
 
                         <div className="footer-item">
-                            <Link className="footer-link" to="/tasks/manageEmployessTasks">Manage Employees Tasks</Link >
+                            <Link className={`footer-link ${style.footerLinks}`} to="/tasks/manageEmployessTasks">Manage Employees Tasks</Link >
                         </div>
                     </>
                 )}
@@ -68,7 +68,7 @@ const Footer: FunctionComponent<FooterProps> = () => {
                 {!userInfo.id && (
                     <>
                         <div className="footer-item">
-                            <Link className="footer-link" to="/">Login</Link>
+                            <Link className={`footer-link ${style.footerLinks}`} to="/">Login</Link>
                         </div>
                     </>
                 )}

@@ -6,7 +6,6 @@
   flex-direction: column;
   align-items: center;
   background-color: lightblue;
-  background-color: rgba(122, 203, 244, 0.8745098039);
   position: fixed;
   left: 50%;
   top: calc(50% + 60px);
@@ -25,6 +24,7 @@
 
 .inline_form_wrapper {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: column;
   gap: 20px;
 }
@@ -37,7 +37,8 @@
   gap: 5px;
 }
 
-#btnclosePopUp, .top_btns_form > button {
+#btnclosePopUp,
+.top_btns_form > button {
   border: none;
   background-color: inherit;
 }
@@ -83,4 +84,20 @@ legend {
 .profile {
   width: 30px;
   height: 30px;
+}
+
+@media screen and (max-width: 600px) {
+  .container_popUp {
+    width: 90%;
+    padding: 10px 20px 30px 20px;
+  }
+  .warpper_form {
+    padding: 0px;
+  }
+  fieldset {
+    display: block;
+  }
+  .formInputs {
+    width: 100%;
+  }
 }/*# sourceMappingURL=addEmployee.module.css.map */

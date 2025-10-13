@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState, type FunctionComponent } from "react";
+import { useEffect, useState, type FunctionComponent } from "react";
 import style from '../../style/addMission/addMission.module.css';
-import { useFormik, type FormikFormProps } from 'formik';
+import { useFormik } from 'formik';
 import CreateInputs from "./CreateInputs.js";
 import CreateSelects from "./CreateSelects.js";
 import * as Yup from 'yup';
@@ -9,7 +9,6 @@ import { addTask } from "../../services/tasksService.js";
 import { useSelector } from "react-redux";
 import { getTokenInStorage } from "../../services/tokenService.js";
 import { getAllUsers } from "../../services/userService.js";
-import ErrorPremission from "../layot/ErrorPremission.js";
 import { errorMessage, successMessage } from "../../toastify/toastifyService.js";
 
 
@@ -125,31 +124,11 @@ const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission, onT
                 <CreateInputs type="text" id="title" name="כותרת ראשית" formik={formik} />
                 <CreateInputs type="text" id="subTitle" name="כותרת משנית" formik={formik} />
                 <CreateInputs type="text" id="description" name="תיאור" formik={formik} />
+
                 <div className={style.inlineFormDiv}>
                     <CreateInputs type="Date" id="deadLine" name="תאריך סיום" formik={formik} />
                     <CreateInputs type="Date" id="receiptDate" name="תאריך קבלה" formik={formik} />
                 </div>
-
-                {/* <div>
-                    <label>רמת דחיפות</label>
-                    <div className={style.inlineFormDiv} id="priorityContainer">
-                        <div className={`${style.priorityOption} ${style.defaultPriority}`} onClick={() => priority.current = "0"} id={priority.current == "0" ? `${style.nonePriority}` : ""}>
-                            ללא
-                        </div>
-                        <div className={`${style.priorityOption} ${style.defaultPriority}`} onClick={() => priority.current = "1"} id={priority.current == "1" ? `${style.lowPriority}` : ""}>
-                            נמוך
-                        </div>
-                        <div className={`${style.priorityOption} ${style.defaultPriority}`} onClick={() => priority.current = "2"} id={priority.current == "2" ? `${style.middlePriority}` : ""}>
-                            בינוני
-                        </div>
-                        <div className={`${style.priorityOption} ${style.defaultPriority}`} onClick={() => priority.current = "3"} id={priority.current == "3" ? `${style.highPriority}` : ""}>
-                            גבוה
-                        </div>
-                        <div className={`${style.priorityOption} ${style.defaultPriority}`} onClick={() => priority.current = "4"} id={priority.current == "4" ? `${style.veryHighPriority}` : ""}>
-                            גבוה מאוד
-                        </div>
-                    </div>
-                </div> */}
 
                 <div className={style.inlineFormDiv}>
                     <CreateSelects id="type" name="סוג" formik={formik}>

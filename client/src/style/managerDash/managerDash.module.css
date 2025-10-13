@@ -67,4 +67,10 @@
 #messageBoard li,
 #deficiencies li {
   padding: 5px;
+}
+
+@media screen and (max-width: 600px) {
+  .managerDash_conatainer {
+    grid-template-areas: "quickButtons quickButtons" "messageBoard messageBoard" "managmentSide argentTasks" "statistics statistics" "statistics statistics" "deficiencies deficiencies";
+  }
 }/*# sourceMappingURL=managerDash.module.css.map */

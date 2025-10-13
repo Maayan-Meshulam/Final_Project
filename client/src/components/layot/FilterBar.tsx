@@ -147,7 +147,6 @@ const FilterBar: FunctionComponent<FilterBarProps> = ({ allEmployees, setfilters
             transition: "2s"
         },
         showFilterSide_false: {
-            height: "400px",
             display: "flex",
             flexDirection: "column",
             gap: "20px",

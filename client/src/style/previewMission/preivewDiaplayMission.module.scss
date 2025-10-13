@@ -55,13 +55,27 @@
     align-items: center;
 }
 
-#inProcessTasks{box-shadow: 1px 1px 2px orange;}
-#urgentTasks{box-shadow: 1px 1px 2px red;}
-#conpleteTasks{box-shadow: 1px 1px 2px green;}
-#allTasks{box-shadow: 1px 1px 2px blue;}
-#inStarTasks{box-shadow: 1px 1px 2px palevioletred;}
+#inProcessTasks {
+    box-shadow: 1px 1px 2px orange;
+}
 
-#addTaskBtn{
+#urgentTasks {
+    box-shadow: 1px 1px 2px red;
+}
+
+#conpleteTasks {
+    box-shadow: 1px 1px 2px green;
+}
+
+#allTasks {
+    box-shadow: 1px 1px 2px blue;
+}
+
+#inStarTasks {
+    box-shadow: 1px 1px 2px palevioletred;
+}
+
+#addTaskBtn {
     border: 1px solid blue;
     background-color: #010179;
     color: white;
@@ -72,11 +86,25 @@
     top: 10px;
 }
 
-.priority0{color:gray;}
-.priority1{color: yellow;}
-.priority2{color: orange;}
-.priority3{color: #fa5656;}
-.priority4{color: red;}
+.priority0 {
+    color: gray;
+}
+
+.priority1 {
+    color: yellow;
+}
+
+.priority2 {
+    color: orange;
+}
+
+.priority3 {
+    color: #fa5656;
+}
+
+.priority4 {
+    color: red;
+}
 
 
 .filter_Bar {
@@ -111,12 +139,18 @@
     margin-right: 20px;
 }
 
-.searchContainer{
+.searchContainer {
     position: relative;
 }
 
-.searchIcon{
+.searchIcon {
     position: absolute;
     right: 5px;
-    
+
+}
+
+@media screen and (max-width:600px) {
+    .containerAbove {
+        padding: 70px 30px;
+    }
 }

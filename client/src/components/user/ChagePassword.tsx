@@ -87,9 +87,13 @@ const ChangePassword: FunctionComponent<ChangePasswordProps> = () => {
     return (<>
         <div className="container">
 
-            <div className="btn_back" onClick={() => nav(-1)}>
+            <div className="btn_back" onClick={() => nav(+1)}>
                 <i className="fa-solid fa-arrow-left"></i>
             </div>
+            <div className="btn_forword" onClick={() => nav(-1)}>
+                <i className="fa-solid fa-arrow-right"></i>
+            </div>
+
 
             <h1 className="main_title">שינוי סיסמא</h1>
 
