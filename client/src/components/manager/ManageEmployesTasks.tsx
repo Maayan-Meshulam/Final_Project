@@ -62,6 +62,10 @@ const ManageAllEmployesTasks: FunctionComponent<ManageAllEmployesTasksProps> = (
     useEffect(() => {
         console.log("hiiiii");
 
+        if (!token)
+            return;
+        
+
         getAllTasks(userInfo.connectedEmployess, token)
             .then((res: any) => {
                 console.log(res.data);

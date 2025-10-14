@@ -32,32 +32,16 @@ const SingleMission: FunctionComponent<SingleMissionProps> = () => {
 
 
     useEffect(() => {
+        if (!token)
+            return;
+        
         getTaskById(id as string, token) //נביא את המשתמש עצמו שיצר את המשימה
             .then(res => {
+                console.log(res.data);
+                
                 setTask(res.data);
-                let nameCreator = "";
-                let nameWorker = "";
-
-                getUserById(res.data.userIdCreatorTask, token)//נביא את המשתמש שיצר את המשימה
-                    .then(inline_res => {
-                        nameCreator = `${inline_res.data.name.first} ${inline_res.data.name.last}`
-                        setWorkerTaskCreator(nameCreator);
-
-                        if (res.data.workerTaskId != res.data.userIdCreatorTask) {
-
-                            getUserById(res.data.workerTaskId, token)//נביא את המשתמש שהמשימה נוצרה בשבילו
-                                .then(res1 => {
-                                    nameWorker = `${res1.data.name.first} ${res1.data.name.last}`
-                                    setWorkerTaskName(nameWorker);
-                                })
-                                .catch(error => errorMessage(error.message))
-                        }
-                        else {
-                            setWorkerTaskName(nameCreator); // יוצר ועובד אותו אחד
-                        }
-                    })
-                    .catch(error => errorMessage(error.message))
-
+                setWorkerTaskCreator(res.data.creatorName);
+                setWorkerTaskName(res.data.workerName);
             })
             .catch(error => errorMessage(error.message))
     }, [toggleupdatedTask, user]);
@@ -131,7 +115,7 @@ const SingleMission: FunctionComponent<SingleMissionProps> = () => {
                 </div>
                 <img className={style.imgTask} src={imageTaskSrc} alt="task" />
             </div>
-        </div >) : (<ErrorPremission/>)
+        </div >) : (<ErrorPremission />)
         }
 
     </>);

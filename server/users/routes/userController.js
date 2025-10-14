@@ -11,31 +11,31 @@ const jwt = require("jsonwebtoken");
 
 
 // //login user
-// router.post('/login', async (req, res, next) => {
-//     console.log("in login user router");
+router.post('/login', async (req, res, next) => {
+    console.log("in login user router");
 
-//     try {
-//         let user = req.body;
-//         console.log(JSON.stringify(user));
+    try {
+        let user = req.body;
+        console.log(JSON.stringify(user));
 
-//         console.log(user.email, user.password + " verify");
+        console.log(user.email, user.password + " verify");
 
 
-//         //בדיקת זהות המשתמש - האם קיים ופרטיו נכונים
-//         if (!await verifyLogin(user.email, user.password)) {
-//             console.log("innnnnnnnnnnnnnnnnnnnn");
+        //בדיקת זהות המשתמש - האם קיים ופרטיו נכונים
+        if (!await verifyLogin(user.email, user.password)) {
+            console.log("innnnnnnnnnnnnnnnnnnnn");
 
-//             return next(buildError("Authentication Error", "user not register / details not right", 403))
-//         }
+            return next(buildError("Authentication Error", "user not register / details not right", 403))
+        }
 
-//         //יצירת טוקן - המשתמש קיים
-//         const token = await generateToken(user);
-//         res.status(200).send(token);
+        //יצירת טוקן - המשתמש קיים
+        const token = await generateToken(user);
+        res.status(200).send(token);
 
-//     } catch (error) {
-//         return next(buildError("General Error", error, 403));
-//     }
-// });
+    } catch (error) {
+        return next(buildError("General Error", error, 403));
+    }
+});
 
 //add user - register
 router.post('/addUser', auth, userValidation, async (req, res, next) => {
@@ -167,9 +167,9 @@ router.get('/:id', auth, async (req, res, next) => {
         let { id } = req.params;
         let user = req.userInfo;
 
-        console.log(id);
-        console.log(user.connectedEmployess);
-
+        console.log(id, "id user");
+        console.log(user.id, " user id second");
+        console.log(user.connectedEmployess ," employess");
 
 
         //בדיקת הרשאות משתמש - המשתמש עצמו / המנהל
@@ -183,7 +183,7 @@ router.get('/:id', auth, async (req, res, next) => {
         res.status(200).send(user);
 
     } catch (error) {
-        return next(buildError("General Error", error, 403));
+        return next(buildError("General Error", error.message, 403));
     }
 });
 

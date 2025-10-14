@@ -4,6 +4,7 @@ const taskValidation = require("../validation/taskValidationService");
 const buildError = require("../../helpers/erorrs/errorsHandeling");
 const auth = require("../../auth/authService");
 const mongoose = require("mongoose");
+const { getUserById } = require("../../users/models/userAccessDBService");
 const router = express.Router();
 
 
@@ -102,12 +103,30 @@ router.get('/:id', auth, async (req, res, next) => {
         const user = req.userInfo;
         const task = await getTaskById(id);
 
+        console.log(user.id, "user id !!$");
+        console.log(task.workerTaskId, " who does !!$");
+        console.log(user.id != task.workerTaskId, " equal ??$");
+
+
         // בדיקת הרשאות - האם זה המשתמש עצמו / עובד שמושיך למנהל / משימה משויכת לעובד
         if (user.id != task.workerTaskId && !(user.connectedEmployess).includes(task.workerTaskId)) {
             return next(buildError("Authorization", "access blocked, user not allow", 403));
         }
 
-        res.status(200).send(task);
+
+        // נוסיף כאן שליפה של שמות המשתמשים ונחזיר אותם כחלק מה-Task
+        const creator = await getUserById(task.userIdCreatorTask);
+        const worker = await getUserById(task.workerTaskId);
+
+        console.log(task, "123");
+        
+        const taskWithNames = {
+            ...task.toObject(),
+            creatorName: `${creator.name.first} ${creator.name.last}`,
+            workerName: `${worker.name.first} ${worker.name.last}`
+        };
+
+        res.status(200).send(taskWithNames);
 
     } catch (error) {
         return next(buildError("Error", error.message, 500))

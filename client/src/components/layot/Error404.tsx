@@ -21,7 +21,7 @@ const Error404: FunctionComponent<Error404Props> = () => {
                         borderRadius: "10px",
                         backgroundColor: "green",
                         color: "white"
-                    }}>login page</button>
+                    }} onClick={()=>nav('/')}>login page</button>
                     <button className="btn_back"
                         onClick={() => nav(-1)}
                         style={{

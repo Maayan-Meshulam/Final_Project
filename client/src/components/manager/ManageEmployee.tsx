@@ -86,6 +86,10 @@ const ManageEmployee: FunctionComponent<ManageEmployeeProps> = () => {
     }
 
     useEffect(() => {
+
+        if (!token)
+            return;
+        
         console.log(userInfo.connectedEmployess);
         console.log(userInfo.connectedEmployess.length);
 

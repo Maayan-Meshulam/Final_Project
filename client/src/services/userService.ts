@@ -4,7 +4,7 @@ const API_USERS = import.meta.env.VITE_API_USERS
 //התחברות
 const loginUser = (user: any) => {
     console.log("in login");
-    return axios.post("/", user);
+    return axios.post(`${API_USERS}/login`, user);
 };
 
 const addUser = (user: any, token: string) => {

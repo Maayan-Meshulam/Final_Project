@@ -64,6 +64,9 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
 
     //בטעינה ראשונית / כשיש שינוי במערך המשימות
     useEffect(() => {
+        if (!token)
+            return;
+        
         getMyTasks(token as string)
             .then(res => {
                 console.log((res.data));

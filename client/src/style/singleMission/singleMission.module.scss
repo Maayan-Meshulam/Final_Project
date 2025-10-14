@@ -54,7 +54,12 @@
 
 
 @media screen and (max-width:600px) {
-    .containerWithImg{
+    .containerWithImg {
         flex-direction: column;
+    }
+
+
+    .task_characterization {
+        text-align: center;
     }
 }

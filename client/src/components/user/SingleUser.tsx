@@ -36,6 +36,9 @@ const SingleUser: FunctionComponent<SingleUserProps> = () => {
     const { id } = useParams() as any
 
     useEffect(() => {
+        if (!token)
+            return;
+        
         getUserById(id, token)
             .then(res => {
                 console.log(res.data);

@@ -1,6 +1,6 @@
 import { useEffect, useState, type FunctionComponent } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { data, Link } from "react-router-dom";
+import { data, Link, useNavigate } from "react-router-dom";
 import { clearState, setState } from "../../redux/userInfoState";
 import { getTokenInStorage, removeTokenFromStorage } from "../../services/tokenService";
 import style from "../../style/navber_footer/navbar_footer.module.css";
@@ -30,20 +30,28 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
 
     useEffect(() => {
         const token = getTokenInStorage();
+        console.log(userInfo, " infooooooooooo");
+        console.log(token, "tokennnnnn");
+
         console.log(userInfo.id + "iddd");
 
-        getUserById(userInfo.id, token as string)
-            .then(res => {
-                console.log("???????????????????????????????????????");
-                console.log(JSON.stringify(res.data) + "9999");
-                setUser(res.data);
-            })
-            .catch(error => errorMessage(error.message))
+        if (token && userInfo.id) {
+            getUserById(userInfo.id, token as string)
+                .then(res => {
+                    console.log("???????????????????????????????????????");
+                    console.log(JSON.stringify(res.data) + "9999");
+                    setUser(res.data);
+                })
+                .catch(error => errorMessage(error.message))
+        }
+
     }, [userInfo])
 
     useEffect(() => {
         setRandomNum(Math.floor(Math.random() * 1_000_000));
     }, [])
+
+    const nav = useNavigate()
 
     return (<>
         <nav className="navbar navbar-expand-lg " id={style.navbarContainer}>
@@ -57,11 +65,12 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                     {userInfo.id && userInfo.managerLevel < 1 && (
                         <>
                             <li className="nav-item">
-                                <Link className="nav-link" to="/" onClick={() => {
+                                <button className="nav-link" onClick={() => {
                                     dispatch(clearState()); //איפוס מידע על המשתמש
                                     removeTokenFromStorage();
-                                    successMessage("התנתקת בהצלחה ! מצפים לראותך בקרוב")
-                                }}>Exit</Link>
+                                    successMessage("התנתקת בהצלחה ! מצפים לראותך בקרוב");
+                                    nav('/')
+                                }}>Exit</button>
                             </li>
 
                             <li className="nav-item">
@@ -102,11 +111,12 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                     {userInfo.id && userInfo.managerLevel >= 1 && (
                         <>
                             <li className="nav-item">
-                                <Link className="nav-link" to="/" onClick={() => {
+                                <button className="nav-link" onClick={() => {
                                     dispatch(clearState()); //איפוס מידע על המשתמש
                                     removeTokenFromStorage();
-                                    successMessage("התנתקת בהצלחה ! מצפים לראותך בקרוב")
-                                }}>Exit</Link>
+                                    successMessage("התנתקת בהצלחה ! מצפים לראותך בקרוב");
+                                    nav('/')
+                                }}>Exit</button>
                             </li>
 
                             <li className="nav-item">
