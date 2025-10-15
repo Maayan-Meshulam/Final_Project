@@ -1,4 +1,4 @@
-import { useEffect, useState, type FunctionComponent } from "react";
+import { use, useEffect, useState, type FunctionComponent } from "react";
 import style from '../../style/previewMission/preivewDiaplayMission.module.css';
 import { useSelector } from "react-redux";
 import { getTokenInStorage } from "../../services/tokenService";
@@ -30,12 +30,13 @@ const ManageEmployee: FunctionComponent<ManageEmployeeProps> = () => {
     const [allUsers, setAllUsers] = useState<any>([]);
     const [displayAddUser, setDisplayAddUser] = useState<boolean>(false);
 
+    const [namesMap, setNamesMap] = useState<Map<string, string>>(new Map());
+
+
 
     const nav = useNavigate();
 
     const filterTable = () => {
-        console.log(16);
-
         const arrAllCities: any = [];
         const arrAllRoles: any = [];
         const arrAllTypeWork: any = [];
@@ -49,9 +50,7 @@ const ManageEmployee: FunctionComponent<ManageEmployeeProps> = () => {
                 return
 
             const [type, ...rest] = key.split("_"); //פירוק למערך לפי התו המועבר
-            console.log(rest);
             const valueOriginal = rest.join(" "); // הרכבת מחרוזת לפי התו המועבר
-            console.log(valueOriginal);
 
             //נוסיף את הערך למערך המתאים לו
             //נקבל מערכים שבכל אחד מהם יש את כל הסינונים שנבחרו בהתאם לסוג שלהם
@@ -89,25 +88,37 @@ const ManageEmployee: FunctionComponent<ManageEmployeeProps> = () => {
 
         if (!token)
             return;
-        
-        console.log(userInfo.connectedEmployess);
-        console.log(userInfo.connectedEmployess.length);
-
 
         getAllUsers(userInfo.connectedEmployess, token)
             .then(res => {
-                console.log(res.data + "123 123 123 123");
                 setAllUsers(res.data);
                 setArrFilter(res.data);
                 setArrTemp(res.data);
+
+                const mapNames = new Map();
+
+                (res.data).forEach((user: any) => {
+                    const name = `${user.name.first} ${user.name.last}`;
+                    mapNames.set(user._id, name);
+                });
+
+                getUserById(userInfo.id, token)
+                    .then(res1 => {
+                        mapNames.set(userInfo.id, `${res1.data.name.first} ${res1.data.name.last}`)
+                        setNamesMap(mapNames);
+                    })
+                    .catch(error => errorMessage(error.message));
+
             })
             .catch(error => errorMessage(error.message))
 
-    }, [closeDeleting, userInfo]);
 
+    }, [closeDeleting, userInfo, displayAddUser]);
 
     useEffect(() => {
-        console.log("before filtering");
+    }, [namesMap])
+
+    useEffect(() => {
         filterTable();
     }, [filters]);
 
@@ -192,10 +203,9 @@ const ManageEmployee: FunctionComponent<ManageEmployeeProps> = () => {
                                 <td>{user.jobType}</td>
                                 <td>{user.fromWhereWorking}</td>
                                 <td>{user.department}</td>
-                                <td>{user.directManager}</td>
+                                <td>{namesMap.get(user.directManager)}</td>
                                 <td>{user.managerLevel}</td>
                                 <td onClick={() => {
-                                    console.log('click on', user._id);
                                     getUserById(user._id, token)
                                         .then(res => nav(`/users/${user._id}`))
                                         .catch(error => errorMessage(error.message))

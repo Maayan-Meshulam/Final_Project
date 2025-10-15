@@ -16,6 +16,4 @@ export const taskSchema :any = {
     star: Yup.number().oneOf([0, 1], "הערכים המותרים ה 0 /1 ").required()
 };
 
-console.log("after validaion acheama");
-
 

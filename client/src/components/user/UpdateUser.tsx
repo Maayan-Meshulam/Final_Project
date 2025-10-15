@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 import { getTokenInStorage } from "../../services/tokenService";
 import { getAllUsers, getUserById, updatingUser } from "../../services/userService";
 import { userRegisterValidation } from "../../validation/user/userValidation";
-import normaliztionUser from "../../helpers/normalizeUser";
 import { errorMessage, successMessage } from "../../toastify/toastifyService";
 
 
@@ -23,37 +22,18 @@ interface UpdateUserProps {
 const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user, onclosecode }) => {
 
     const userInfo = useSelector((state: any) => state.userBaseInfo)
-    console.log(userInfo.id + " user id" + userInfo.managerLevel);
 
     const [arrEmployess, setArrEmployess] = useState<any>([]);
     const token = getTokenInStorage() as string;
     const [manager, setManager] = useState<any>("");
     const managerId = userInfo.id;
 
-    let imageUrl = useRef<string>("");
-
-    // useEffect(() => {
-    //     //רק במידה והוא מנהל נבקש את כל המשתמשים
-    //     if (userInfo.managerLevel > 0) {
-    //         getAllUsers(userInfo.connectedEmployess, token)
-    //             .then(res => {
-    //                 setArrEmployess(res.data);
-    //             })
-    //             .catch(err => {
-    //                 console.log(err);
-    //             })
-    //     }
-    // }, [])
-
 
     useEffect(() => {
         getUserById(managerId, token)
             .then(res => {
-                console.log(res.data);
                 const name = `${res.data.name.first} ${res.data.name.last}`;
-                console.log(name + " name");
                 setManager(name);
-                imageUrl.current = user.image.url;
             });
     }, [])
 
@@ -66,7 +46,7 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
             email: user.email,
             password: user.password,
             birthDay: (user.birthDay).split('T')[0],
-            url: "",
+            url: null,
             alt: user.image.alt,
             city: user.address.city,
             street: user.address.street,
@@ -85,8 +65,6 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
         enableReinitialize: true,
         validationSchema: Yup.object(userRegisterValidation),
         onSubmit: (values) => {
-            values.url = imageUrl.current as any
-
             const token = getTokenInStorage() as string;
             updatingUser(user._id, token, values)
                 .then(res => {
@@ -105,10 +83,7 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
         }
     });
 
-    console.log(formik);
-    console.log("formik.values:", formik.values);
-
-
+  
     return (<>
         <div className={style.container_popUp}>
             <div className={style.top_btns_form}>
@@ -139,16 +114,13 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
                         <CreateInputs type="text" id="lastName" name="last name" formik={formik} classAddEmployess={style.field_wrapper} />
                         <CreateInputs type="date" id="birthDay" name="birthDay" formik={formik} classAddEmployess={style.field_wrapper} />
                         <CreateInputs type="tel" id="phone" name="phone number" formik={formik} classAddEmployess={style.field_wrapper} />
-                        <div>
-                            <CreateInputs type="text" id="url" name="personal image" formik={formik} classAddEmployess={style.field_wrapper} />
-                            <div style={{ display: "flex" }}>
-                                <img
-                                    src={`http://localhost:3131/${user.image.url}`}
-                                    alt={user.image.alt}
-                                    className={style.profile} />
-                                <p>ניתן להעלות תמונה חדשה</p>
-                            </div>
-                        </div>
+                        <input
+                            type="file"
+                            name="url"
+                            onChange={(e: any) => {
+                                formik.setFieldValue("url", e.currentTarget.files[0]);
+                            }}
+                        />
                         <CreateInputs type="text" id="alt" name="alt" formik={formik} classAddEmployess={style.field_wrapper} />
                     </fieldset>
 

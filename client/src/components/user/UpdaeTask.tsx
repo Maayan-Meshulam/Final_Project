@@ -20,7 +20,6 @@ interface UpdateTaskProps {
 const UpdateTask: FunctionComponent<UpdateTaskProps> = ({ oncloseUpdating, task }) => {
 
     const userInfo = useSelector((state: any) => state.userBaseInfo)
-    console.log(userInfo.id + " user id" + userInfo.managerLevel);
 
     const [arrEmployess, setArrEmployess] = useState<any>([]);
     const token = getTokenInStorage() as string;
@@ -67,7 +66,6 @@ const UpdateTask: FunctionComponent<UpdateTaskProps> = ({ oncloseUpdating, task 
         }
     });
 
-    console.log(formik);
 
     return (<>
 

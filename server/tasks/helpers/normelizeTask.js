@@ -7,9 +7,6 @@ const { default: mongoose } = require("mongoose");
 
 const taskNormalization = (task, user) => {
 
-    console.log(user.id + "******");
-    console.log("in task normalize");
-    
     return ({
         ...task,
         userIdCreatorTask: user.id,

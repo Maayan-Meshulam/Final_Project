@@ -69,7 +69,6 @@ const ChangePassword: FunctionComponent<ChangePasswordProps> = () => {
     }, [password, verPassword])
 
     const handleSubmit = (e: any) => {
-        console.log(e);
         e.preventDefault();
         const password = e.target.password.value;
         const verpassword = e.target.verpassword.value;
@@ -77,8 +76,6 @@ const ChangePassword: FunctionComponent<ChangePasswordProps> = () => {
 
         patchPass(values, id as string, querys.get("token") as string)
             .then(res => {
-                console.log("after changing !!!!!!!!!!!");
-                console.log(res.data);
                 nav("/");
             })
             .catch(error => errorMessage(error.message))

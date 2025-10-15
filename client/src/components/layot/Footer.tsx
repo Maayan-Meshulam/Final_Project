@@ -13,7 +13,6 @@ interface FooterProps {
 const Footer: FunctionComponent<FooterProps> = () => {
 
     const userInfo = useSelector((state: any) => state.userBaseInfo);
-    console.log(JSON.stringify(userInfo) + "-----------------------------------------------------------------");
 
     const dispatch = useDispatch();
 

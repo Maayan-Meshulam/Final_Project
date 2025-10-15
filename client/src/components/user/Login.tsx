@@ -28,14 +28,11 @@ const Login: FunctionComponent<LoginProps> = () => {
         },
         validationSchema: Yup.object(userLoginValidation),
         onSubmit: (values => {
-            console.log(JSON.stringify(values) + " values");
             loginUser(values)
                 .then(res => {
                     const token = res.data;
                     saveTokenInStorage(token); //שמירת הטוקן בזיכרון
                     let userInfo = tokenDecoding(token) as any // פענוח הטוקן
-                    console.log(JSON.stringify(userInfo) + "888888888888888");
-
                     dispatch(setState(userInfo)); // נאחסן בחנות את המידע עבור המשתמש שהתחבר
                     formik.resetForm();
                     userInfo.managerLevel < 1 ? nav('/tasks/myTasks') : nav('/users/managerDash');
@@ -46,7 +43,6 @@ const Login: FunctionComponent<LoginProps> = () => {
         })
     });
 
-    console.log(formik);
 
     return (<>
         <form onSubmit={formik.handleSubmit} id={style.loginBg}>

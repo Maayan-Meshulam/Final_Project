@@ -7,15 +7,15 @@ const VALIDATOR = process.env.VALIDATOR;
 
 const userValidation = async (req, res, next) => {
 
-    console.log("in user validator");
-
     try {
         const bycrptPassword = await hash(req.body.password, 10);
-        console.log(bycrptPassword);
-        
 
-        const user = normaliztionUser(req.body, bycrptPassword);
-        console.log(JSON.stringify(user));
+        const allData = {
+            ...req.body,
+            url: req.file ? `/images/${req.file.filename}` : "/images/profile.png"
+        }
+
+        const user = normaliztionUser(allData, bycrptPassword);
 
 
         if (VALIDATOR == "joi") {
@@ -23,10 +23,7 @@ const userValidation = async (req, res, next) => {
             const { error } = userValid(user);
 
             if (error) {
-                console.log("in user error validation");
-                console.log(error.details);
-
-
+            
                 const errorValidation = error.details.map(detail => detail.message);
                 return next(buildError("Joi Validation", errorValidation, 400));
             }
@@ -51,7 +48,6 @@ const userLoginValidation = async (req, res, next) => {
         if (VALIDATOR == "joi") {
 
             const { error } = UserValidLogin(user);
-            console.log(error);
 
             if (error) {
                 const errorValidation = error.details.map(detail => detail.message);

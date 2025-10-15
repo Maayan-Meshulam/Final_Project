@@ -2,7 +2,6 @@ const Joi = require("joi");
 const { GENERAL_VALIDATION, MINI_GENERAL_VALIDATION } = require("../../../helpers/joi/generalValidation");
 
 const taskValidator = (task) => {
-    console.log("in task validator");
 
     const schema = Joi.object({
         title: GENERAL_VALIDATION,

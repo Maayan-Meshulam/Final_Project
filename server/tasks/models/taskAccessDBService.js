@@ -7,7 +7,6 @@ const DB = process.env.DB // ----> אינטגרציה ??
 const createTask = async (newTask) => {
     try {
         if (DB == "MongoDB") {
-            console.log("in create task mongo");
             let task = new Task(newTask);
             task = await task.save();
             return task;
@@ -24,9 +23,7 @@ const createTask = async (newTask) => {
 const getAllTasks = async (connectedEmployess) => {
     try {
         if (DB == "MongoDB") {
-
             const allTasks = await Task.find({ workerTaskId: { $in: connectedEmployess } });
-            console.log(JSON.stringify(allTasks) + "////////////////");
             return allTasks;
         }
         else
@@ -41,9 +38,7 @@ const getAllTasks = async (connectedEmployess) => {
 
 //get my tasks
 const getMyTasks = async (userId) => {
-    console.log(userId + " 8");
-
-    console.log("in my tasks");
+    
     try {
         if (DB == "MongoDB") {
             const myTasks = await Task.find({ workerTaskId: userId });
@@ -60,8 +55,6 @@ const getMyTasks = async (userId) => {
 
 //get task by id
 const getTaskById = async (taskId) => {
-    console.log("in task by id")
-
     try {
         if (DB == "MongoDB") {
             const task = await Task.findById(taskId);
@@ -93,8 +86,6 @@ const updateTask = async (taskId, newTask) => {
 
 //delete task
 const deleteTask = async (taskId) => {
-    console.log("in delete task");
-
     try {
         if (DB == "MongoDB") {
             const taskRemove = await Task.findByIdAndDelete(taskId);
@@ -110,16 +101,13 @@ const deleteTask = async (taskId) => {
 
 //like-unlike task
 const likeUnlikeTask = async (taskId) => {
-    console.log("in mongo like task");
     try {
         if (DB == "MongoDB") {
             const temp = await Task.findById(taskId, { star: 1 });
-            console.log(temp);
-
+            
             const task = await Task.findByIdAndUpdate(taskId,
                 { $bit: { star: { xor: 1 } } }, { new: true });
-            console.log(task.star);
-            console.log(task);
+           
 
             return task;
         }

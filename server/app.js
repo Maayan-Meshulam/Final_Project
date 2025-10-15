@@ -23,9 +23,8 @@ app.use(router);
 
 
 app.use((err, req, res, next) => {
-    console.log("error function");
-    //ערכים ברירת מחדל - למקרה שלא נשלחו     ??
-    res.status(err.status).send(err.message)
+    const status = err.status ?? 500
+    res.status(status).send(err.message)
 });
 
 //חיבור לשרת

@@ -53,8 +53,16 @@
   padding: 10px;
 }
 
+.image {
+  width: 80px;
+  height: 80px;
+}
+
 @media screen and (max-width: 600px) {
   .containerWithImg {
     flex-direction: column;
+  }
+  .task_characterization {
+    text-align: center;
   }
 }/*# sourceMappingURL=singleMission.module.css.map */

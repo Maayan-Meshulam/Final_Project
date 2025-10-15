@@ -5,34 +5,19 @@ const SECRET_KEY = process.env.SECRET_KEY;
 
 //יצירת טוקן
 const generateToken = async (user) => {
-    console.log("in genertae func");
-    console.log("email", user.email);
-
 
     try {
         const userFromDB = await getUserByEmail(user.email);
-        console.log(JSON.stringify(userFromDB) + "******************");
 
         if (!userFromDB) {
-            console.log("noooooo");
             throw new Error("Mongoode Error, user's datails not rigth / need registeration");
         }
         else {
-
-
-
-            console.log("importent!! " + userFromDB.connectedEmployess);
-
-
             const payload = {
                 id: userFromDB._id,
                 managerLevel: userFromDB.managerLevel,
                 connectedEmployess: userFromDB.connectedEmployess,
             }
-
-            console.log(userFromDB._id);
-
-            console.log(payload);
 
             const token = Jwt.sign(payload, SECRET_KEY);
             return token;
@@ -44,7 +29,6 @@ const generateToken = async (user) => {
 
 //בדיקת תקינות הטוקן
 const verifyToken = (token) => {
-    console.log("in verify token");
 
     try {
         //בדיקת מהימנות הטוקן

@@ -12,7 +12,6 @@ const transport = nodemailer.createTransport({
 });
 
 const email = async (email, messageHtml, title) => {
-    console.log("in sending email");
     
     try {
         const message = {

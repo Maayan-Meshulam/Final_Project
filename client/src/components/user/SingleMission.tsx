@@ -36,9 +36,7 @@ const SingleMission: FunctionComponent<SingleMissionProps> = () => {
             return;
         
         getTaskById(id as string, token) //נביא את המשתמש עצמו שיצר את המשימה
-            .then(res => {
-                console.log(res.data);
-                
+            .then(res => {                
                 setTask(res.data);
                 setWorkerTaskCreator(res.data.creatorName);
                 setWorkerTaskName(res.data.workerName);

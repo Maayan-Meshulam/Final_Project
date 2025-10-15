@@ -26,19 +26,15 @@ const EnterEmail: FunctionComponent<EnterEmailProps> = () => {
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        console.log(e);
         const email = e.target.email.value;
-        console.log(email);
 
         getUserByEmail(email)
             .then(res => {
-                console.log(res.data + "1111111");
                 id = res.data._id
 
                 sendEmail(email, id, -1)
                     .then(res => {
-                        console.log(res.data);
-                        console.log("look at your email to reset your password !!");
+                      
                     })
                     .catch(error => error.response ? errorMessage(error.response.data)
                         : errorMessage("שגיאה כללית -לא נשלחה בקשה"));

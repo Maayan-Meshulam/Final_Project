@@ -7,21 +7,14 @@ const TOKEN_GENERATOR = process.env.TOKEN_GENERATOR;
 const auth = (req, res, next) => {
 
     if (TOKEN_GENERATOR == 'Jwt') {
-        console.log("in auth function");
-
-        const token = req.header('x-auth-token');
-        console.log(token + "____________");
-        
+        const token = req.header('x-auth-token');        
 
         if (!token) {            
             return next(buildError("Authentication Error", "pleae login", 401))
         }
 
         const payload = verifyToken(token);        
-        console.log(payload + "from verify");
-        console.log(payload.connectedEmployess);
-        
-                        
+     
         if (!payload) {            
             return next(buildError("Authentication Error", "Incorrect details", 401))
         }

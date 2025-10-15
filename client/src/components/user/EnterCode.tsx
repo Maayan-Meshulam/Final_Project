@@ -31,10 +31,7 @@ useEffect(() => {
 
 const handleSubmit = (e: any) => {
     e.preventDefault();
-    console.log(e);
     const email = e.target.email.value;
-    console.log(email);
-
 }
 
 return (<>

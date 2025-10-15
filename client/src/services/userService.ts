@@ -1,23 +1,45 @@
 import axios from "axios";
+import { object } from "yup";
 const API_USERS = import.meta.env.VITE_API_USERS
 
 //התחברות
 const loginUser = (user: any) => {
-    console.log("in login");
     return axios.post(`${API_USERS}/login`, user);
 };
 
 const addUser = (user: any, token: string) => {
-    console.log("in add user");
-    return axios.post(`${API_USERS}/addUser`, user, {
-        headers: { "x-auth-token": token }
+    const formData = new FormData();
+
+    // מוסיפים את כל השדות לטופס
+    Object.entries(user).forEach(([key, value]) => {
+        if (key == "image") return;
+
+        if (Array.isArray(value)) {
+            // אם זה מערך, צריך להוסיף כל ערך בנפרד
+            value.forEach(v => formData.append(`${key}[]`, v));
+        } else if (typeof value == 'object' && value != null) {
+            Object.entries(value).forEach(([subKey, subValue]) => {
+                formData.append(`${key}[${subKey}]`, String(subValue))
+            })
+        }
+        else {
+            formData.append(key, String(value));
+        }
     });
+
+    formData.append("image", user.url); // selectedFile הוא ה־File מה-input
+
+    // שליחה
+    return axios.post(`${API_USERS}/addUser`, formData, {
+        headers: {
+            "x-auth-token": token,
+            "Content-Type": "multipart/form-data"
+        }
+    });
+
 }
 
 const getAllUsers = (managerEmployeesArray: string, token: string) => {
-    console.log("in get all users axios");
-    console.log(managerEmployeesArray + "manger id");
-
     return axios.get(`${API_USERS}?ArrEmployess=${managerEmployeesArray.toString()}`, {
         headers: { "x-auth-token": token },
     });
@@ -25,9 +47,6 @@ const getAllUsers = (managerEmployeesArray: string, token: string) => {
 }
 
 const getUserById = (userId: string, token: string) => {
-    console.log("----------------" + userId);
-
-    console.log("in get by id axios");
     return axios.get(`${API_USERS}/${userId}`, {
         headers: { "x-auth-token": token }
     });
@@ -35,14 +54,11 @@ const getUserById = (userId: string, token: string) => {
 }
 
 const getUserByEmail = (email: string) => {
-    console.log("in get by email axios");
     return axios.get(`${API_USERS}/email/${email}`);
 
 }
 
 const deleteUser = (userId: string, managerId: string, token: string) => {
-
-    console.log("in delete user");
     return axios.delete(`${API_USERS}/${userId}`, {
         headers: { 'x-auth-token': token },
         data: { manager_id: managerId }
@@ -50,33 +66,49 @@ const deleteUser = (userId: string, managerId: string, token: string) => {
 }
 
 const updatingUser = (userId: string, token: string, newUser: any) => {
-    console.log("in axios update user");
-    console.log(JSON.stringify(newUser));
+    const formData = new FormData();
 
-    return axios.put(`${API_USERS}/${userId}`, newUser, {
-        headers: { 'x-auth-token': token }
-    })
+    // מוסיפים את כל השדות לטופס
+    Object.entries(newUser).forEach(([key, value]) => {
+        if (key == "image") return;
+
+        if (Array.isArray(value)) {
+            // אם זה מערך, צריך להוסיף כל ערך בנפרד
+            value.forEach(v => formData.append(`${key}[]`, v));
+        } else if (typeof value == 'object' && value != null) {
+            Object.entries(value).forEach(([subKey, subValue]) => {
+                formData.append(`${key}[${subKey}]`, String(subValue))
+            })
+        }
+        else {
+            formData.append(key, String(value));
+        }
+    });
+
+    formData.append("image", newUser.url); // selectedFile הוא ה־File מה-input
+
+    // שליחה
+    return axios.put(`${API_USERS}/${userId}`, formData, {
+        headers: {
+            "x-auth-token": token,
+            "Content-Type": "multipart/form-data"
+        }
+    });
+
 }
 
 const patchConnectedEmployees = (managerId: string, userId: string, prevConnectingEmployes: any, token: string) => {
-    console.log("in patch axios");
-    console.log(managerId + " manager id");
-    console.log(userId + " user id");
-    console.log(JSON.stringify([...prevConnectingEmployes, userId]));
-
-
     return axios.patch(`${API_USERS}/${managerId}`, { "connectedEmployess": [...prevConnectingEmployes, userId] },
         { headers: { 'x-auth-token': token } }
     )
 }
 
-const patchPass = (values: any, id:string, token:string) => {
+const patchPass = (values: any, id: string, token: string) => {
     return axios.patch(`${API_USERS}/change-password/${id}?token=${token}`, values)
 }
 
-const sendEmail = (email: string, id:string, randomNum: number) => {
-    console.log(email);
-    return axios.post(`${API_USERS}/send-email`, { email, id, randomNum})
+const sendEmail = (email: string, id: string, randomNum: number) => {
+    return axios.post(`${API_USERS}/send-email`, { email, id, randomNum })
 }
 
 export {

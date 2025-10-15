@@ -29,7 +29,7 @@ const PASSWORD = Joi.string()
 
 
 const IMAGE = Joi.object({
-    url: Joi.string(),
+    url: Joi.string().allow(''),
     alt: Joi.string().min(2).max(256)
 });
 

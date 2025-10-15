@@ -6,7 +6,7 @@ import { getTokenInStorage } from "../../services/tokenService";
 import { statusConvert, typeConvert } from "../../helpers/Convert_valueSelectsToString";
 import UpdateTask from '../user/UpdaeTask';
 import DeleteTask from "./DeleteTask";
-import { getUserById } from "../../services/userService";
+import { getAllUsers, getUserById } from "../../services/userService";
 import { useSelector } from "react-redux";
 import DeleteUser from "./DeleteUser";
 import UpdateUser from "./UpdateUser";
@@ -30,6 +30,8 @@ const SingleUser: FunctionComponent<SingleUserProps> = () => {
     const [closeUpdating, setCloseUpdating] = useState<boolean>(false);
     const [toggleUpdaedUser, settoggleUpdaedUser] = useState<boolean>(false);
 
+    const [namesMap, setNamesMap] = useState<Map<string, string>>(new Map());
+
     const nav = useNavigate()
 
 
@@ -38,10 +40,28 @@ const SingleUser: FunctionComponent<SingleUserProps> = () => {
     useEffect(() => {
         if (!token)
             return;
-        
+
+        getAllUsers(userInfo.connectedEmployess, token)
+            .then(res => {
+                const mapNames = new Map();
+
+                (res.data).forEach((user: any) => {
+                    const name = `${user.name.first} ${user.name.last}`;
+                    mapNames.set(user._id, name);
+                });
+
+                getUserById(userInfo.id, token)
+                    .then(res1 => {
+                        mapNames.set(userInfo.id, `${res1.data.name.first} ${res1.data.name.last}`)
+                        setNamesMap(mapNames);
+                    })
+                    .catch(error => errorMessage(error.message));
+
+            })
+            .catch(error => errorMessage(error.message))
+
         getUserById(id, token)
             .then(res => {
-                console.log(res.data);
                 setUser(res.data);
             })
             .catch(error => errorMessage(error.message))
@@ -74,10 +94,13 @@ const SingleUser: FunctionComponent<SingleUserProps> = () => {
                     <p>{user.address.city}, {user.address.street}, {user.address.houseNumber}, {user.address.zip}</p>
                     <p>תאריך התחלה : <span>{(user.startDate).split('T')[0]}</span></p>
                     <p>{user.jobType}, {user.fromWhereWorking}</p>
-                    <p>מנהל ישיר : <span>{user.directManager}</span></p>
+                    <p>מנהל ישיר : <span>{namesMap.get(user.directManager)}</span></p>
                     <p>מחלקה וצוות : <span>{user.department}, {user.team}</span></p>
                     <p>רמת ניהול : <span>{user.managerLevel}</span></p>
-                    <p><span>עובדים משויכים :</span>{user.connectedEmployess}</p>
+                    <p><span>עובדים משויכים :</span>{(user.connectedEmployess).map((user:any)=>{
+                        return namesMap.get(user) + ' , '
+                    })}</p>
+                   <img className={style.image} src={`http://localhost:3131/${user.image.url}`} alt={user.image.alt} />
 
                     <div className={style.buttons_container}>
 
@@ -104,7 +127,7 @@ const SingleUser: FunctionComponent<SingleUserProps> = () => {
 
             </div>
 
-        </div >) : (<ErrorPremission/>)
+        </div >) : (<ErrorPremission />)
         }
 
     </>);

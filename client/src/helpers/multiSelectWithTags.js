@@ -8,7 +8,6 @@ const workers = [
 
 const serachInArrWorkers = (expression)=>{
     const newArrIncludes = workers.map(worker=>worker[fullName].includes(expression));
-    console.log(newArrIncludes);    
 }
 
 

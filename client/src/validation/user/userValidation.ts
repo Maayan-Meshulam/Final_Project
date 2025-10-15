@@ -24,7 +24,6 @@ const userRegisterValidation = {
     email: BASIC_VAL_STRING,
     password: BASIC_VAL_STRING,
     birthDay: Yup.date().required(),
-    url: Yup.string().url(),
     alt: Yup.string().min(2),
     city: BASIC_VAL_STRING,
     street: BASIC_VAL_STRING,

@@ -28,7 +28,6 @@ const FilterBar: FunctionComponent<FilterBarProps> = ({ allEmployees, setfilters
         const uniqeFromWhereWork = new Set();
         const uniqeDepartment = new Set();
 
-        console.log(allEmployees);
 
         allEmployees.map(employee => {
             uniqesCitys.add(employee.address.city)
@@ -38,7 +37,6 @@ const FilterBar: FunctionComponent<FilterBarProps> = ({ allEmployees, setfilters
             uniqeDepartment.add(employee.department)
         });
 
-        console.log(uniqeJobs, uniqesCitys, uniqeTypeWork, uniqeFromWhereWork, uniqeDepartment, 123);
 
         //מערכים עם שמות השדות עם הרווחים
         setCitys(Array.from(uniqesCitys))
@@ -50,14 +48,12 @@ const FilterBar: FunctionComponent<FilterBarProps> = ({ allEmployees, setfilters
 
 
     useEffect(() => {
-        console.log(allEmployees);
         createSets();
     }, [allEmployees]);
 
 
 
     const initialValuesFunc = () => {
-        console.log(citys, jobs, typeWork, fromWhereWork, department);
 
         if (citys.length > 0 && jobs.length > 0 &&
             typeWork.length > 0 && fromWhereWork.length > 0 && department.length > 0) {
@@ -103,7 +99,6 @@ const FilterBar: FunctionComponent<FilterBarProps> = ({ allEmployees, setfilters
     }
 
     useEffect(() => {
-        console.log(initialValuesForm);
         setInitialValuesForm(initialValuesFunc());
     }, [citys, jobs, typeWork, fromWhereWork, department]);
 
@@ -112,14 +107,11 @@ const FilterBar: FunctionComponent<FilterBarProps> = ({ allEmployees, setfilters
         initialValues: initialValuesForm,
         enableReinitialize: true,
         onSubmit: (values) => {
-            console.log(values);
             setIsShow(false)
             setfilters(values);
             infoMessage("סינונים חלו בהצלחה");
         }
     });
-
-    console.log(formik);
 
 
     const style: {

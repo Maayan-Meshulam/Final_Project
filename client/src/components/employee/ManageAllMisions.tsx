@@ -29,7 +29,6 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
     const [selectedTask, setSelectedTask] = useState<any>(null);
 
     const filterdArr = () => {
-        console.log(termSearch, typeSearch);
         switch (typeSearch) {
             case "All":
                 setArrDeepSearch(allMyTasks);
@@ -53,11 +52,8 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
 
 
     let userInfo = useSelector((state: any) => state.userBaseInfo);
-    console.log("........." + JSON.stringify(userInfo));
 
     const token = getTokenInStorage();
-    console.log(token + "token from storage");
-    console.log(JSON.stringify(userInfo) + "user");
 
     const nav = useNavigate();
 
@@ -69,7 +65,6 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
         
         getMyTasks(token as string)
             .then(res => {
-                console.log((res.data));
                 setAllMyTasks(res.data);
                 setArrDeepSearch(res.data);
             })
@@ -183,7 +178,6 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
                                             <td onClick={() => {
                                                 like_unlike_task(token as string, task._id)
                                                     .then(res => {
-                                                        console.log(res.data);
                                                         setArrDeepSearch((prev: any) => prev.map((Originaltask: any) => {
                                                             return Originaltask._id == task._id ?
                                                                 { ...task, star: res.data.star == 1 ? 1 : 0 } : Originaltask

@@ -29,9 +29,7 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
     useEffect(() => {
         getUserById(managerId, token)
             .then(res => {
-                console.log(res.data);
                 const name = `${res.data.name.first} ${res.data.name.last}`;
-                console.log(name + " name");
                 setManager(name);
             });
     }, [])
@@ -46,7 +44,7 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
             email: "",
             password: "",
             birthDay: "",
-            url: "",
+            url: null,
             alt: "",
             city: "",
             street: "",
@@ -65,11 +63,9 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
         enableReinitialize: true,
         validationSchema: Yup.object(userRegisterValidation),
         onSubmit: (values: any) => {
-            console.log(JSON.stringify(values));
 
             addUser(values, token)
                 .then((res) => {
-                    console.log(res.data);
                     oncloseAddNewEmployee(false);
                     formik.resetForm();
                     successMessage("מזל טוב ! משתמש חדש נוסף בהצלחה ");
@@ -84,9 +80,6 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
 
         }
     });
-
-    console.log(formik);
-
 
     return (<>
 
@@ -119,7 +112,13 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
                         <CreateInputs type="text" id="lastName" name="last name" formik={formik} classAddEmployess={style.field_wrapper} />
                         <CreateInputs type="date" id="birthDay" name="birthDay" formik={formik} classAddEmployess={style.field_wrapper} />
                         <CreateInputs type="tel" id="phone" name="phone number" formik={formik} classAddEmployess={style.field_wrapper} />
-                        <CreateInputs type="text" id="url" name="personal image" formik={formik} classAddEmployess={style.field_wrapper} />
+                        <input
+                            type="file"
+                            name="url"
+                            onChange={(e:any) => {
+                                formik.setFieldValue("url", e.currentTarget.files[0]);
+                            }}
+                        />
                         <CreateInputs type="text" id="alt" name="alt" formik={formik} classAddEmployess={style.field_wrapper} />
                     </fieldset>
 
@@ -188,7 +187,6 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
                                 <option value="1">1 - entry manager</option>
                                 {/* <option value="1">2 - senior manager</option> */}
                             </CreateSelects>
-                            <p>על מנת לשייך עובדים למנהל יש ליצור קשר עם אדמין</p>
                         </div>
 
 

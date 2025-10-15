@@ -5,7 +5,6 @@ const { default: mongoose } = require("mongoose");
 
 
 const userValid = (user) => {
-    console.log("startingggg");
     
     const schema = Joi.object({
         name: NAME,
@@ -26,9 +25,6 @@ const userValid = (user) => {
         managerLevel: MANAGER_LEVEL,
         connectedEmployess: CONNECTEDEMPLOYESS
     });
-    console.log("enddddd");
-    
-    console.log(schema.validate(user, { abortEarly: false }));
 
     return schema.validate(user, { abortEarly: false })
 };

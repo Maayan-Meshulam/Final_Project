@@ -17,8 +17,6 @@ const ManagerDash: FunctionComponent<ManagerDashProps> = () => {
 
     //פרטי המשתמש המחובר - שמור בחנות
     const user = useSelector((state: any) => state.userBaseInfo);
-    console.log(JSON.stringify(user) + "  from manager dash");
-
     const nav = useNavigate();
 
 

@@ -20,8 +20,6 @@ const ManageAllEmployesTasks: FunctionComponent<ManageAllEmployesTasksProps> = (
 
     const token = getTokenInStorage() as string;
     const userInfo = useSelector((state: any) => state.userBaseInfo);
-    console.log(JSON.stringify(userInfo) + "user info 77887878");
-
     const nav = useNavigate();
 
     const [closeDeleting, setCloseDeleting] = useState<boolean>(false);
@@ -36,7 +34,6 @@ const ManageAllEmployesTasks: FunctionComponent<ManageAllEmployesTasksProps> = (
 
 
     const filterdArr = () => {
-        console.log(termSearch, typeSearch);
         switch (typeSearch) {
             case "All":
                 setArrDeepSearch(allMyTasks);
@@ -60,21 +57,19 @@ const ManageAllEmployesTasks: FunctionComponent<ManageAllEmployesTasksProps> = (
 
 
     useEffect(() => {
-        console.log("hiiiii");
 
         if (!token)
             return;
-        
+
 
         getAllTasks(userInfo.connectedEmployess, token)
             .then((res: any) => {
-                console.log(res.data);
                 setAllMyTasks(res.data);
                 setArrDeepSearch(res.data);
             })
             .catch(error => errorMessage(error.message))
 
-    }, [userInfo])
+    }, [userInfo, closeUpdating, closeDeleting,displayAddMission])
 
 
     useEffect(() => {
@@ -179,7 +174,6 @@ const ManageAllEmployesTasks: FunctionComponent<ManageAllEmployesTasksProps> = (
                                             <td onClick={() => {
                                                 like_unlike_task(token as string, task._id)
                                                     .then(res => {
-                                                        console.log(res.data);
                                                         setArrDeepSearch((prev: any) => prev.map((Originaltask: any) => {
                                                             return Originaltask._id == task._id ?
                                                                 { ...task, star: res.data.star == 1 ? 1 : 0 } : Originaltask
@@ -204,7 +198,6 @@ const ManageAllEmployesTasks: FunctionComponent<ManageAllEmployesTasksProps> = (
                                             <td>{typeConvert[task.type]}</td>
 
                                             <td onClick={() => {
-                                                console.log('click on', task._id);
                                                 getTaskById(task._id, token)
                                                     .then(res => nav(`/tasks/${task._id}`))
                                                     .catch(error => errorMessage(error.message))

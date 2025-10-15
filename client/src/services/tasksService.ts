@@ -4,7 +4,6 @@ const API_TASK = import.meta.env.VITE_API_TASK
 
 //הוספת משימה
 const addTask = (task: any, token: string) => {
-    console.log("in add task");
     return axios.post(API_TASK, task, {
         headers: {
             'x-auth-token': token
@@ -14,9 +13,6 @@ const addTask = (task: any, token: string) => {
 
 //עריכת משימה
 const updatedTask = (task: any, taskId: number, token: string) => {
-    console.log(token + "___________token");
-
-    console.log("in update task");
     return axios.put(`${API_TASK}/${taskId}`, task, {
         headers: {
             'x-auth-token': token
@@ -26,7 +22,6 @@ const updatedTask = (task: any, taskId: number, token: string) => {
 
 //מחיקת משימה
 const deleteTask = (taskId: string, token: string) => {
-    console.log("in delete task");
     return axios.delete(`${API_TASK}/${taskId}`, {
         headers: {
             'x-auth-token': token
@@ -35,30 +30,24 @@ const deleteTask = (taskId: string, token: string) => {
 }
 
 const getMyTasks = (token: string) => {
-    console.log("in my tasks");
     return axios.get(`${API_TASK}/myTasks`, {
         headers: { "x-auth-token": token }
     });
 }
 
 const getTaskById = (id: string, token: string) => {
-    console.log("token" + token);
-
-    console.log("in get task by id axios");
     return axios.get(`${API_TASK}/${id}`, {
         headers: { "x-auth-token": token }
     })
 }
 
 const getAllTasks = (connectedEmployees: any, token: string) => {
-    console.log("get all tasks from axios");
     return axios.get(`${API_TASK}?arrEmployess=${connectedEmployees.toString()}`, {
         headers: { 'x-auth-token': token },
     });
 }
 
 const like_unlike_task = (token: string, taskId: number) => {
-    console.log(taskId, "in patch like unlike task");
     return axios.patch(`${API_TASK}/like-unlike`, {task_id: taskId}, {
         headers: { 'x-auth-token': token }
     })

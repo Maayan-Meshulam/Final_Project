@@ -22,36 +22,16 @@ const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission, onT
 
     //פרטי המשתמש המחובר - שמור בחנות
     const user = useSelector((state: any) => state.userBaseInfo);
-    console.log(JSON.stringify(user) + "  from add task");
 
     const token = getTokenInStorage() as string
 
     const [arrEmployess, setArrEmployess] = useState<any>([]);
-    // let priority = useRef<any>("");
-
-    // const priorityRefStyle = (targetDiv: any) => {
-    //     console.log(targetDiv);
-    //     const arrChildrens = document.getElementById("priorityContainer")?.childNodes;
-    //     for (let i = 0; i < arrChildrens?.length; i++) {
-    //         if (targetDiv.value == i){
-    //             targetDiv.id = style[`${i}priority`]
-    //         }
-    //         else{
-    //             targetDiv.id = "";
-    //         }
-    //     }
-    // }
-
-    console.log(typeof user.id + " ypeeee");
-
 
     useEffect(() => {
         if (user.managerLevel > 0) {
-            console.log(user.connectedEmployess + "7090909000000000000000000");
 
             getAllUsers(user.connectedEmployess, token)
                 .then((res: any) => {
-                    console.log(JSON.stringify(res.data) + "......................");
                     setArrEmployess(res.data);
                     return res.data;
                 })
@@ -76,17 +56,9 @@ const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission, onT
         enableReinitialize: true,
         validationSchema: Yup.object(taskSchema),
         onSubmit: (values) => {
-            console.log("in on submit add task");
-
-            console.log("values" + JSON.stringify(values));
             addTask(values, token)
                 .then(res => {
-                    console.log("נוסףףףףף");
-
-                    console.log(res.data);
-                    // if (onToggleAllMyTasks) onToggleAllMyTasks((prev: boolean) => !prev);
                     oncloseAddMission(false);
-                    // window.location.reload();
                     formik.resetForm();
                     successMessage("משימה נוספה בהצלחה !")
                 })
@@ -94,8 +66,6 @@ const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission, onT
                     : errorMessage("שגיאה כללית -לא נשלחה בקשה"));
         }
     });
-
-    console.log(formik);
 
 
     return (<>

@@ -17,7 +17,6 @@ interface NavbarProps {
 const Navbar: FunctionComponent<NavbarProps> = () => {
 
     const userInfo = useSelector((state: any) => state.userBaseInfo);
-    console.log(JSON.stringify(userInfo) + "-----------------------------------------------------------------");
     const [closeUpdating, setCloseUpdating] = useState<boolean>(false);
     const [user, setUser] = useState(null);
     const [randomNum, setRandomNum] = useState<number | null>(null)
@@ -30,16 +29,11 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
 
     useEffect(() => {
         const token = getTokenInStorage();
-        console.log(userInfo, " infooooooooooo");
-        console.log(token, "tokennnnnn");
-
-        console.log(userInfo.id + "iddd");
+     
 
         if (token && userInfo.id) {
             getUserById(userInfo.id, token as string)
                 .then(res => {
-                    console.log("???????????????????????????????????????");
-                    console.log(JSON.stringify(res.data) + "9999");
                     setUser(res.data);
                 })
                 .catch(error => errorMessage(error.message))
@@ -87,11 +81,9 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                                         style={{ cursor: "pointer" }}
                                         className="nav-link"
                                         onClick={() => {
-                                            console.log(user.email, userInfo.id, randomNum)
                                             sendEmail(user.email, userInfo._id, randomNum)
                                                 .then((res) => {
                                                     setCloseCode(true);
-                                                    console.log(12312312);
                                                     successMessage("איימייל נשלח בהצלחה !")
                                                 })
                                                 .catch(error => error.response ? errorMessage(error.response.data)
@@ -144,11 +136,9 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                                         style={{ cursor: "pointer" }}
                                         className="nav-link"
                                         onClick={() => {
-                                            console.log(user.email, userInfo.id, randomNum)
                                             sendEmail(user.email, userInfo._id, randomNum)
                                                 .then((res) => {
                                                     setCloseCode(true);
-                                                    console.log(12312312);
                                                     successMessage("איימייל נשלח בהצלחה !")
                                                 })
                                                 .catch(error => error.response ? errorMessage(error.response.data)

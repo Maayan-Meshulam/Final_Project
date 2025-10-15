@@ -8,23 +8,17 @@ const { hash } = require("bcrypt");
 const sendingEmail = require("../../emails/smtpServer");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
+const upload = require("../../helpers/multer/multerService");
 
 
 // //login user
 router.post('/login', async (req, res, next) => {
-    console.log("in login user router");
 
     try {
         let user = req.body;
-        console.log(JSON.stringify(user));
-
-        console.log(user.email, user.password + " verify");
-
 
         //בדיקת זהות המשתמש - האם קיים ופרטיו נכונים
         if (!await verifyLogin(user.email, user.password)) {
-            console.log("innnnnnnnnnnnnnnnnnnnn");
-
             return next(buildError("Authentication Error", "user not register / details not right", 403))
         }
 
@@ -38,16 +32,18 @@ router.post('/login', async (req, res, next) => {
 });
 
 //add user - register
-router.post('/addUser', auth, userValidation, async (req, res, next) => {
-    console.log("in post user");
+router.post('/addUser', auth, upload.single("image"), userValidation, async (req, res, next) => {
     try {
+        if (!req.file) {
+            return next(buildError("File Error", "no image file uploaded", 400))
+        }
         let user = req.userValid;
-        console.log(req.userInfo);
+
+        const newUrl = `/images/${req.file.filename}`;
+        
+        user = { ...(req.userValid), url: newUrl }
 
         let managerConnect = await getUserById(req.userInfo.id);
-
-        console.log(managerConnect);
-
 
         //נבדוק הרשאות
         if (managerConnect.managerLevel < 1) {
@@ -86,44 +82,27 @@ router.post('/addUser', auth, userValidation, async (req, res, next) => {
 router.get('/', auth, async (req, res, next) => {
 
     try {
-        console.log("in get all users");
         const user = req.userInfo;
 
-        // console.log(req);
-
         let { ArrEmployess } = (req.query);
-        console.log(ArrEmployess);
-
 
         if (ArrEmployess == '') {
-            console.log(1);
             ArrEmployess = [];
         }
         else if (!ArrEmployess) {
-            console.log(3);
             return next(buildError("mongoose Error", `need to pass manager employess array in quary`, 500));
         }
         else {
             ArrEmployess = ArrEmployess.split(',');
-            console.log(2);
         }
 
-        // console.log(JSON.stringify(ArrEmployess) + "11111111111111111111111111111");
-        // ArrEmployess = ArrEmployess.split(',')
-        // console.log(JSON.stringify(ArrEmployess) + "11111111111111111111111111111");
 
         //נבדוק הרשאות
-        console.log("manager level" + user.managerLevel);
-
         if (user.managerLevel < 1) {
             return next(buildError("Authentication Error", "user not allow, access block", 403));
         }
-        // else if (user.connectedEmployess.length < 1) {
-        //     next(buildError("Authentication Error", "you dont have employess", 403));
-        // }
-
+     
         let allUsers = await getAllUsers(ArrEmployess);
-        console.log("hiiiiiiiiiii" + allUsers);
 
         res.status(200).send(allUsers);
 
@@ -136,16 +115,10 @@ router.get('/', auth, async (req, res, next) => {
 //get user by email
 router.get('/email/:email', async (req, res, next) => {
     try {
-        console.log("in royer get by email");
-
-        console.log(req.params);
-
+    
         const { email } = req.params
-        console.log(email);
 
         const user = await getUserByEmail(email);
-        console.log(user);
-
 
         if (!user)
             return next(buildError("Authitcation Error:", "user not exist", 403));
@@ -160,17 +133,10 @@ router.get('/email/:email', async (req, res, next) => {
 
 // get user by id
 router.get('/:id', auth, async (req, res, next) => {
-    console.log("in get user by id");
 
     try {
-        console.log(req.params);
         let { id } = req.params;
         let user = req.userInfo;
-
-        console.log(id, "id user");
-        console.log(user.id, " user id second");
-        console.log(user.connectedEmployess ," employess");
-
 
         //בדיקת הרשאות משתמש - המשתמש עצמו / המנהל
         if (user.id != id && !(user.connectedEmployess).includes(id)) {
@@ -179,7 +145,6 @@ router.get('/:id', auth, async (req, res, next) => {
 
         //שמירת נתונים במסד
         user = await getUserById(id);
-        console.log("after saving");
         res.status(200).send(user);
 
     } catch (error) {
@@ -188,8 +153,7 @@ router.get('/:id', auth, async (req, res, next) => {
 });
 
 // update user
-router.put('/:id', auth, userValidation, async (req, res, next) => {
-    console.log("in update user router");
+router.put('/:id', auth,upload.single("image"), userValidation, async (req, res, next) => {
     try {
         let { id } = req.params;
         let user = req.userInfo;
@@ -212,15 +176,11 @@ router.put('/:id', auth, userValidation, async (req, res, next) => {
 
 // delete user
 router.delete('/:id', auth, async (req, res, next) => {
-    console.log("in delte user router **************************************************************************");
     try {
         let { id } = req.params;
-        console.log(id + " user id !");
         let user = req.userInfo;
-        console.log(user + " user info !");
 
         let managerId = req.body.manager_id;
-        console.log(managerId + " manager id !");
 
         if (!user) {
             return next(buildError(("Error", "user not exsist", 400)));
@@ -243,28 +203,18 @@ router.delete('/:id', auth, async (req, res, next) => {
 
 router.patch('/change-password/:id', async (req, res, next) => {
     try {
-
-        console.log("in patch password");
-
         const { token } = req.query;
-        console.log(req);
-
         const { id } = req.params;
-
-        console.log(token);
 
         if (!token)
             return next(buildError("authication Error", "user not allow, access block", 403));
 
 
         const temp_payload = jwt.verify(token, "TEMP_SECRET");
-        console.log(temp_payload);
 
         if (temp_payload.id != id)
             return next(buildError("authication Error", "user not match", 400));
 
-
-        console.log(req.body);
         const { password, verpassword } = req.body
 
         if (password != verpassword)
@@ -274,7 +224,6 @@ router.patch('/change-password/:id', async (req, res, next) => {
             return next(buildError("validation Error", "password not match the pattern", 400));
 
         const bycrptPassword = await hash(password, 10);
-        console.log(bycrptPassword);
 
         //שמירה בDB
         const user = changePassword(bycrptPassword, id)
@@ -289,12 +238,7 @@ router.patch('/change-password/:id', async (req, res, next) => {
 //שינוי עובדים משויכים של מנהל
 router.patch('/:id', async (req, res, next) => {
     try {
-        console.log("in patch axios");
         const { id } = req.params;
-        console.log("id + " + id);
-
-
-        console.log(JSON.stringify(req.body) + "bodyyyyyy");
 
         const user = await connectEmployeToManager(id, req.body);
         res.status(200).send(user);
@@ -307,11 +251,9 @@ router.patch('/:id', async (req, res, next) => {
 
 router.post('/send-email', async (req, res, next) => {
     try {
-        console.log("in send email server");
         let { email, id, randomNum } = req.body;
 
         const token = jwt.sign({ id: id }, "TEMP_SECRET", { expiresIn: "15m" });
-        console.log(token);
 
         let message = "";
         let title = "";
@@ -335,10 +277,7 @@ router.post('/send-email', async (req, res, next) => {
         }
 
 
-        console.log(email, message);
-
         message = await sendingEmail(email, message, title);
-        console.log(message + "77??");
 
         res.status(200).send(message)
 
