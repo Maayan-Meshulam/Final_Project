@@ -72,7 +72,6 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
                         formik.resetForm();
                         oncloseUpdating(false);
                         onclosecode && onclosecode(false);
-                        // window.location.reload();
                         successMessage("משתמש עודכן בהצלחה !")
                     } catch (error: any) {
                         throw new Error(error.message);
@@ -91,8 +90,7 @@ const UpdateUser: FunctionComponent<UpdateUserProps> = ({ oncloseUpdating, user,
                     id={style.btnclosePopUp}
                     type="button"
                     onClick={() => {
-                        // oncloseUpdating(false);
-                        window.location.reload()
+                        oncloseUpdating(false);
                     }}
                 >&#10060;</button>
 

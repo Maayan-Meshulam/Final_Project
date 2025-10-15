@@ -45,9 +45,11 @@ const Login: FunctionComponent<LoginProps> = () => {
 
 
     return (<>
-        <form onSubmit={formik.handleSubmit} id={style.loginBg}>
-            <div className={style.loginForm}>
 
+        <form onSubmit={formik.handleSubmit} id={style.loginBg}>
+
+            <div className={style.loginForm}>
+                <h1 style={{color:"white", marginTop:"10px"}} className="main_title">Login</h1>
                 <div>
                     <div className={`form-floating `}>
 

@@ -33,14 +33,14 @@ const DeleteUser: FunctionComponent<DeleteUserProps> = ({ onCloseDeleting, user,
             <div>
                 <h1>{user.name.first} {user.name.last}</h1>
                 <h3>{user.role}</h3>
-                <p>{user.phone} {user.email}</p>
-                <p>{user.birthDay}</p>
-                <p>{user.address.city}, {user.address.street}, {user.address.houseNumber}, {user.address.zip}</p>
-                <p>{user.startDate}</p>
+                <p>{user.phone} | {user.email}</p>
+                <p>יומולדת: {(user.birthDay).split('T')[0]}</p>
+                <p>כתובת : {user.address.city}, {user.address.street}, {user.address.houseNumber}, {user.address.zip}</p>
+                <p>תאריך התחלה: {(user.startDate).split('T')[0]}</p>
                 <p>{user.jobType}, {user.fromWhereWorking}</p>
-                <p>{user.directManager}</p>
+                <p>מנהל ישיר: {user.directManager}</p>
                 <p>{user.department}, {user.team}</p>
-                <p>{user.managerLevel}</p>
+                <p>רמת ניהול: {user.managerLevel}</p>
                 <p>{user.connectedEmployess}</p>
 
             </div>
@@ -51,8 +51,6 @@ const DeleteUser: FunctionComponent<DeleteUserProps> = ({ onCloseDeleting, user,
                     deleteUser(user._id as string, user.directManager, token)
                         .then(res => {
                             onCloseDeleting(false);
-                            // onToggleCloseDeleting((prev:any)=>!prev);
-                            // window.location.reload()
                             if (id) nav(-1);
                             successMessage("משתמש נחמק בהצלחה !");
                             infoMessage("משימות ועובדים משוכים למנהל הישיר");

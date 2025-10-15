@@ -33,7 +33,22 @@ router.post('/', auth, taskValidation, async (req, res, next) => {
 router.get('/myTasks', auth, async (req, res, next) => {
 
     try {
-        const allTasks = await getMyTasks(req.userInfo.id);
+        let allTasks = await getMyTasks(req.userInfo.id);
+
+        allTasks = await Promise.all(allTasks.map(async (task) => {
+            // נוסיף כאן שליפה של שמות המשתמשים ונחזיר אותם כחלק מה-Task
+            const creator = await getUserById(task.userIdCreatorTask);
+            const worker = await getUserById(task.workerTaskId);
+
+            const taskWithNames = {
+                ...task.toObject(),
+                creatorName: `${creator.name.first} ${creator.name.last}`,
+                workerName: `${worker.name.first} ${worker.name.last}`
+            };
+
+            return taskWithNames;
+        }))
+
         res.status(200).send(allTasks);
 
     } catch (error) {
@@ -58,7 +73,23 @@ router.get('/', auth, async (req, res, next) => {
             arrEmployess = arrEmployess.split(',');
         }
 
-        const allTasks = await getAllTasks(arrEmployess);
+        let allTasks = await getAllTasks(arrEmployess);
+
+        allTasks = await Promise.all(allTasks.map(async (task) => {
+            // נוסיף כאן שליפה של שמות המשתמשים ונחזיר אותם כחלק מה-Task
+            const creator = await getUserById(task.userIdCreatorTask);
+            const worker = await getUserById(task.workerTaskId);
+
+            const taskWithNames = {
+                ...task.toObject(),
+                creatorName: `${creator.name.first} ${creator.name.last}`,
+                workerName: `${worker.name.first} ${worker.name.last}`
+            };
+
+            return taskWithNames;
+        }))
+
+
         res.status(200).send(allTasks);
     } catch (error) {
         return next(buildError("Error", error.message, 500))
@@ -87,7 +118,7 @@ router.get('/:id', auth, async (req, res, next) => {
         // נוסיף כאן שליפה של שמות המשתמשים ונחזיר אותם כחלק מה-Task
         const creator = await getUserById(task.userIdCreatorTask);
         const worker = await getUserById(task.workerTaskId);
-        
+
         const taskWithNames = {
             ...task.toObject(),
             creatorName: `${creator.name.first} ${creator.name.last}`,
@@ -147,7 +178,7 @@ router.delete('/:id', auth, async (req, res, next) => {
 
 router.patch('/like-unlike', auth, async (req, res, next) => {
     try {
-        
+
         const { task_id } = req.body;
 
         const task = await likeUnlikeTask(task_id);

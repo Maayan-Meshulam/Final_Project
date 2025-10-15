@@ -24,25 +24,27 @@ const SingleMission: FunctionComponent<SingleMissionProps> = () => {
     const { id } = useParams();
     const token = getTokenInStorage() as string;
     const [task, setTask] = useState<any>(null);
-    const [toggleupdatedTask, setToggleUpdaedTask] = useState<boolean>(false)
     const [closeDeleting, setCloseDeleting] = useState<string | null>(null);
     const [closeUpdating, setCloseUpdating] = useState<string | null>(null);
     const [workerTaskName, setWorkerTaskName] = useState<string>("");
     const [workerTaskCreator, setWorkerTaskCreator] = useState<string>("");
+    const [toggle, setToggle] = useState<boolean>(false);
 
 
     useEffect(() => {
-        if (!token)
+        if (!token || toggle)
             return;
-        
+
         getTaskById(id as string, token) //נביא את המשתמש עצמו שיצר את המשימה
-            .then(res => {                
+            .then(res => {
                 setTask(res.data);
                 setWorkerTaskCreator(res.data.creatorName);
                 setWorkerTaskName(res.data.workerName);
             })
-            .catch(error => errorMessage(error.message))
-    }, [toggleupdatedTask, user]);
+            .catch(error => {
+                errorMessage(error.message);
+            })
+    }, [user, closeUpdating, closeDeleting]);
 
     if (!user.id) {
         return <ErrorPremission />
@@ -91,6 +93,7 @@ const SingleMission: FunctionComponent<SingleMissionProps> = () => {
                         (task.type == "1" || user.managerLevel > 1) &&
                         <div className={style.buttons_container}>
                             <button
+                                id={style.exit}
                                 type="button"
                                 onClick={() => {
                                     setCloseUpdating(task._id);
@@ -100,9 +103,11 @@ const SingleMission: FunctionComponent<SingleMissionProps> = () => {
                             {closeUpdating && <UpdateTask oncloseUpdating={setCloseUpdating} task={task} />}
 
                             <button
+                                id={style.delete}
                                 type="button"
                                 onClick={() => {
                                     setCloseDeleting(task._id);
+                                    setToggle(true);
                                 }}
                             >Delete</button>
                             {closeDeleting && <DeleteTask onCloseDeleting={setCloseDeleting} task={task} />}

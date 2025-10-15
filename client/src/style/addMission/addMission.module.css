@@ -57,7 +57,7 @@
 }
 
 #btnclosePopUp,
-.top_btns_form > button {
+.top_btns_form>button {
   border: none;
   background-color: inherit;
 }
@@ -90,4 +90,6 @@
 
 #veryHighPriority {
   background-color: red;
-}/*# sourceMappingURL=addMission.module.css.map */
+}
+
+/*# sourceMappingURL=addMission.module.css.map */

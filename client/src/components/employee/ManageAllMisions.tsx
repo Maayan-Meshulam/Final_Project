@@ -64,7 +64,9 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
             return;
         
         getMyTasks(token as string)
-            .then(res => {
+            .then(res => {          
+                console.log(res.data);
+                     
                 setAllMyTasks(res.data);
                 setArrDeepSearch(res.data);
             })

@@ -113,7 +113,7 @@ const ManageEmployee: FunctionComponent<ManageEmployeeProps> = () => {
             .catch(error => errorMessage(error.message))
 
 
-    }, [closeDeleting, userInfo, displayAddUser]);
+    }, [closeDeleting, userInfo, displayAddUser,closeUpdating]);
 
     useEffect(() => {
     }, [namesMap])

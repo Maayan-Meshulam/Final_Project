@@ -170,7 +170,7 @@ const ManageAllEmployesTasks: FunctionComponent<ManageAllEmployesTasksProps> = (
                             <tbody>
                                 {
                                     arrDeepSearch.length > 0 && arrDeepSearch.map((task: any) => (
-                                        <tr>
+                                        <tr key={task._id}>
                                             <td onClick={() => {
                                                 like_unlike_task(token as string, task._id)
                                                     .then(res => {
@@ -190,7 +190,6 @@ const ManageAllEmployesTasks: FunctionComponent<ManageAllEmployesTasksProps> = (
                                             </td>
                                             <td>{task.title}</td>
                                             <td>{task.subTitle}</td>
-                                            {/* <td>{task.description}</td> */}
                                             <td className={style[`priority${task.priority}`]}>{priorityConvert[task.priority]}</td>
                                             <td>{(task.receiptDate).split('T')[0]}</td>
                                             <td>{(task.deadLine).split('T')[0]}</td>

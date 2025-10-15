@@ -47,7 +47,8 @@ const UpdateTask: FunctionComponent<UpdateTaskProps> = ({ oncloseUpdating, task 
             type: task.type,
             status: task.status,
             priority: task.priority,
-            workerTaskId: task.workerTaskId == userInfo.id ? "0" : task.workerTaskId
+            workerTaskId: task.workerTaskId == userInfo.id ? "0" : task.workerTaskId,
+            star: task.star
         },
         enableReinitialize: true,
         validationSchema: Yup.object(taskSchema),
@@ -57,8 +58,6 @@ const UpdateTask: FunctionComponent<UpdateTaskProps> = ({ oncloseUpdating, task 
                 .then(res => {
                     formik.resetForm();
                     oncloseUpdating(false);
-                    // onToggleUetUpdaedTask((prev: boolean) => !prev);
-                    // window.location.reload();
                     successMessage("משימה עודכנה בהצלחה !")
                 })
                 .catch(error => error.response ? errorMessage(error.response.data)
@@ -77,11 +76,11 @@ const UpdateTask: FunctionComponent<UpdateTaskProps> = ({ oncloseUpdating, task 
 
                 <div className={style.top_btns_form}>
                     <button
+                        className="close_popUp_btn"
                         id={style.btnclosePopUp}
                         type="button"
                         onClick={() => {
                             oncloseUpdating(false);
-                            // window.location.reload()
                         }}
                     >&#10060;</button>
 

@@ -16,6 +16,9 @@ const DeleteTask: FunctionComponent<DeleteTaskProps> = ({ task, onCloseDeleting 
     const nav = useNavigate();
     const { id } = useParams();
 
+    console.log(task);
+
+
     return (<>
         <div className={style.warpper_form}>
             <button
@@ -38,8 +41,8 @@ const DeleteTask: FunctionComponent<DeleteTaskProps> = ({ task, onCloseDeleting 
                 </div>
                 <p><span>תאריך תחילה : </span>{task.receiptDate}</p>
                 <p><span>תאריך סיום : </span>{task.deadLine}</p>
-                <p><span>עובד משויך :</span>{workerTaskIdConvert[task.workerTaskId]}</p>
-                <p><span>יוצר המשימה :</span>{task.userIdCreatorTask}</p>
+                <p><span>עובד משויך :</span>{task.workerName}</p>
+                <p><span>יוצר המשימה :</span>{task.creatorName}</p>
 
             </div>
 
@@ -49,7 +52,6 @@ const DeleteTask: FunctionComponent<DeleteTaskProps> = ({ task, onCloseDeleting 
                     deleteTask(task._id as string, token)
                         .then(res => {
                             onCloseDeleting(false);
-                            // window.location.reload();
                             if (id) nav(-1);
                             successMessage("משימה נמחקה בהצלחה !")
                         })

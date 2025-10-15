@@ -28,7 +28,6 @@ const SingleUser: FunctionComponent<SingleUserProps> = () => {
 
     const [closeDeleting, setCloseDeleting] = useState<boolean>(false);
     const [closeUpdating, setCloseUpdating] = useState<boolean>(false);
-    const [toggleUpdaedUser, settoggleUpdaedUser] = useState<boolean>(false);
 
     const [namesMap, setNamesMap] = useState<Map<string, string>>(new Map());
 
@@ -66,7 +65,7 @@ const SingleUser: FunctionComponent<SingleUserProps> = () => {
             })
             .catch(error => errorMessage(error.message))
 
-    }, [toggleUpdaedUser]);
+    }, [closeUpdating]);
 
     if (!userInfo.id) {
         return <ErrorPremission />
@@ -97,15 +96,16 @@ const SingleUser: FunctionComponent<SingleUserProps> = () => {
                     <p>מנהל ישיר : <span>{namesMap.get(user.directManager)}</span></p>
                     <p>מחלקה וצוות : <span>{user.department}, {user.team}</span></p>
                     <p>רמת ניהול : <span>{user.managerLevel}</span></p>
-                    <p><span>עובדים משויכים :</span>{(user.connectedEmployess).map((user:any)=>{
+                    <p><span>עובדים משויכים :</span>{(user.connectedEmployess).map((user: any) => {
                         return namesMap.get(user) + ' , '
                     })}</p>
-                   <img className={style.image} src={`http://localhost:3131/${user.image.url}`} alt={user.image.alt} />
+                    <img className={style.image} src={`http://localhost:3131/${user.image.url}`} alt={user.image.alt} />
 
                     <div className={style.buttons_container}>
 
                         <button
                             type="button"
+                            id={style.exit}
                             onClick={() => {
                                 setCloseUpdating(true);
                             }}
@@ -115,6 +115,7 @@ const SingleUser: FunctionComponent<SingleUserProps> = () => {
 
                         <button
                             type="button"
+                            id={style.delete}
                             onClick={() => {
                                 setCloseDeleting(true);
                             }}
