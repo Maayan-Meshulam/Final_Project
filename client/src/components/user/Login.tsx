@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { setState } from "../../redux/userInfoState";
 import { saveTokenInStorage, tokenDecoding } from "../../services/tokenService";
 import { errorMessage, successMessage } from "../../toastify/toastifyService";
+import type { UserLogin } from "../../interfaces/userInterface";
 
 
 interface LoginProps {
@@ -27,7 +28,7 @@ const Login: FunctionComponent<LoginProps> = () => {
             password: ""
         },
         validationSchema: Yup.object(userLoginValidation),
-        onSubmit: (values => {
+        onSubmit: ((values : UserLogin) => {
             loginUser(values)
                 .then(res => {
                     const token = res.data;

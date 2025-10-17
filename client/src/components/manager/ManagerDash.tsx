@@ -20,24 +20,6 @@ const ManagerDash: FunctionComponent<ManagerDashProps> = () => {
     const nav = useNavigate();
 
 
-    //loading the compomemts on hover their links.
-    // const PreLoadManageEmployee = ()=> import('./ManageEmployee');
-    // const PreLoadManageProjects = ()=> import('./ManageProjects');
-    // const PreLoadAddMission = ()=> import('../user/AddMission');
-
-    {/* <div style={{border:"1px solid black", padding:"10px",borderRadius:"30px"}}>
-                {onhover or onenter }
-                <Link to="/manageEmployee" onMouseOver={PreLoadManageEmployee} >ניהול עובדים</Link>
-            </div>
-
-             <div style={{border:"1px solid black", padding:"10px",borderRadius:"30px"}}>
-                <Link to="/manageProjects" onMouseOver={PreLoadManageProjects}>ניהול פרויקטים</Link>
-            </div>
-
-             <div style={{border:"1px solid black", padding:"10px",borderRadius:"30px"}}>
-                <Link to="/addMission" onMouseOver={PreLoadAddMission}>הוספת משימה</Link>
-            </div> */}
-
     if (!user.id || user.managerLevel < 1) {
         return <ErrorPremission />
     }

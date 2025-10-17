@@ -11,6 +11,7 @@ import { getTokenInStorage, saveTokenInStorage, tokenDecoding } from "../../serv
 import { useDispatch, useSelector } from "react-redux";
 import { errorMessage, successMessage } from "../../toastify/toastifyService";
 import { setState } from "../../redux/userInfoState";
+import type { UserReg } from "../../interfaces/userInterface";
 
 interface AddNewEmployeeProps {
     oncloseAddNewEmployee: (NewEmployeesCloseBoll: boolean) => void
@@ -62,7 +63,7 @@ const AddNewEmployee: FunctionComponent<AddNewEmployeeProps> = ({ oncloseAddNewE
         },
         enableReinitialize: true,
         validationSchema: Yup.object(userRegisterValidation),
-        onSubmit: (values: any) => {
+        onSubmit: (values: UserReg) => {
 
             addUser(values, token)
                 .then((res) => {

@@ -27,6 +27,8 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
     const [termSearch, setSearchTerm] = useState<string>("");
     const [typeSearch, setTypeSearch] = useState<string>("All");
     const [selectedTask, setSelectedTask] = useState<any>(null);
+    const [closeChat, setCloseChat] = useState<boolean>(false);
+
 
     const filterdArr = () => {
         switch (typeSearch) {
@@ -62,11 +64,11 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
     useEffect(() => {
         if (!token)
             return;
-        
+
         getMyTasks(token as string)
-            .then(res => {          
+            .then(res => {
                 console.log(res.data);
-                     
+
                 setAllMyTasks(res.data);
                 setArrDeepSearch(res.data);
             })
@@ -85,7 +87,6 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
 
     return (<>
         <div className="container">
-
             <div className="btn_back" onClick={() => nav(+1)}>
                 <i className="fa-solid fa-arrow-left"></i>
             </div>
@@ -94,7 +95,7 @@ const ManageAllMissions: FunctionComponent<ManageAllMissionsProps> = () => {
             </div>
 
             <h1 className="main_title">המשימות שלי</h1>
-
+            
             <div className={style.containerAbove}>
                 <button id={style.addTaskBtn} onClick={() => setDisplayAddMission(true)}>
                     Add Task <i className="fa-solid fa-plus"></i>

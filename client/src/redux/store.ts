@@ -6,7 +6,7 @@ import { persistStore } from "redux-persist";
 export const store = configureStore({
     reducer: {
         userBaseInfo: presistReducer,
-        code: presistReducerCode
+        code: presistReducerCode,
     }
 });
 

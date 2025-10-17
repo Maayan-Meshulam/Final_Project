@@ -133,6 +133,8 @@
     border: 1px solid gray;
     border-radius: 30px;
     padding: 5px;
+    padding-right: 20px;
+    box-sizing: border-box;
 }
 
 #resultFilter {
@@ -145,7 +147,8 @@
 
 .searchIcon {
     position: absolute;
-    right: 5px;
+    right: 15px;
+    top: 8px;
 
 }
 

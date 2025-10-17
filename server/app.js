@@ -11,6 +11,8 @@ const connctToDB = require("./DB/DBService");
 const cors = require("cors");
 const buildError = require("./helpers/erorrs/errorsHandeling");
 const loggerMiddleWare = require("./logger/loggerService");
+const Server = require('socket.io');
+
 
 app.use(express.json());
 
@@ -20,6 +22,9 @@ app.use(loggerMiddleWare());
 app.use(express.static("./public"));
 
 app.use(router);
+
+
+
 
 
 app.use((err, req, res, next) => {
