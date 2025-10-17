@@ -1,8 +1,7 @@
 import { useEffect, useState, type FunctionComponent } from "react";
 import { patchPass } from "../../services/userService";
-import { getTokenInStorage } from "../../services/tokenService";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { errorMessage } from "../../toastify/toastifyService";
+import { errorMessage, successMessage } from "../../toastify/toastifyService";
 
 interface ChangePasswordProps {
 
@@ -56,6 +55,8 @@ const ChangePassword: FunctionComponent<ChangePasswordProps> = () => {
     const [verPassword, setVerPassword] = useState<string>("");
     const [errorSamePass, setErrorSamePass] = useState<boolean>(true);
     const [dirtyForm, setDirtyForm] = useState<boolean>(false);
+    const [matchPattern, setMatchPattern] = useState<boolean>(false);
+    const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=<>?{}[\]~`|\\/]).{8,}$/;
 
     const [querys] = useSearchParams();
     const nav = useNavigate()
@@ -65,6 +66,7 @@ const ChangePassword: FunctionComponent<ChangePasswordProps> = () => {
 
     useEffect(() => {
         setErrorSamePass(password === verPassword);
+        setMatchPattern(pattern.test(password));
         (password == "" && verPassword == "") ? setDirtyForm(false) : setDirtyForm(true)
     }, [password, verPassword])
 
@@ -76,9 +78,11 @@ const ChangePassword: FunctionComponent<ChangePasswordProps> = () => {
 
         patchPass(values, id as string, querys.get("token") as string)
             .then(res => {
+                successMessage("סיסמא שונתה בהצלחה")
                 nav("/");
             })
-            .catch(error => errorMessage(error.message))
+            .catch(error => error.response ? errorMessage(error.response.data) :
+                errorMessage("שגיאה כללית"))
     }
 
     return (<>
@@ -103,6 +107,7 @@ const ChangePassword: FunctionComponent<ChangePasswordProps> = () => {
                         style={style.inputs}
                         onInput={(e: any) => setPassword(e.target.value)}
                     />
+                    {!matchPattern && <p>לפחות אות אחת גדולה, קטנה, מספר, תו מיוחד ו8 תווים בכולל</p>}
                 </div>
 
                 <div style={style.inline_form}>
@@ -114,10 +119,11 @@ const ChangePassword: FunctionComponent<ChangePasswordProps> = () => {
                         onInput={(e: any) => setVerPassword(e.target.value)}
                     />
                     {!errorSamePass && <p>סיסמאות לא תואמות</p>}
+
                 </div>
                 <button
                     style={style.button}
-                    disabled={!errorSamePass || !dirtyForm}
+                    disabled={!errorSamePass || !dirtyForm || !matchPattern}
                 >שלח</button>
             </form>
         </div>

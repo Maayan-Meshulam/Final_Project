@@ -39,7 +39,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                 .catch(error => errorMessage(error.message))
         }
 
-    }, [userInfo])
+    }, [userInfo, closeCode])
 
     useEffect(() => {
         setRandomNum(Math.floor(Math.random() * 1_000_000));

@@ -18,7 +18,7 @@ interface AddMissionProps {
     onToggleAllMyTasks?: any
 }
 
-const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission, onToggleAllMyTasks }) => {
+const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission }) => {
 
     //פרטי המשתמש המחובר - שמור בחנות
     const user = useSelector((state: any) => state.userBaseInfo);
@@ -95,10 +95,8 @@ const AddMission: FunctionComponent<AddMissionProps> = ({ oncloseAddMission, onT
                 <CreateInputs type="text" id="subTitle" name="כותרת משנית" formik={formik} />
                 <CreateInputs type="text" id="description" name="תיאור" formik={formik} />
 
-                <div className={style.inlineFormDiv}>
-                    <CreateInputs type="Date" id="deadLine" name="תאריך סיום" formik={formik} />
-                    <CreateInputs type="Date" id="receiptDate" name="תאריך קבלה" formik={formik} />
-                </div>
+                <CreateInputs type="Date" id="receiptDate" name="תאריך קבלה" formik={formik} />
+                <CreateInputs type="Date" id="deadLine" name="תאריך סיום" formik={formik} />
 
                 <div className={style.inlineFormDiv}>
                     <CreateSelects id="type" name="סוג" formik={formik}>

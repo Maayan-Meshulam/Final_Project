@@ -40,7 +40,7 @@ router.post('/addUser', auth, upload.single("image"), userValidation, async (req
         let user = req.userValid;
 
         const newUrl = `/images/${req.file.filename}`;
-        
+
         user = { ...(req.userValid), url: newUrl }
 
         let managerConnect = await getUserById(req.userInfo.id);
@@ -101,7 +101,7 @@ router.get('/', auth, async (req, res, next) => {
         if (user.managerLevel < 1) {
             return next(buildError("Authentication Error", "user not allow, access block", 403));
         }
-     
+
         let allUsers = await getAllUsers(ArrEmployess);
 
         res.status(200).send(allUsers);
@@ -115,7 +115,7 @@ router.get('/', auth, async (req, res, next) => {
 //get user by email
 router.get('/email/:email', async (req, res, next) => {
     try {
-    
+
         const { email } = req.params
 
         const user = await getUserByEmail(email);
@@ -153,7 +153,7 @@ router.get('/:id', auth, async (req, res, next) => {
 });
 
 // update user
-router.put('/:id', auth,upload.single("image"), userValidation, async (req, res, next) => {
+router.put('/:id', auth, upload.single("image"), userValidation, async (req, res, next) => {
     try {
         let { id } = req.params;
         let user = req.userInfo;
@@ -205,6 +205,10 @@ router.patch('/change-password/:id', async (req, res, next) => {
     try {
         const { token } = req.query;
         const { id } = req.params;
+        
+        console.log("BODY:", req.body);
+        console.log("PARAM ID:", req.params.id);
+        console.log("QUERY TOKEN:", req.query.token);
 
         if (!token)
             return next(buildError("authication Error", "user not allow, access block", 403));

@@ -1,7 +1,7 @@
 import { useEffect, useState, type FunctionComponent } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUserByEmail, patchPass, sendEmail } from "../../services/userService";
-import { errorMessage } from "../../toastify/toastifyService";
+import { errorMessage, successMessage } from "../../toastify/toastifyService";
 
 
 interface EnterEmailProps {
@@ -34,7 +34,7 @@ const EnterEmail: FunctionComponent<EnterEmailProps> = () => {
 
                 sendEmail(email, id, -1)
                     .then(res => {
-                      
+                      successMessage("אימייל נשלח")
                     })
                     .catch(error => error.response ? errorMessage(error.response.data)
                         : errorMessage("שגיאה כללית -לא נשלחה בקשה"));
